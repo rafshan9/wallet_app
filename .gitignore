@@ -1,0 +1,35 @@
+# --- Frontend (Expo / React Native) ---
+frontend/node_modules/
+frontend/.expo/
+frontend/dist/
+frontend/web-build/
+frontend/npm-debug.*
+frontend/*.tsbuildinfo
+frontend/coverage/
+frontend/ios/
+frontend/android/
+
+# --- Backend (Python / Django) ---
+*.pyc
+__pycache__/
+venv/
+env/
+db.sqlite3
+*.egg-info/
+.pytest_cache/
+staticfiles/
+media/
+
+# --- Environment & OS ---
+.env
+.env.local
+.env.*.local
+.DS_Store
+Thumbs.db
+*.jks
+*.p8
+*.p12
+*.pem
+*.key
+*.mobileprovision
+*.orig.*
