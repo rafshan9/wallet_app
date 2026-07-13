@@ -1,10 +1,14 @@
 import { View, TouchableOpacity, Animated, Text } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState, useRef } from 'react';
+import AddFundModal from './CashFlowComponents/AddFundModal';
+import { useAppStore } from '../store';
+
 
 export default function FAB() {
     const [isOpen, setIsOpen] = useState(false);
     const animation = useRef(new Animated.Value(0)).current;
+    const { isAddModalOpen, openModal, closeModal, triggerRefresh } = useAppStore();
 
     const toggleMenu = () => {
         const toValue = isOpen ? 0 : 1;
@@ -39,39 +43,19 @@ export default function FAB() {
         opacity: animation
     };
 
-    // 3. Camera (Green) - 288px
-    const item3Style = {
-        transform: [
-            { scale: animation },
-            { translateY: animation.interpolate({ inputRange: [0, 1], outputRange: [0, -288] }) }
-        ],
-        opacity: animation
-    };
-
     return (
         <View className="items-center justify-end relative z-50">
-
-            {/* Pop-up Item 3 (Top - Maroon - Camera) */}
-            <Animated.View className="absolute items-center justify-center" style={item3Style}>
-                <View className="absolute right-[80px] bg-maroon py-2 rounded-full w-44 items-center justify-center">
-                    <Text className="text-white font-rubik_medium">Snapshot expense</Text>
-                </View>
-                <TouchableOpacity
-                    activeOpacity={0.8}
-                    className="h-20 w-20 bg-maroon rounded-full justify-center items-center shadow-xl"
-                >
-                    <Feather name="camera" size={32} color="white" />
-                </TouchableOpacity>
-
-            </Animated.View>
-
             {/* Pop-up Item 2 (Middle - Yellow - Expense) */}
             <Animated.View className="absolute items-center justify-center" style={item2Style}>
                 <View className="absolute right-[80px] bg-yellow py-2 rounded-full w-40 items-center justify-center">
-                    <Text className="text-black font-rubik_medium">Add expense</Text>
+                    <Text className="text-black font-rubik_medium">Add Transaction</Text>
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.8}
+                    onPress={() => {
+                        toggleMenu();
+                        openModal();
+                    }}
                     className="h-20 w-20 bg-yellow rounded-full justify-center items-center shadow-xl"
                 >
                     <Feather name="shopping-bag" size={32} color="black" />
@@ -105,7 +89,12 @@ export default function FAB() {
                     </View>
                 </Animated.View>
             </TouchableOpacity>
-
+            <AddFundModal
+                visible={isAddModalOpen}
+                onClose={() => {
+                    closeModal();
+                }}
+            />
         </View>
     );
 }

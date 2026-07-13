@@ -61,7 +61,7 @@ export default function ExpensePieChart({ total, categories }: ExpensePieChartPr
                                                 strokeWidth={strokeWidth}
                                                 strokeDasharray={`${segmentLength} ${circumference}`}
                                                 strokeDashoffset={offset}
-                                                strokeLinecap="round"
+                                                strokeLinecap="butt"
                                                 fill="none"
                                             />
                                         );

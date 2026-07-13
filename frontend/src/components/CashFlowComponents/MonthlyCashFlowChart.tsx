@@ -17,7 +17,7 @@ export default function MonthlyCashFlowChart({ deposited, expense, savings }: Mo
     ];
 
     return (
-        <View className="bg-black rounded-2xl p-6 mb-8">
+        <View className="bg-very_dark_blue rounded-2xl p-6 mb-8">
             <Text className="font-rubik_medium text-xs text-white/50 mb-1">This month · net</Text>
             <Text
                 className="font-rubik_bold text-3xl mb-5"

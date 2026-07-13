@@ -9,15 +9,10 @@ type AddGoalModalProps = {
 };
 
 const COLOR_OPTIONS = [
-    { color: 'bg-red', text: 'text-white' },
-    { color: 'bg-maroon', text: 'text-white' },
-    { color: 'bg-dark_blue', text: 'text-white' },
-    { color: 'bg-light_blue', text: 'text-black' },
-    { color: 'bg-yellow', text: 'text-black' },
-    { color: 'bg-orange', text: 'text-black' },
-    { color: 'bg-teal', text: 'text-white' },
-    { color: 'bg-green', text: 'text-white' },
-    { color: 'bg-black', text: 'text-white' },
+    { color: 'bg-light_blue' },
+    { color: 'bg-yellow' },
+    { color: 'bg-teal' },
+    { color: 'bg-white' },
 ];
 
 export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
@@ -57,12 +52,14 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
     return (
         <Modal visible={visible} animationType="slide" transparent={true}>
             <View className="flex-1 justify-end bg-black/80">
-                <View className="bg-dark_blue w-full rounded-t-[40px] p-8">
+                <View className="bg-very_dark_blue w-full rounded-t-[40px] p-8 border-2 border-black">
 
                     <View className="flex-row justify-between items-center mb-8">
                         <Text className="text-3xl font-rubik_bold text-white">New Goal</Text>
-                        <TouchableOpacity onPress={onClose}>
-                            <Feather name="x" size={28} color="white" />
+                        <TouchableOpacity
+                            className="bg-yellow rounded-full p-2 border-2 border-black"
+                            onPress={onClose}>
+                            <Feather name="x" size={28} color="black" />
                         </TouchableOpacity>
                     </View>
 
@@ -97,7 +94,7 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                                     style={{ borderColor: isSelected ? 'white' : 'transparent' }}
                                 >
                                     {isSelected && (
-                                        <Feather name="check" size={16} color={opt.text === 'text-white' ? 'white' : 'black'} />
+                                        <Feather name="check" size={16} color={'black'} />
                                     )}
                                 </TouchableOpacity>
                             );

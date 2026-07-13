@@ -3,6 +3,7 @@ import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { CATEGORIES } from '../../constants/categories';
 import api from '../../../utils/axios'
+import { useAppStore } from '../../store'
 
 type AddExpenseModalProps = {
     visible: boolean;
@@ -13,7 +14,7 @@ type AddExpenseModalProps = {
 export default function AddExpenseModal({ visible, onClose }: AddExpenseModalProps) {
     const [type, setType] = useState<'expense' | 'income'>('expense');
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
+    const { triggerRefresh } = useAppStore();
     const [amount, setAmount] = useState('');
     const [title, setTitle] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +41,8 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
             setTitle('');
             setSelectedCategory(null);
             setType('expense');
+
+            triggerRefresh();
             onClose();
         } catch (error) {
             console.error(error);

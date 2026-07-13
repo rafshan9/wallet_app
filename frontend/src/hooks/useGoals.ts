@@ -18,17 +18,9 @@ export type UIGoal = {
     targetAmount: number;
     savedAmount: number;
     color: string;
-    textColor: string;
     deadline?: string;
 };
 
-const COLORS = [
-    { color: 'bg-teal', text: 'text-white' },
-    { color: 'bg-dark_blue', text: 'text-white' },
-    { color: 'bg-orange', text: 'text-black' },
-    { color: 'bg-green', text: 'text-white' },
-    { color: 'bg-maroon', text: 'text-white' },
-];
 
 export function useGoals() {
     const [goals, setGoals] = useState<UIGoal[]>([]);
@@ -43,8 +35,8 @@ export function useGoals() {
                 name: g.name,
                 targetAmount: parseFloat(g.target_amount),
                 savedAmount: parseFloat(g.current_amount || '0'),
-                color: g.color, // Use the backend color
-                textColor: 'text-white', // You can add logic to detect text color if needed
+                color: g.color,
+                textColor: 'text-white',
                 deadline: 'Ongoing',
             }));
             setGoals(formattedGoals);

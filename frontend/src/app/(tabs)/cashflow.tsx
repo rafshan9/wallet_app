@@ -1,16 +1,23 @@
 import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ExpensePieChart from '../../components/CashFlowComponents/ExpensePieChart';
 import AddExpenseModal from '../../components/CashFlowComponents/AddFundModal';
 import MonthlyCashFlowChart from '../../components/CashFlowComponents/MonthlyCashFlowChart';
 import { getCategoryStyle } from '../../constants/categories';
 import { useCashFlow } from '../../hooks/useCashFlow';
+import { useAppStore } from '../../store';
+
 
 export default function CashFlowScreen() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const { refreshTrigger, openModal } = useAppStore();
 
-    // Import all logic from the custom hook
+    useEffect(() => {
+        fetchTransactions();
+    }, [refreshTrigger]);
+
+
     const {
         transactions,
         isLoading,
@@ -52,7 +59,7 @@ export default function CashFlowScreen() {
                     <Text className="text-xl font-rubik_bold">Recent Activity</Text>
                     <TouchableOpacity
                         activeOpacity={0.8}
-                        onPress={() => setIsModalOpen(true)}
+                        onPress={openModal}
                         className="flex-row items-center bg-maroon border-2 border-black/40 rounded-full px-6 py-4"
                     >
                         <Feather name="plus" size={16} color="white" />
@@ -81,8 +88,15 @@ export default function CashFlowScreen() {
                         );
                     }
 
+                    const isGoal = tx.title.startsWith('Transferred to');
+
                     const titleCaseCategory = tx.category.charAt(0).toUpperCase() + tx.category.slice(1).toLowerCase();
-                    const style = getCategoryStyle(titleCaseCategory) || { color: 'bg-white', text: 'text-black' };
+
+                    let style = getCategoryStyle(titleCaseCategory) || { label: 'Other', color: 'bg-white', text: 'text-black' };
+
+                    if (isGoal) {
+                        style = { label: 'Savings', color: 'bg-yellow', text: 'black' };
+                    }
 
                     return (
                         <View key={tx.id} className={`flex-row items-center ${style.color} p-4 rounded-3xl mb-4 border-2 border-black border-dashed`}>

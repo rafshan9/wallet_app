@@ -11,10 +11,13 @@ export type Transaction = {
 };
 
 const CATEGORY_HEX: Record<string, string> = {
-    Groceries: '#0eff66ff',
-    Subscriptions: '#fbfbfbff',
-    Entertainment: '#ffde0fff',
-    Shopping: '#3b08f7ff',
+    GROCERIES: '#0eff66ff',
+    SUBSCRIPTIONS: '#34d399',
+    ENTERTAINMENT: '#ffde0fff',
+    SHOPPING: '#3b08f7ff',
+    MEMBERSHIP: '#f43f5e',
+    DINING: '#fb923c',
+    OTHER: '#a855f7',
 };
 
 function getCategoryBreakdown(transactions: Transaction[]) {

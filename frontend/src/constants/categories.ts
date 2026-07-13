@@ -1,8 +1,8 @@
 export const CATEGORIES = [
     { label: 'Groceries', color: 'bg-green', text: 'text-white' },
-    { label: 'Subscriptions', color: 'bg-teal', text: 'text-white' },
+    { label: 'Subscriptions', color: 'bg-teal', text: 'text-black' },
     { label: 'Membership', color: 'bg-maroon', text: 'text-white' },
-    { label: 'Bills', color: 'bg-orange', text: 'text-white' },
+    { label: 'Bills', color: 'bg-orange', text: 'text-black' },
     { label: 'Transport', color: 'bg-light_blue', text: 'text-black' },
     { label: 'Dining', color: 'bg-red', text: 'text-white' },
     { label: 'Shopping', color: 'bg-yellow', text: 'text-black' },
