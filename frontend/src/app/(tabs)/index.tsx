@@ -6,7 +6,6 @@ import InsightCard from '../../components/CardComponents/InsightCard';
 
 export default function HomeScreen() {
   return (
-    // 1. Add 'relative' here so the TabBar knows where the bottom is
     <View className="flex-1 relative bg-background pt-16 ">
       <View className="px-6">
         <TopBar />

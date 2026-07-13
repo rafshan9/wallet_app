@@ -43,7 +43,7 @@ export default function Navbar({ state, navigation }: TabBarProps) {
 
     return (
         <View
-            className="w-80 h-20 bg-black rounded-full flex-row items-center relative mr-4 px-2"
+            className="w-80 h-20 bg-very_dark_blue rounded-full flex-row items-center relative mr-4 px-2"
             onLayout={(event) => setBarWidth(event.nativeEvent.layout.width)}
         >
             {barWidth > 0 && (

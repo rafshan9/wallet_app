@@ -3,15 +3,17 @@ import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import GoalCard from '../../components/GoalComponents/GoalCard';
 import AddGoalModal from '../../components/GoalComponents/AddGoalModal';
-import { useGoals } from '../../hooks/useGoals';
 import AddContributionModal from '../../components/GoalComponents/AddContributionModal';
+import CelebrationModal from '../../components/GoalComponents/CelebrationModal';
+import { useGoals } from '../../hooks/useGoals';
 
 export default function GoalScreen() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFundModalOpen, setIsFundModalOpen] = useState(false);
-    const [selectedGoal, setSelectedGoal] = useState<{ id: string, name: string } | null>(null);
-    const { goals, isLoading, fetchGoals, totalSaved, totalTarget, overallPercent } = useGoals();
+    const [selectedGoal, setSelectedGoal] = useState<{ id: string; name: string } | null>(null);
+    const [celebratingGoal, setCelebratingGoal] = useState<{ name: string; targetAmount: number } | null>(null);
 
+    const { goals, isLoading, fetchGoals, deleteGoal, totalSaved, totalTarget, overallPercent } = useGoals();
 
     if (isLoading) {
         return (
@@ -25,9 +27,6 @@ export default function GoalScreen() {
         <View className="flex-1 bg-background pt-16">
             <View className="px-6 flex-row justify-between items-center mb-6">
                 <Text className="text-3xl font-rubik_bold">Goals</Text>
-                <TouchableOpacity className="h-12 w-12 bg-black rounded-full justify-center items-center">
-                    <Feather name="filter" size={20} color="white" />
-                </TouchableOpacity>
             </View>
 
             <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 140 }}>
@@ -60,6 +59,7 @@ export default function GoalScreen() {
                             setSelectedGoal({ id: goal.id, name: goal.name });
                             setIsFundModalOpen(true);
                         }}
+                        onDelete={deleteGoal}
                     />
                 ))}
             </ScrollView>
@@ -71,14 +71,37 @@ export default function GoalScreen() {
                     fetchGoals();
                 }}
             />
+
             <AddContributionModal
                 visible={isFundModalOpen}
                 goal={selectedGoal}
-                onClose={() => {
+                onClose={async () => {
+                    const goalId = selectedGoal?.id;
+                    const previous = goals.find((g) => g.id === goalId);
+                    const goalName = selectedGoal?.name ?? '';
+
                     setIsFundModalOpen(false);
                     setSelectedGoal(null);
-                    fetchGoals(); // Refresh goals to see the new total
+
+                    const freshGoals = await fetchGoals();
+                    const updated = freshGoals?.find((g) => g.id === goalId);
+
+                    if (
+                        previous &&
+                        updated &&
+                        previous.savedAmount < previous.targetAmount &&
+                        updated.savedAmount >= updated.targetAmount
+                    ) {
+                        setCelebratingGoal({ name: goalName, targetAmount: updated.targetAmount });
+                    }
                 }}
+            />
+
+            <CelebrationModal
+                visible={!!celebratingGoal}
+                goalName={celebratingGoal?.name ?? ''}
+                targetAmount={celebratingGoal?.targetAmount ?? 0}
+                onClose={() => setCelebratingGoal(null)}
             />
         </View>
     );

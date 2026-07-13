@@ -11,7 +11,7 @@ export default function ProfileScreen() {
             {/* Top Bar with Back Button */}
             <View className="flex-row items-center mb-8">
                 <TouchableOpacity
-                    onPress={() => router.back()}
+                    onPress={() => router.replace('/')}
                     className="w-12 h-12 bg-white border-2 border-black rounded-full items-center justify-center shadow-sm"
                 >
                     <Feather name="arrow-left" size={24} color="black" />

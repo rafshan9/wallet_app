@@ -79,7 +79,7 @@ export default function FAB() {
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={toggleMenu}
-                className="h-20 w-20 bg-green rounded-full justify-center items-center z-50 shadow-xl"
+                className="h-20 w-20 bg-red rounded-full justify-center items-center z-50 shadow-xl"
             >
                 <Animated.View style={{ transform: [{ rotate: rotation }] }}>
                     {/* Your custom thick rounded plus icon */}

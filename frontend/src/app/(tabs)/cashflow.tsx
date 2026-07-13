@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import ExpensePieChart from '../../components/CashFlowComponents/ExpensePieChart';
@@ -7,16 +7,18 @@ import MonthlyCashFlowChart from '../../components/CashFlowComponents/MonthlyCas
 import { getCategoryStyle } from '../../constants/categories';
 import { useCashFlow } from '../../hooks/useCashFlow';
 import { useAppStore } from '../../store';
+import MonthYearPickerModal from '../../components/CashFlowComponents/MonthYearPickerModal';
+import ReceiptModal from '../../components/CashFlowComponents/ReceiptModal';
+import TopBar from '../../components/TopBar';
 
 
 export default function CashFlowScreen() {
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+    const [selectedMonth, setSelectedMonth] = useState('Jul');
+    const [selectedYear, setSelectedYear] = useState(2026);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { refreshTrigger, openModal } = useAppStore();
-
-    useEffect(() => {
-        fetchTransactions();
-    }, [refreshTrigger]);
-
 
     const {
         transactions,
@@ -28,6 +30,10 @@ export default function CashFlowScreen() {
         totalSavings
     } = useCashFlow();
 
+    useEffect(() => {
+        fetchTransactions();
+    }, [refreshTrigger]);
+
     if (isLoading) {
         return (
             <View className="flex-1 bg-background justify-center items-center">
@@ -38,13 +44,7 @@ export default function CashFlowScreen() {
 
     return (
         <View className="flex-1 relative bg-background pt-16">
-            {/* Header */}
-            <View className="px-6 flex-row justify-between items-center mb-6">
-                <Text className="text-3xl font-rubik_bold">Cash Flow</Text>
-                <TouchableOpacity className="h-12 w-12 bg-black rounded-full justify-center items-center">
-                    <Feather name="filter" size={20} color="white" />
-                </TouchableOpacity>
-            </View>
+            <TopBar />
 
             <ScrollView
                 className="flex-1 px-6"
@@ -57,14 +57,22 @@ export default function CashFlowScreen() {
 
                 <View className="flex-row justify-between items-center mb-4">
                     <Text className="text-xl font-rubik_bold">Recent Activity</Text>
-                    <TouchableOpacity
-                        activeOpacity={0.8}
-                        onPress={openModal}
-                        className="flex-row items-center bg-maroon border-2 border-black/40 rounded-full px-6 py-4"
-                    >
-                        <Feather name="plus" size={16} color="white" />
-                        <Text className="text-sm font-rubik_bold text-white ml-1">Add New</Text>
-                    </TouchableOpacity>
+                    <View className="flex-row justify-between items-center gap-2">
+                        <TouchableOpacity
+                            onPress={() => setIsFilterOpen(true)}
+                            className="h-12 w-12 bg-black rounded-full justify-center items-center">
+                            <Feather name="filter" size={20} color="white" />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            activeOpacity={0.8}
+                            onPress={openModal}
+                            className="flex-row items-center bg-maroon border-2 border-black/40 rounded-full px-6 py-4"
+                        >
+                            <Feather name="plus" size={16} color="white" />
+                            <Text className="text-sm font-rubik_bold text-white ml-1">Add New</Text>
+                        </TouchableOpacity>
+                    </View>
+
                 </View>
 
                 {transactions.map((tx) => {
@@ -123,6 +131,37 @@ export default function CashFlowScreen() {
                     setIsModalOpen(false);
                     fetchTransactions();
                 }}
+            />
+            <MonthYearPickerModal
+                visible={isFilterOpen}
+                onClose={() => setIsFilterOpen(false)}
+                month={selectedMonth}
+                setMonth={setSelectedMonth}
+                year={selectedYear}
+                setYear={setSelectedYear}
+                transactions={transactions} onSelect={() => {
+                    const hasData = transactions.some((tx) => {
+                        const txDate = new Date(tx.date);
+                        const txMonth = txDate.toLocaleDateString('en-US', { month: 'short' });
+                        return txMonth === selectedMonth && txDate.getFullYear() === selectedYear;
+                    });
+
+                    if (!hasData) {
+                        Alert.alert("No Data", "No transactions for this month.");
+                        return; // picker stays open — no Modal close animation to race against
+                    }
+
+                    setIsFilterOpen(false);
+                    setTimeout(() => setIsReceiptOpen(true), 300);
+                }}
+            />
+
+            <ReceiptModal
+                visible={isReceiptOpen}
+                onClose={() => setIsReceiptOpen(false)}
+                month={selectedMonth}
+                year={selectedYear}
+                transactions={transactions}
             />
         </View>
     );

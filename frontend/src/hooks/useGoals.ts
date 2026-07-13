@@ -18,6 +18,7 @@ export type UIGoal = {
     targetAmount: number;
     savedAmount: number;
     color: string;
+    textColor: string;
     deadline?: string;
 };
 
@@ -40,10 +41,22 @@ export function useGoals() {
                 deadline: 'Ongoing',
             }));
             setGoals(formattedGoals);
+            return formattedGoals;
         } catch (error) {
             console.error('Failed to fetch goals:', error);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const deleteGoal = async (id: string) => {
+        const previousGoals = goals;
+        setGoals((prev) => prev.filter((g) => g.id !== id));
+        try {
+            await api.delete(`/goals/${id}/`);
+        } catch (error) {
+            console.error('Failed to delete goal:', error);
+            setGoals(previousGoals);
         }
     };
 
@@ -55,5 +68,6 @@ export function useGoals() {
     const totalTarget = goals.reduce((sum, g) => sum + g.targetAmount, 0);
     const overallPercent = totalTarget > 0 ? Math.min(100, Math.round((totalSaved / totalTarget) * 100)) : 0;
 
-    return { goals, isLoading, fetchGoals, totalSaved, totalTarget, overallPercent };
+    return { goals, isLoading, fetchGoals, deleteGoal, totalSaved, totalTarget, overallPercent };
+
 }
