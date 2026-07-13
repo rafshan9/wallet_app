@@ -52,3 +52,11 @@ class SavingsGoalViewSet(viewsets.ModelViewSet):
         )
 
         return Response(GoalContributionSerializer(contribution).data, status=status.HTTP_201_CREATED)
+
+class GoalContributionViewSet(viewsets.ModelViewSet):
+    serializer_class = GoalContributionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Only show contributions for goals that belong to the logged-in user
+        return GoalContribution.objects.filter(goal__user=self.request.user)

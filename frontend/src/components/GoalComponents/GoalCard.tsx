@@ -13,10 +13,11 @@ type Goal = {
 
 type GoalCardProps = {
     goal: Goal;
+    onAddPress: () => void;
 };
 
-export default function GoalCard({ goal }: GoalCardProps) {
-    const percent = Math.min(100, Math.round((goal.savedAmount / goal.targetAmount) * 100));
+export default function GoalCard({ goal, onAddPress }: GoalCardProps) {
+    const percent = goal.targetAmount > 0 ? Math.min(100, Math.round((goal.savedAmount / goal.targetAmount) * 100)) : 0;
     const isDark = goal.textColor === 'text-white';
 
     return (
@@ -45,7 +46,9 @@ export default function GoalCard({ goal }: GoalCardProps) {
                     ${goal.savedAmount.toLocaleString()}
                     <Text className={isDark ? 'text-white/60' : 'text-black/50'}> of ${goal.targetAmount.toLocaleString()}</Text>
                 </Text>
-                <TouchableOpacity className={`px-3 py-1.5 rounded-full ${isDark ? 'bg-white/20' : 'bg-black/10'}`}>
+                <TouchableOpacity
+                    onPress={onAddPress}
+                    className={`px-3 py-1.5 rounded-full ${isDark ? 'bg-white/20' : 'bg-black/10'}`}>
                     <Feather name="plus" size={14} color={isDark ? 'white' : 'black'} />
                 </TouchableOpacity>
             </View>

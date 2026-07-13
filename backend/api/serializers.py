@@ -1,4 +1,3 @@
-# pyrefly: ignore [missing-import]
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Transaction, SavingsGoal, GoalContribution
@@ -12,21 +11,28 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
 
-#Transaction serializers
+
 class TransactionSerializer(serializers.ModelSerializer):
+    # Automatically assigns the logged-in user
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    
     class Meta:
         model = Transaction
-        fields = ['id', 'type', 'category', 'amount', 'date', 'title']
+        fields = ['id', 'user', 'type', 'category', 'amount', 'date', 'title']
+
+
 class GoalContributionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GoalContribution
-        fields = ['id', 'amount', 'date']
-        
+        fields = ['id', 'amount', 'date', 'goal'] 
+
+
 class SavingsGoalSerializer(serializers.ModelSerializer):
     current_amount = serializers.ReadOnlyField()
     contributions = GoalContributionSerializer(many=True, read_only=True)
+    # Automatically assigns the logged-in user
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    
     class Meta:
         model = SavingsGoal
-        fields = ['id', 'name', 'target_amount', 'current_amount', 'created_at']
-
-
+        fields = ['id', 'user', 'name', 'target_amount', 'current_amount', 'contributions', 'color', 'created_at']

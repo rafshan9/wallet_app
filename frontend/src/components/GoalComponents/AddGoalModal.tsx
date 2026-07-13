@@ -1,6 +1,7 @@
-import { View, Text, Modal, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Modal, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
+import api from '../../../utils/axios';
 
 type AddGoalModalProps = {
     visible: boolean;
@@ -21,6 +22,37 @@ const COLOR_OPTIONS = [
 
 export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
+    const [name, setName] = useState('');
+    const [targetAmount, setTargetAmount] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async () => {
+        // Added validation to ensure a color is selected
+        if (!name || !targetAmount || !selectedColor) {
+            Alert.alert('Error', 'Please fill in all fields and select a color.');
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            await api.post('/goals/', {
+                name: name,
+                target_amount: targetAmount.replace(/[^0-9.]/g, ''),
+                color: selectedColor,
+            });
+
+            // Reset and close
+            setName('');
+            setTargetAmount('');
+            setSelectedColor(null);
+            onClose();
+        } catch (error) {
+            console.error('Failed to create goal:', error);
+            Alert.alert('Error', 'Failed to create goal.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <Modal visible={visible} animationType="slide" transparent={true}>
@@ -36,6 +68,8 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
 
                     <TextInput
                         placeholder="Goal name"
+                        value={name}
+                        onChangeText={setName}
                         placeholderTextColor="rgba(255,255,255,0.5)"
                         className="text-2xl font-rubik_bold text-white mb-6"
                     />
@@ -43,11 +77,14 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                     <TextInput
                         placeholder="$0.00 target"
                         keyboardType="numeric"
+                        value={targetAmount}
+                        onChangeText={setTargetAmount}
                         placeholderTextColor="rgba(255,255,255,0.5)"
                         className="text-5xl font-rubik_bold text-white text-center mb-8"
                         style={{ lineHeight: 64, paddingTop: 8 }}
                     />
 
+                    {/* Restored Color Picker UI */}
                     <Text className="text-white/60 font-rubik_medium text-sm mb-3">Choose a color</Text>
                     <View className="flex-row flex-wrap mb-8">
                         {COLOR_OPTIONS.map((opt) => {
@@ -68,11 +105,18 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                     </View>
 
                     <TouchableOpacity
-                        className="bg-maroon px-8 py-4 rounded-full flex-row items-center justify-center shadow-md border-2 border-black"
-                        onPress={onClose}
+                        className="bg-maroon px-8 py-4 rounded-full flex-row items-center justify-center shadow-md border-2 border-black mt-8"
+                        onPress={handleSubmit}
+                        disabled={isLoading}
                     >
-                        <Text className="text-white font-rubik_bold text-lg mr-2">Create Goal</Text>
-                        <Feather name="check" size={20} color="white" />
+                        {isLoading ? (
+                            <ActivityIndicator color="white" />
+                        ) : (
+                            <>
+                                <Text className="text-white font-rubik_bold text-lg mr-2">Create Goal</Text>
+                                <Feather name="check" size={20} color="white" />
+                            </>
+                        )}
                     </TouchableOpacity>
 
                 </View>

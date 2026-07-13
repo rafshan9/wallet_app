@@ -37,6 +37,7 @@ class SavingsGoal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='goals')
     name = models.CharField(max_length=100) # e.g., "Trip to Argentina"
     target_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    color = models.CharField(max_length=20, default='bg-teal')
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
