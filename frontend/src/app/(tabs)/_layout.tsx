@@ -8,8 +8,8 @@ export default function TabsLayout() {
             tabBar={(props) => <CustomTabBar {...props} />}
         >
             <Tabs.Screen name="index" />
-            <Tabs.Screen name="expenses" />
-            <Tabs.Screen name="target" />
+            <Tabs.Screen name="cashflow" />
+            <Tabs.Screen name="goal" />
         </Tabs>
     );
 }

@@ -3,6 +3,7 @@ import TopBar from '../../components/TopBar'
 import CardSlider from '../../components/CardComponents/CardSlider';
 import RecentActivity from '../../components/RecentActivity';
 import InsightCard from '../../components/CardComponents/InsightCard';
+
 export default function HomeScreen() {
   return (
     // 1. Add 'relative' here so the TabBar knows where the bottom is

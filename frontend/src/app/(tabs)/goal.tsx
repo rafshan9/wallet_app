@@ -22,7 +22,7 @@ const DUMMY_GOALS: Goal[] = [
     { id: '4', name: 'New Laptop', targetAmount: 2000, savedAmount: 2000, color: 'bg-green', textColor: 'text-white' },
 ];
 
-export default function TargetScreen() {
+export default function GoalScreen() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const totalSaved = DUMMY_GOALS.reduce((sum, g) => sum + g.savedAmount, 0);
