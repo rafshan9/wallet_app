@@ -5,12 +5,15 @@ import { Feather } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import api from '../../../utils/axios';
 import { CATEGORY_STYLES, PaymentCategory } from '../../constants/paymentCategories';
+import { usePlannedPayments } from '../../hooks/usePlannedPayments';
 
 export default function PlannedPaymentDetailScreen() {
     const { id } = useLocalSearchParams();
     const router = useRouter();
     const [payment, setPayment] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const { markPaid, deletePayment } = usePlannedPayments();
+
 
     useEffect(() => { fetchPayment(); }, [id]);
 
@@ -27,7 +30,7 @@ export default function PlannedPaymentDetailScreen() {
 
     const handleMarkPaid = async () => {
         try {
-            await api.post(`/planned-payments/${id}/mark_paid/`);
+            await markPaid(id as string);
             router.back();
         } catch (error) {
             console.error('Failed to mark paid', error);
@@ -40,8 +43,13 @@ export default function PlannedPaymentDetailScreen() {
             { text: 'Cancel', style: 'cancel' },
             {
                 text: 'Delete', style: 'destructive', onPress: async () => {
-                    await api.delete(`/planned-payments/${id}/`);
-                    router.back();
+                    try {
+                        await deletePayment(id as string);
+                        router.back();
+                    } catch (error) {
+                        console.error('Failed to delete payment', error);
+                        Alert.alert('Something went wrong', 'Could not delete this payment.');
+                    }
                 }
             },
         ]);

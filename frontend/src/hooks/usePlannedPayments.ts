@@ -1,5 +1,4 @@
-// hooks/usePlannedPayments.ts
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../utils/axios';
 
 export type PaymentCategory = 'housing' | 'subscription' | 'utility' | 'insurance' | 'transport' | 'other';
@@ -16,32 +15,32 @@ export type PlannedPayment = {
 };
 
 export function usePlannedPayments() {
-    const [payments, setPayments] = useState<PlannedPayment[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const queryClient = useQueryClient();
 
-    const fetchPayments = useCallback(async () => {
-        try {
+    const { data: payments = [], isLoading, refetch } = useQuery<PlannedPayment[]>({
+        queryKey: ['planned-payments'],
+        queryFn: async () => {
             const res = await api.get('/planned-payments/');
-            setPayments(res.data);
-            return res.data as PlannedPayment[];
-        } catch (error) {
-            console.error('Failed to fetch planned payments', error);
-        } finally {
-            setIsLoading(false);
+            return res.data.map((p: any) => ({
+                ...p,
+                amount: parseFloat(p.amount),
+            }));
         }
-    }, []);
+    });
 
+    const markPaidMutation = useMutation({
+        mutationFn: (id: string) => api.post(`/planned-payments/${id}/mark_paid/`),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['planned-payments'] });
+        }
+    });
 
-
-    const markPaid = async (id: string) => {
-        await api.post(`/planned-payments/${id}/mark_paid/`);
-        fetchPayments();
-    };
-
-    const deletePayment = async (id: string) => {
-        await api.delete(`/planned-payments/${id}/`);
-        setPayments((prev) => prev.filter((p) => p.id !== id));
-    };
+    const deleteMutation = useMutation({
+        mutationFn: (id: string) => api.delete(`/planned-payments/${id}/`),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['planned-payments'] });
+        }
+    });
 
     const upcoming = [...payments]
         .filter((p) => !p.isPaid)
@@ -51,5 +50,13 @@ export function usePlannedPayments() {
         .filter((p) => (new Date(p.dueDate).getTime() - Date.now()) / (1000 * 3600 * 24) <= 7)
         .reduce((sum, p) => sum + p.amount, 0);
 
-    return { payments, upcoming, isLoading, fetchPayments, markPaid, deletePayment, totalDueThisWeek };
+    return {
+        payments,
+        upcoming,
+        isLoading,
+        fetchPayments: refetch,
+        markPaid: markPaidMutation.mutateAsync,
+        deletePayment: deleteMutation.mutateAsync,
+        totalDueThisWeek
+    };
 }

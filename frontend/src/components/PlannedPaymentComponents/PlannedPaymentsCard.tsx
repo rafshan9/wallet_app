@@ -24,19 +24,27 @@ type Props = {
     totalDueThisWeek: number;
     onPressPayment: (id: string) => void;
     onAddPress: () => void;
+    onViewAll: () => void;
 };
 
-export default function PlannedPaymentsCard({ payments, totalDueThisWeek, onPressPayment, onAddPress }: Props) {
+export default function PlannedPaymentsCard({ payments, totalDueThisWeek, onPressPayment, onAddPress, onViewAll }: Props) {
     const visible = payments.slice(0, 4);
+    const remaining = payments.length - visible.length;
 
     return (
         <View className="bg-white rounded-3xl p-5 mb-8 border-2 border-black border-dashed">
-            <View className="flex-row justify-between items-center mb-4">
+            <TouchableOpacity
+                onPress={onViewAll}
+                className="flex-row justify-between items-center mb-4"
+            >
                 <Text className="font-rubik_bold text-lg">Upcoming Payments</Text>
-                <Text className="font-rubik_medium text-xs text-gray-400">
-                    ${totalDueThisWeek.toLocaleString()} due this week
-                </Text>
-            </View>
+                <View className="flex-row items-center">
+                    <Text className="font-rubik_medium text-xs text-gray-400">
+                        ${totalDueThisWeek.toLocaleString()} due this week
+                    </Text>
+                    <Feather name="chevron-right" size={16} color="#9CA3AF" style={{ marginLeft: 4 }} />
+                </View>
+            </TouchableOpacity>
 
             {visible.length === 0 ? (
                 <Text className="text-gray-400 font-rubik_medium text-center py-4">Nothing scheduled.</Text>
@@ -67,6 +75,15 @@ export default function PlannedPaymentsCard({ payments, totalDueThisWeek, onPres
                         </TouchableOpacity>
                     );
                 })
+            )}
+
+            {remaining > 0 && (
+                <TouchableOpacity onPress={onViewAll} className="flex-row items-center justify-center py-2">
+                    <Text className="font-rubik_medium text-xs text-gray-400">
+                        +{remaining} more
+                    </Text>
+                    <Feather name="chevron-right" size={12} color="#9CA3AF" style={{ marginLeft: 2 }} />
+                </TouchableOpacity>
             )}
 
             <TouchableOpacity onPress={onAddPress} className="mt-4 bg-dark_blue py-3 rounded-full items-center">

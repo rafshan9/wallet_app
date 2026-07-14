@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import api from '../../utils/axios';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // Matches what Django sends
+
 type ApiGoal = {
     id: string;
     name: string;
@@ -9,7 +11,10 @@ type ApiGoal = {
     current_amount: string;
     color: string;
     created_at: string;
+
 };
+
+
 
 // Matches what your UI needs
 export type UIGoal = {
@@ -20,18 +25,15 @@ export type UIGoal = {
     color: string;
     textColor: string;
     deadline?: string;
+
 };
 
-
 export function useGoals() {
-    const [goals, setGoals] = useState<UIGoal[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    const fetchGoals = async () => {
-        try {
-            const response = await api.get('/goals/'); // Ensure this endpoint exists in your Django urls.py
-
-            const formattedGoals: UIGoal[] = response.data.map((g: ApiGoal) => ({
+    const { data: goals = [], isLoading, refetch } = useQuery<UIGoal[]>({
+        queryKey: ['goals'],
+        queryFn: async () => {
+            const response = await api.get('/goals/');
+            return response.data.map((g: ApiGoal) => ({
                 id: g.id,
                 name: g.name,
                 targetAmount: parseFloat(g.target_amount),
@@ -40,34 +42,27 @@ export function useGoals() {
                 textColor: 'text-white',
                 deadline: 'Ongoing',
             }));
-            setGoals(formattedGoals);
-            return formattedGoals;
-        } catch (error) {
-            console.error('Failed to fetch goals:', error);
-        } finally {
-            setIsLoading(false);
         }
-    };
-
-    const deleteGoal = async (id: string) => {
-        const previousGoals = goals;
-        setGoals((prev) => prev.filter((g) => g.id !== id));
-        try {
-            await api.delete(`/goals/${id}/`);
-        } catch (error) {
-            console.error('Failed to delete goal:', error);
-            setGoals(previousGoals);
+    });
+    const queryClient = useQueryClient();
+    const deleteMutation = useMutation({
+        mutationFn: (id: string) => api.delete(`/goals/${id}/`),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['goals'] });
         }
-    };
+    });
 
-    useEffect(() => {
-        fetchGoals();
-    }, []);
-
-    const totalSaved = goals.reduce((sum, g) => sum + g.savedAmount, 0);
-    const totalTarget = goals.reduce((sum, g) => sum + g.targetAmount, 0);
+    const totalSaved = goals.reduce((sum: number, g: UIGoal) => sum + g.savedAmount, 0);
+    const totalTarget = goals.reduce((sum: number, g: UIGoal) => sum + g.targetAmount, 0);
     const overallPercent = totalTarget > 0 ? Math.min(100, Math.round((totalSaved / totalTarget) * 100)) : 0;
 
-    return { goals, isLoading, fetchGoals, deleteGoal, totalSaved, totalTarget, overallPercent };
-
+    return {
+        goals,
+        isLoading,
+        fetchGoals: refetch,
+        deleteGoal: deleteMutation.mutate,
+        totalSaved,
+        totalTarget,
+        overallPercent
+    };
 }

@@ -22,7 +22,7 @@ export default function HomeScreen() {
 
   const handlePressPayment = (id: string) => router.push(`/planned-payment/${id}`);
   const handleAddPress = () => setIsAddModalOpen(true);
-
+  const handleViewAll = () => router.push('/planned-payment');
   return (
     <View className="flex-1 relative bg-background pt-16 ">
       <View className="px-6">
@@ -42,6 +42,7 @@ export default function HomeScreen() {
             totalDueThisWeek={totalDueThisWeek}
             onPressPayment={handlePressPayment}
             onAddPress={handleAddPress}
+            onViewAll={handleViewAll}
           />
         </View>
       </ScrollView>

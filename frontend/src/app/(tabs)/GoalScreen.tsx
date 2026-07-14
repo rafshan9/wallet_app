@@ -155,8 +155,8 @@ export default function GoalScreen() {
                     setIsFundModalOpen(false);
                     setSelectedGoal(null);
 
-                    const freshGoals = await fetchGoals();
-                    const updated = freshGoals?.find((g) => g.id === goalId);
+                    const response = await fetchGoals();
+                    const updated = response.data?.find((g) => g.id === goalId);
 
                     if (
                         previous &&

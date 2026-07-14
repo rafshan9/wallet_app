@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import api from '../../utils/axios';
 
 export type Transaction = {
@@ -41,35 +41,29 @@ function getCategoryBreakdown(transactions: Transaction[]) {
 }
 
 export function useCashFlow() {
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [totalSavings, setTotalSavings] = useState(0);
-
-
-    const fetchTransactions = async () => {
-        try {
-            // Fetch both at the same time
+    // TanStack Query handles fetching, caching, and loading states automatically
+    const { data, isLoading, refetch } = useQuery({
+        queryKey: ['cashFlow'],
+        queryFn: async () => {
             const [txRes, contRes] = await Promise.all([
                 api.get('/transactions/'),
                 api.get('/contributions/')
             ]);
 
-            setTransactions(txRes.data);
-
-            // Sum up the contributions
             const savingsSum = contRes.data.reduce((sum: number, c: any) => sum + parseFloat(c.amount), 0);
-            setTotalSavings(savingsSum);
-        } catch (error) {
-            console.error('Failed to fetch data:', error);
-        } finally {
-            setIsLoading(false);
+
+            return {
+                transactions: txRes.data as Transaction[],
+                totalSavings: savingsSum
+            };
         }
-    };
+    });
 
-    useEffect(() => {
-        fetchTransactions();
-    }, []);
+    // Safe fallbacks while data is loading
+    const transactions = data?.transactions || [];
+    const totalSavings = data?.totalSavings || 0;
 
+    // Derived calculations remain exactly the same
     const totalIncome = transactions
         .filter((t) => t.type === 'INCOME')
         .reduce((sum, t) => sum + parseFloat(t.amount), 0);
@@ -83,7 +77,7 @@ export function useCashFlow() {
     return {
         transactions,
         isLoading,
-        fetchTransactions,
+        fetchTransactions: refetch, // Renamed 'refetch' to match your existing component logic
         totalIncome,
         totalExpenses,
         categoryBreakdown,

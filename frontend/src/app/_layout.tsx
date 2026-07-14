@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Rubik_400Regular, Rubik_500Medium, Rubik_700Bold } from '@expo-google-fonts/rubik';
@@ -22,13 +23,15 @@ export default function RootLayout() {
   if (!fontsLoaded && !error) {
     return null;
   }
-
+  const queryClient = new QueryClient();
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="(auth)" />
-      <Stack.Screen name="goal/[id]" />
-      <Stack.Screen name="profile" />
-    </Stack>
+    <QueryClientProvider client={queryClient}>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="goal/[id]" />
+        <Stack.Screen name="profile" />
+      </Stack>
+    </QueryClientProvider>
   );
 }
