@@ -18,10 +18,28 @@ type GoalCardProps = {
 
 export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) {
     const percent = goal.targetAmount > 0 ? Math.min(100, Math.round((goal.savedAmount / goal.targetAmount) * 100)) : 0;
+    const isCompleted = goal.savedAmount >= goal.targetAmount;
 
-    const lightBackgrounds = ['bg-yellow', 'bg-light_blue', 'bg-orange', 'bg-teal'];
+    const lightBackgrounds = ['bg-white', 'bg-yellow', 'bg-light_blue', 'bg-orange', 'bg-teal'];
     const textColor = lightBackgrounds.includes(goal.color) ? 'text-black' : 'text-white';
     const isDark = textColor === 'text-white';
+
+    // Calculate pace and deadline details dynamically
+    let deadlineInsight = '';
+    if (isCompleted) {
+        deadlineInsight = 'Goal reached!';
+    } else if (goal.deadline) {
+        const remainingAmount = goal.targetAmount - goal.savedAmount;
+        const daysLeft = Math.ceil((new Date(goal.deadline).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+
+        if (daysLeft > 0) {
+            const weeksLeft = Math.max(1, Math.floor(daysLeft / 7));
+            const perWeek = remainingAmount / weeksLeft;
+            deadlineInsight = `$${perWeek.toFixed(0)}/wk needed`;
+        } else {
+            deadlineInsight = 'Past deadline';
+        }
+    }
 
     const handleDelete = () => {
         Alert.alert(
@@ -39,9 +57,12 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
             <View className="flex-row justify-between items-start mb-4">
                 <View className="flex-1 mr-2">
                     <Text className={`font-rubik_bold text-lg ${textColor}`}>{goal.name}</Text>
-                    {goal.deadline && (
+
+                    {/* Updated Subtitle: Combines deadline date and weekly tracking insight */}
+                    {(goal.deadline || deadlineInsight) && (
                         <Text className={`font-rubik_regular text-xs mt-1 ${isDark ? 'text-white/70' : 'text-black/60'}`}>
-                            {goal.deadline}
+                            {goal.deadline ? `${goal.deadline} ` : ''}
+                            {deadlineInsight ? `• ${deadlineInsight}` : ''}
                         </Text>
                     )}
                 </View>
@@ -68,12 +89,16 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
                     ${goal.savedAmount.toLocaleString()}
                     <Text className={isDark ? 'text-white/60' : 'text-black/50'}> of ${goal.targetAmount.toLocaleString()}</Text>
                 </Text>
-                <TouchableOpacity
-                    onPress={onAddPress}
-                    className={`px-3 py-1.5 rounded-full ${isDark ? 'bg-white/20' : 'bg-black/10'}`}
-                >
-                    <Feather name="plus" size={14} color={isDark ? 'white' : 'black'} />
-                </TouchableOpacity>
+
+                {/* Hides the action button if the milestone is already reached */}
+                {!isCompleted && (
+                    <TouchableOpacity
+                        onPress={onAddPress}
+                        className={`px-3 py-1.5 rounded-full ${isDark ? 'bg-white/20' : 'bg-black/10'}`}
+                    >
+                        <Feather name="plus" size={14} color={isDark ? 'white' : 'black'} />
+                    </TouchableOpacity>
+                )}
             </View>
         </View>
     );

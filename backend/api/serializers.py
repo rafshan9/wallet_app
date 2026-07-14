@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Transaction, SavingsGoal, GoalContribution
+from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,3 +36,12 @@ class SavingsGoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = SavingsGoal
         fields = ['id', 'user', 'name', 'target_amount', 'current_amount', 'contributions', 'color', 'created_at']
+
+class PlannedPaymentSerializer(serializers.ModelSerializer):
+    dueDate = serializers.DateField(source='due_date')
+    isRecurring = serializers.BooleanField(source='is_recurring')
+    isPaid = serializers.BooleanField(source='is_paid', read_only=True)
+
+    class Meta:
+        model = PlannedPayment
+        fields = ['id', 'name', 'amount', 'dueDate', 'category', 'isRecurring', 'frequency', 'isPaid']

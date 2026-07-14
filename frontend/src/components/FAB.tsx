@@ -84,8 +84,8 @@ export default function FAB() {
                 <Animated.View style={{ transform: [{ rotate: rotation }] }}>
                     {/* Your custom thick rounded plus icon */}
                     <View className="justify-center items-center w-8 h-8">
-                        <View className="absolute w-1.5 h-8 bg-black rounded-full" />
-                        <View className="absolute w-8 h-1.5 bg-black rounded-full" />
+                        <View className="absolute w-1.5 h-8 bg-white rounded-full" />
+                        <View className="absolute w-8 h-1.5 bg-white rounded-full" />
                     </View>
                 </Animated.View>
             </TouchableOpacity>

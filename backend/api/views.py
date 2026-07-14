@@ -3,8 +3,9 @@ from rest_framework import generics, viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer
-from .models import Transaction, SavingsGoal, GoalContribution
+from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer
+from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment
+from datetime import timedelta
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -60,3 +61,25 @@ class GoalContributionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # Only show contributions for goals that belong to the logged-in user
         return GoalContribution.objects.filter(goal__user=self.request.user)
+    
+class PlannedPaymentViewSet(viewsets.ModelViewSet):
+    serializer_class = PlannedPaymentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return PlannedPayment.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    @action(detail=True, methods=['post'])
+    def mark_paid(self, request, pk=None):
+        payment = self.get_object()
+        if payment.is_recurring and payment.frequency:
+            # one-off payments just get marked paid and drop off the list
+            delta = {'weekly': timedelta(weeks=1), 'monthly': timedelta(days=30), 'yearly': timedelta(days=365)}[payment.frequency]
+            payment.due_date += delta  # recurring ones roll forward instead
+        else:
+            payment.is_paid = True
+        payment.save()
+        return Response(PlannedPaymentSerializer(payment).data)
