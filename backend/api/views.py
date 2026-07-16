@@ -3,8 +3,8 @@ from rest_framework import generics, viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer
-from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment
+from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer, NoteSerializer
+from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment, Note
 from datetime import timedelta
 
 class RegisterView(generics.CreateAPIView):
@@ -83,3 +83,14 @@ class PlannedPaymentViewSet(viewsets.ModelViewSet):
             payment.is_paid = True
         payment.save()
         return Response(PlannedPaymentSerializer(payment).data)
+
+
+class NoteViewSet(viewsets.ModelViewSet):
+    serializer_class = NoteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Note.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

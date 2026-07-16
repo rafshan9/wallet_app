@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { CATEGORIES } from '../../constants/categories';
 import api from '../../../utils/axios'
 import { useAppStore } from '../../store'
+import { useAlert } from '../AlertModal';
 
 type AddExpenseModalProps = {
     visible: boolean;
@@ -18,14 +19,15 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
     const [amount, setAmount] = useState('');
     const [title, setTitle] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const showAlert = useAlert();
 
     const handleSubmit = async () => {
         if (!amount || !title) {
-            Alert.alert('Error', 'Please enter an amount and title');
+            showAlert({ title: 'Error', message: 'Please enter an amount and title' });
             return;
         }
         if (type === 'expense' && !selectedCategory) {
-            Alert.alert('Error', 'Please select a category.');
+            showAlert({ title: 'Error', message: 'Please select a category.' });
             return;
         }
         setIsLoading(true)

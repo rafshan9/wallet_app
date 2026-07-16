@@ -1,4 +1,5 @@
 import { Modal, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { useAlert } from '../AlertModal';
 
 type Transaction = {
     id: string | number;

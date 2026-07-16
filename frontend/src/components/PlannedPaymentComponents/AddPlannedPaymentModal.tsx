@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import api from '../../../utils/axios';
 import { CATEGORY_STYLES, FREQUENCIES, PaymentCategory } from '../../constants/paymentCategories';
-
+import { useAlert } from '../AlertModal';
 type Props = {
     visible: boolean;
     onClose: () => void;
@@ -22,10 +22,11 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
     const reset = () => {
         setName(''); setAmount(''); setDueDate(''); setCategory('other'); setIsRecurring(false); setFrequency('monthly');
     };
+    const showAlert = useAlert();
 
     const handleSave = async () => {
         if (!name.trim() || !amount || !dueDate) {
-            Alert.alert('Missing info', 'Name, amount, and due date are required.');
+            showAlert({ title: 'Missing info', message: 'Name, amount, and due date are required.' });
             return;
         }
         setIsSaving(true);
@@ -42,7 +43,7 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
             onClose();
         } catch (error) {
             console.error('Failed to create planned payment', error);
-            Alert.alert('Something went wrong', 'Could not save this payment. Try again.');
+            showAlert({ title: 'Something went wrong', message: 'Could not save this payment. Try again.' });
         } finally {
             setIsSaving(false);
         }

@@ -11,6 +11,7 @@ import MonthYearPickerModal from '../../components/CashFlowComponents/MonthYearP
 import ReceiptModal from '../../components/CashFlowComponents/ReceiptModal';
 import TopBar from '../../components/TopBar';
 import { groupTransactionsByWeek } from '../../../utils/groupTransactionsByWeeks';
+import { useAlert } from '../../components/AlertModal';
 
 export default function CashFlowScreen() {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -19,6 +20,7 @@ export default function CashFlowScreen() {
     const [selectedYear, setSelectedYear] = useState(2026);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { refreshTrigger, openModal } = useAppStore();
+    const showAlert = useAlert();
 
     const {
         transactions,
@@ -160,7 +162,10 @@ export default function CashFlowScreen() {
                     });
 
                     if (!hasData) {
-                        Alert.alert("No Data", "No transactions for this month.");
+                        showAlert({
+                            title: 'No Data',
+                            message: 'No transactions for this month.',
+                        });
                         return;
                     }
 

@@ -2,6 +2,7 @@ import { View, Text, Modal, TextInput, TouchableOpacity, Alert, ActivityIndicato
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import api from '../../../utils/axios';
+import { useAlert } from '../AlertModal';
 
 type AddContributionModalProps = {
     visible: boolean;
@@ -12,10 +13,11 @@ type AddContributionModalProps = {
 export default function AddContributionModal({ visible, onClose, goal }: AddContributionModalProps) {
     const [amount, setAmount] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const showAlert = useAlert();
 
     const handleSubmit = async () => {
         if (!amount || !goal) {
-            Alert.alert('Error', 'Please enter an amount.');
+            showAlert({ title: 'Error', message: 'Please enter an amount.' });
             return;
         }
 

@@ -4,7 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useFonts, Rubik_400Regular, Rubik_500Medium, Rubik_700Bold } from '@expo-google-fonts/rubik';
 import { useEffect } from 'react';
 import '../../global.css';
-
+import { AlertModalProvider } from '../components/AlertModal';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -26,12 +26,14 @@ export default function RootLayout() {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="goal/[id]" />
-        <Stack.Screen name="profile" />
-      </Stack>
+      <AlertModalProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="goal/[id]" />
+          <Stack.Screen name="profile" />
+        </Stack>
+      </AlertModalProvider>
     </QueryClientProvider>
   );
 }
