@@ -37,9 +37,9 @@ export default function PlannedPaymentsCard({ payments, totalDueThisWeek, onPres
                 onPress={onViewAll}
                 className="flex-row justify-between items-center mb-4"
             >
-                <Text className="font-rubik_bold text-lg">Upcoming Payments</Text>
+                <Text className="font-inter_bold text-lg">Upcoming Payments</Text>
                 <View className="flex-row items-center">
-                    <Text className="font-rubik_medium text-xs text-gray-400">
+                    <Text className="font-inter_medium text-xs text-gray-400">
                         ${totalDueThisWeek.toLocaleString()} due this week
                     </Text>
                     <Feather name="chevron-right" size={16} color="#9CA3AF" style={{ marginLeft: 4 }} />
@@ -47,7 +47,7 @@ export default function PlannedPaymentsCard({ payments, totalDueThisWeek, onPres
             </TouchableOpacity>
 
             {visible.length === 0 ? (
-                <Text className="text-gray-400 font-rubik_medium text-center py-4">Nothing scheduled.</Text>
+                <Text className="text-gray-400 font-inter_medium text-center py-4">Nothing scheduled.</Text>
             ) : (
                 visible.map((payment) => {
                     const style = CATEGORY_STYLES[payment.category] ?? CATEGORY_STYLES.other;
@@ -62,15 +62,15 @@ export default function PlannedPaymentsCard({ payments, totalDueThisWeek, onPres
                                 <Feather name={style.icon} size={16} color="white" />
                             </View>
                             <View className="flex-1">
-                                <Text className="font-rubik_medium text-lg">{payment.name}</Text>
-                                <Text className="font-rubik_regular text-xs text-gray-400">
+                                <Text className="font-inter_medium text-lg">{payment.name}</Text>
+                                <Text className="font-inter_regular text-xs text-gray-400">
                                     {payment.isRecurring ? `${payment.frequency} · ` : ''}
                                     {new Date(payment.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                                 </Text>
                             </View>
                             <View className="items-end">
-                                <Text className="font-rubik_bold text-sm">${payment.amount.toLocaleString()}</Text>
-                                <Text className={`font-rubik_medium text-[10px] ${status.color}`}>{status.label}</Text>
+                                <Text className="font-inter_bold text-sm">${payment.amount.toLocaleString()}</Text>
+                                <Text className={`font-inter_medium text-[10px] ${status.color}`}>{status.label}</Text>
                             </View>
                         </TouchableOpacity>
                     );
@@ -79,7 +79,7 @@ export default function PlannedPaymentsCard({ payments, totalDueThisWeek, onPres
 
             {remaining > 0 && (
                 <TouchableOpacity onPress={onViewAll} className="flex-row items-center justify-center py-2">
-                    <Text className="font-rubik_medium text-xs text-gray-400">
+                    <Text className="font-inter_medium text-xs text-gray-400">
                         +{remaining} more
                     </Text>
                     <Feather name="chevron-right" size={12} color="#9CA3AF" style={{ marginLeft: 2 }} />
@@ -87,7 +87,7 @@ export default function PlannedPaymentsCard({ payments, totalDueThisWeek, onPres
             )}
 
             <TouchableOpacity onPress={onAddPress} className="mt-4 bg-dark_blue py-3 rounded-full items-center">
-                <Text className="text-white p-2 font-rubik_bold text-md">Add Payment</Text>
+                <Text className="text-white p-2 font-inter_bold text-md">Add Payment</Text>
             </TouchableOpacity>
         </View>
     );

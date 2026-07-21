@@ -77,33 +77,33 @@ export default function PlannedPaymentDetailScreen() {
                 >
                     <Feather name="arrow-left" size={24} color="black" />
                 </TouchableOpacity>
-                <Text className="text-2xl text-white font-rubik_bold mx-4 flex-1" numberOfLines={1}>{payment.name}</Text>
+                <Text className="text-2xl text-white font-inter_bold mx-4 flex-1" numberOfLines={1}>{payment.name}</Text>
             </View>
 
             <View className={`p-6 rounded-3xl mb-8 border-2 border-dashed border-black ${style.bg}`}>
                 <View className="h-14 w-14 rounded-full bg-white/20 justify-center items-center mb-4">
                     <Feather name={style.icon} size={24} color="white" />
                 </View>
-                <Text className="text-white/80 font-rubik_medium text-sm mb-1 uppercase tracking-widest">Amount</Text>
-                <Text className="text-white font-rubik_bold text-4xl mb-6">
+                <Text className="text-white/80 font-inter_medium text-sm mb-1 uppercase tracking-widest">Amount</Text>
+                <Text className="text-white font-inter_bold text-4xl mb-6">
                     ${Number(payment.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </Text>
                 <View className="flex-row justify-between">
-                    <Text className="text-white/80 font-rubik_medium text-sm">
+                    <Text className="text-white/80 font-inter_medium text-sm">
                         Due: {new Date(payment.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </Text>
                     {payment.isRecurring && (
-                        <Text className="text-white/80 font-rubik_medium text-sm capitalize">{payment.frequency}</Text>
+                        <Text className="text-white/80 font-inter_medium text-sm capitalize">{payment.frequency}</Text>
                     )}
                 </View>
             </View>
 
             <TouchableOpacity onPress={handleMarkPaid} className="bg-yellow py-4 rounded-full items-center mb-3">
-                <Text className="font-rubik_bold">Mark as Paid</Text>
+                <Text className="font-inter_bold">Mark as Paid</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={handleDelete} className="bg-red border-2 border-white/30 py-4 rounded-full items-center">
-                <Text className="text-white font-rubik_bold">Delete</Text>
+                <Text className="text-white font-inter_bold">Delete</Text>
             </TouchableOpacity>
         </View>
     );

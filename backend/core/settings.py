@@ -11,9 +11,18 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load the environment variables from the .env file
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# Define the variable so views.py can access it via settings.GEMINI_API_KEY
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 
 # Quick-start development settings - unsuitable for production

@@ -2,10 +2,16 @@ from django.contrib.auth.models import User
 from rest_framework import generics, viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer, NoteSerializer
 from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment, Note
 from datetime import timedelta
+import google.generativeai as genai
+import tempfile
+import os
+import json
+from rest_framework.decorators import api_view, permission_classes
+from django.conf import settings
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -94,3 +100,47 @@ class NoteViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+#Gemini voice to text
+genai.configure(api_key=settings.GEMINI_API_KEY)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def process_voice_expense(request):
+    audio_file = request.FILES.get('audio')
+    if not audio_file:
+        return Response({"error": "No audio file"}, status=400)
+
+    # Save incoming audio to a temporary file
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.m4a') as temp_audio:
+        for chunk in audio_file.chunks():
+            temp_audio.write(chunk)
+        temp_path = temp_audio.name
+
+    try:
+        # Upload to Gemini
+        gemini_file = genai.upload_file(temp_path)
+        
+        # Enforce your strict JSON schema
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        prompt = """
+        Extract the expense details from this audio. 
+        Return ONLY a JSON array matching this exact format, with no markdown formatting:
+        [{"name": "Merchant Name", "amount": 0.00, "category": "CATEGORY_NAME"}]
+        """
+        
+        response = model.generate_content([prompt, gemini_file])
+        
+        # Clean up files immediately
+        os.remove(temp_path)
+        genai.delete_file(gemini_file.name)
+        
+        # Parse and return to Expo
+        raw_text = response.text.strip().removeprefix('```json').removesuffix('```').strip()
+        return Response(json.loads(raw_text))
+
+    except Exception as e:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        return Response({"error": str(e)}, status=500)

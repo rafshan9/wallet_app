@@ -18,9 +18,9 @@ export default function MonthlyCashFlowChart({ deposited, expense, savings }: Mo
 
     return (
         <View className="bg-very_dark_blue rounded-2xl p-6 mb-8">
-            <Text className="font-rubik_medium text-xs text-white/50 mb-1">This month · net</Text>
+            <Text className="font-inter_medium text-xs text-white/50 mb-1">This month · net</Text>
             <Text
-                className="font-rubik_bold text-3xl mb-5"
+                className="font-inter_bold text-3xl mb-5"
                 style={{ color: isPositive ? '#ffffff' : '#F87171' }}
             >
                 {isPositive ? '+' : '-'}${Math.abs(net).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -42,9 +42,9 @@ export default function MonthlyCashFlowChart({ deposited, expense, savings }: Mo
                     <View key={seg.label} className="flex-1">
                         <View className="flex-row items-center mb-1">
                             <View className="h-2 w-2 rounded-full mr-1.5" style={{ backgroundColor: seg.hex }} />
-                            <Text className="font-rubik_medium text-xs text-white/60">{seg.label}</Text>
+                            <Text className="font-inter_medium text-xs text-white/60">{seg.label}</Text>
                         </View>
-                        <Text className="font-rubik_bold text-sm text-white">
+                        <Text className="font-inter_bold text-sm text-white">
                             ${seg.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </Text>
                     </View>

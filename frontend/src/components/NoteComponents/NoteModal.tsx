@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Modal, KeyboardAvoidingView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { useAlert } from '../AlertModal';
@@ -47,46 +47,51 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
 
     return (
         <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-            <View className="flex-1 justify-end bg-black/40">
-                <View className="bg-very_dark_blue rounded-t-[32px] border-2 border-black px-6 pt-6 pb-8">
-                    <View className="flex-row justify-between items-center mb-6">
-                        <Text className="font-rubik_bold text-xl text-white">{note ? 'Edit Note' : 'New Note'}</Text>
-                        <TouchableOpacity className="bg-yellow rounded-full p-2 border-2 border-black" onPress={onClose} hitSlop={8}>
-                            <Feather name="x" size={22} color="black" />
-                        </TouchableOpacity>
-                    </View>
+            <KeyboardAvoidingView
+                behavior="padding"
+                className="flex-1"
+            >
+                <View className="flex-1 justify-end bg-black/40">
+                    <View className="bg-very_dark_blue rounded-t-[32px] border-2 border-black px-6 pt-6 pb-8">
+                        <View className="flex-row justify-between items-center mb-6">
+                            <Text className="font-inter_bold text-xl text-white">{note ? 'Edit Note' : 'New Note'}</Text>
+                            <TouchableOpacity className="bg-yellow rounded-full p-2 border-2 border-black" onPress={onClose} hitSlop={8}>
+                                <Feather name="x" size={22} color="black" />
+                            </TouchableOpacity>
+                        </View>
 
-                    <TextInput
-                        value={content}
-                        onChangeText={setContent}
-                        placeholder="Write a note..."
-                        placeholderTextColor="rgba(255,255,255,0.6)"
-                        multiline
-                        numberOfLines={4}
-                        autoFocus
-                        className="border-2 border-white/30 rounded-2xl px-4 py-3 font-rubik_medium mb-6"
-                        style={{ minHeight: 100, textAlignVertical: 'top' }}
-                    />
+                        <TextInput
+                            value={content}
+                            onChangeText={setContent}
+                            placeholder="Write a note..."
+                            placeholderTextColor="rgba(255,255,255,0.6)"
+                            multiline
+                            numberOfLines={4}
+                            autoFocus
+                            className="border-2 border-white/30 text-white rounded-2xl px-4 py-3 font-inter_medium mb-6"
+                            style={{ minHeight: 100, textAlignVertical: 'top' }}
+                        />
 
-                    <View className="flex-row items-center gap-3">
-                        <TouchableOpacity
-                            onPress={handleCameraPress}
-                            className="h-14 w-14 bg-yellow rounded-full items-center justify-center border-2 border-black"
-                        >
-                            <Feather name="camera" size={20} color="black" />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={handleVoicePress}
-                            className="h-14 w-14 bg-yellow rounded-full items-center justify-center border-2 border-black"
-                        >
-                            <Feather name="mic" size={20} color="black" />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={handleSave} disabled={isSaving} className="flex-1 bg-black py-4 rounded-full items-center">
-                            <Text className="text-white font-rubik_bold">{isSaving ? 'Saving...' : 'Save Note'}</Text>
-                        </TouchableOpacity>
+                        <View className="flex-row items-center gap-3">
+                            <TouchableOpacity
+                                onPress={handleCameraPress}
+                                className="h-14 w-14 bg-yellow rounded-full items-center justify-center border-2 border-black"
+                            >
+                                <Feather name="camera" size={20} color="black" />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={handleVoicePress}
+                                className="h-14 w-14 bg-yellow rounded-full items-center justify-center border-2 border-black"
+                            >
+                                <Feather name="mic" size={20} color="black" />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleSave} disabled={isSaving} className="flex-1 bg-black py-4 rounded-full items-center">
+                                <Text className="text-white font-inter_bold">{isSaving ? 'Saving...' : 'Save Note'}</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         </Modal>
     );
 }

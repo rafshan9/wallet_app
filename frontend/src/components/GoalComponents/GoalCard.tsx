@@ -56,18 +56,18 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
         <View className={`${goal.color} rounded-3xl p-5 mb-4 border-2 border-dashed border-black`}>
             <View className="flex-row justify-between items-start mb-4">
                 <View className="flex-1 mr-2">
-                    <Text className={`font-rubik_bold text-lg ${textColor}`}>{goal.name}</Text>
+                    <Text className={`font-inter_bold text-lg ${textColor}`}>{goal.name}</Text>
 
                     {/* Updated Subtitle: Combines deadline date and weekly tracking insight */}
                     {(goal.deadline || deadlineInsight) && (
-                        <Text className={`font-rubik_regular text-xs mt-1 ${isDark ? 'text-white/70' : 'text-black/60'}`}>
+                        <Text className={`font-inter_regular text-xs mt-1 ${isDark ? 'text-white/70' : 'text-black/60'}`}>
                             {goal.deadline ? `${goal.deadline} ` : ''}
                             {deadlineInsight ? `• ${deadlineInsight}` : ''}
                         </Text>
                     )}
                 </View>
                 <View className="flex-row items-center gap-3">
-                    <Text className={`font-rubik_bold text-base ${textColor}`}>{percent}%</Text>
+                    <Text className={`font-inter_bold text-base ${textColor}`}>{percent}%</Text>
                     <TouchableOpacity onPress={handleDelete} hitSlop={8}>
                         <Feather name="trash-2" size={16} color={isDark ? 'white' : 'black'} style={{ opacity: 0.5 }} />
                     </TouchableOpacity>
@@ -85,7 +85,7 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
             </View>
 
             <View className="flex-row justify-between items-center">
-                <Text className={`font-rubik_medium text-sm ${textColor}`}>
+                <Text className={`font-inter_medium text-sm ${textColor}`}>
                     ${goal.savedAmount.toLocaleString()}
                     <Text className={isDark ? 'text-white/60' : 'text-black/50'}> of ${goal.targetAmount.toLocaleString()}</Text>
                 </Text>

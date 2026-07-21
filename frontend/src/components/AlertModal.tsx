@@ -41,9 +41,9 @@ export function AlertModalProvider({ children }: { children: ReactNode }) {
             <Modal visible={visible} transparent animationType="fade" onRequestClose={() => setVisible(false)}>
                 <View className="flex-1 items-center justify-center bg-black/40 px-8">
                     <View className="bg-yellow rounded-3xl border-2 border-black border-dashed p-6 w-full max-w-sm">
-                        <Text className="font-rubik_bold text-lg text-center mb-2">{options?.title}</Text>
+                        <Text className="font-inter_bold text-lg text-center mb-2">{options?.title}</Text>
                         {options?.message && (
-                            <Text className="font-rubik_regular text-sm text-center mb-6">
+                            <Text className="font-inter_regular text-sm text-center mb-6">
                                 {options.message}
                             </Text>
                         )}
@@ -62,7 +62,7 @@ export function AlertModalProvider({ children }: { children: ReactNode }) {
                                     >
                                         {/* Bulletproof inline color to prevent NativeWind fallback issues */}
                                         <Text
-                                            className="font-rubik_bold text-sm"
+                                            className="font-inter_bold text-sm"
                                             style={{ color: isCancel ? '#000000' : '#FFFFFF' }}
                                         >
                                             {button.text}

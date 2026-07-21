@@ -11,18 +11,25 @@ module.exports = {
         very_dark_blue: '#00215E',
         dark_blue: '#134E8E',
         light_blue: '#1E93AB',
-        yellow: '#FFB33F',
+        yellow: '#EAFF00',
         orange: '#FF4400',
         teal: '#6FEDD6',
         green: '#219C90',
-        black: '#151515',
+        black: '#111A09',
         background: '#F5EFE2',
+        background_green: '#A8FF57',
+        background_red: '#D9313F',
+        background_blue: '#3B4BD7',
+
       },
       fontFamily: {
-        rubik: ['Rubik_400Regular'],
-        rubik_medium: ['Rubik_500Medium'],
-        rubik_bold: ['Rubik_700Bold'],
-      }
+        inter: ['Inter_400Regular'],
+        inter_medium: ['Inter_500Medium'],
+        inter_bold: ['Inter_700Bold'],
+        inter_black: ['Inter_900Black'],
+        alfa: ['AlfaSlabOne_400Regular'],
+
+      },
     }
   },
   plugins: [],

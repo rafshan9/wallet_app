@@ -32,12 +32,12 @@ export default function AllPlannedPaymentsScreen() {
                 >
                     <Feather name="arrow-left" size={24} color="black" />
                 </TouchableOpacity>
-                <Text className="text-2xl font-rubik_bold mx-4 text-white">All Payments</Text>
+                <Text className="text-2xl font-inter_bold mx-4 text-white">All Payments</Text>
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
                 {upcoming.length === 0 ? (
-                    <Text className="text-gray-400 font-rubik_medium text-center py-8">Nothing scheduled.</Text>
+                    <Text className="text-gray-400 font-inter_medium text-center py-8">Nothing scheduled.</Text>
                 ) : (
                     upcoming.map((payment) => {
                         const style = CATEGORY_STYLES[payment.category as PaymentCategory] ?? CATEGORY_STYLES.other;
@@ -52,15 +52,15 @@ export default function AllPlannedPaymentsScreen() {
                                     <Feather name={style.icon} size={16} color="white" />
                                 </View>
                                 <View className="flex-1">
-                                    <Text className="font-rubik_medium text-base">{payment.name}</Text>
-                                    <Text className="font-rubik_regular text-xs text-gray-400">
+                                    <Text className="font-inter_medium text-base">{payment.name}</Text>
+                                    <Text className="font-inter_regular text-xs text-gray-400">
                                         {payment.isRecurring ? `${payment.frequency} · ` : ''}
                                         {new Date(payment.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                                     </Text>
                                 </View>
                                 <View className="items-end">
-                                    <Text className="font-rubik_bold text-sm">${payment.amount.toLocaleString()}</Text>
-                                    <Text className={`font-rubik_medium text-[10px] ${status.color}`}>{status.label}</Text>
+                                    <Text className="font-inter_bold text-sm">${payment.amount.toLocaleString()}</Text>
+                                    <Text className={`font-inter_medium text-[10px] ${status.color}`}>{status.label}</Text>
                                 </View>
                             </TouchableOpacity>
                         );

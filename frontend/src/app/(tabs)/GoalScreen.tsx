@@ -40,8 +40,8 @@ export default function GoalScreen() {
 
                 {/* 2. Overview Card with Segmented Bar */}
                 <View className="bg-black rounded-3xl p-6 mb-8">
-                    <Text className="text-white/60 font-rubik_medium text-sm mb-2">Total Saved</Text>
-                    <Text className="text-white font-rubik_bold text-4xl mb-4">
+                    <Text className="text-white/60 font-inter_medium text-sm mb-2">Total Saved</Text>
+                    <Text className="text-white font-inter_bold text-4xl mb-4">
                         ${totalSaved.toLocaleString()}
                     </Text>
                     <View className="h-3 bg-white/20 rounded-full overflow-hidden mb-2 flex-row">
@@ -63,18 +63,18 @@ export default function GoalScreen() {
                             <View className="h-full bg-teal rounded-full" style={{ width: '0%' }} />
                         )}
                     </View>
-                    <Text className="text-white/60 font-rubik_medium text-xs">
+                    <Text className="text-white/60 font-inter_medium text-xs">
                         ${totalSaved.toLocaleString()} of ${totalTarget.toLocaleString()} across {goals.length} goals
                     </Text>
                 </View>
 
                 {/* Header & Add Button */}
                 <View className="flex-row justify-between items-center mb-6">
-                    <Text className="text-xl font-rubik_bold">Your Goals</Text>
+                    <Text className="text-xl font-inter_bold">Your Goals</Text>
                     {goals.length > 0 && (
                         <TouchableOpacity activeOpacity={0.8} onPress={() => setIsModalOpen(true)} className="flex-row items-center bg-dark_blue border-2 border-black/40 rounded-full px-6 py-4">
                             <Feather name="plus" size={16} color="white" />
-                            <Text className="text-sm font-rubik_bold text-white ml-1">Add New</Text>
+                            <Text className="text-sm font-inter_bold text-white ml-1">Add New</Text>
                         </TouchableOpacity>
                     )}
                 </View>
@@ -85,12 +85,12 @@ export default function GoalScreen() {
                         <View className="h-20 w-20 bg-black/5 rounded-full justify-center items-center mb-4">
                             <Feather name="target" size={32} color="black" />
                         </View>
-                        <Text className="text-xl font-rubik_bold text-black mb-2">No goals yet</Text>
-                        <Text className="text-gray-500 font-rubik_medium text-center mb-6 px-8">
+                        <Text className="text-xl font-inter_bold text-black mb-2">No goals yet</Text>
+                        <Text className="text-gray-500 font-inter_medium text-center mb-6 px-8">
                             Set a target and start tracking your savings journey today.
                         </Text>
                         <TouchableOpacity onPress={() => setIsModalOpen(true)} className="bg-black px-8 py-4 rounded-full">
-                            <Text className="text-white font-rubik_bold">Create Your First Goal</Text>
+                            <Text className="text-white font-inter_bold">Create Your First Goal</Text>
                         </TouchableOpacity>
                     </View>
                 ) : (
@@ -98,7 +98,7 @@ export default function GoalScreen() {
                         {/* 4. Active Goals List (Wrapped in TouchableOpacity for Routing) */}
                         {activeGoals.length > 0 && (
                             <View className="mb-4">
-                                <Text className="text-sm font-rubik_bold text-gray-400 mb-4 uppercase tracking-wider">In Progress</Text>
+                                <Text className="text-sm font-inter_bold text-gray-400 mb-4 uppercase tracking-wider">In Progress</Text>
                                 {activeGoals.map((goal) => (
                                     <TouchableOpacity key={goal.id} activeOpacity={0.9} onPress={() => router.push(`/goal/${goal.id}`)}>
                                         <GoalCard
@@ -117,7 +117,7 @@ export default function GoalScreen() {
                         {/* 5. Completed Goals List */}
                         {completedGoals.length > 0 && (
                             <View className="mt-4">
-                                <Text className="text-sm font-rubik_bold mb-4 uppercase tracking-wider">Completed</Text>
+                                <Text className="text-sm font-inter_bold mb-4 uppercase tracking-wider">Completed</Text>
                                 {completedGoals.map((goal) => (
                                     <TouchableOpacity key={goal.id} activeOpacity={0.9} onPress={() => router.push(`/goal/${goal.id}`)}>
                                         <GoalCard

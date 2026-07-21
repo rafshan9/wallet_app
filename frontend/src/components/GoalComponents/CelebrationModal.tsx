@@ -114,13 +114,13 @@ export default function CelebrationModal({ visible, onClose, goalName, targetAmo
                         <Feather name="award" size={40} color="black" />
                     </View>
 
-                    <Text className="font-rubik_bold text-2xl text-black text-center mb-2">Goal Complete!</Text>
-                    <Text className="font-rubik_medium text-base text-gray-500 text-center mb-6">
+                    <Text className="font-inter_bold text-2xl text-black text-center mb-2">Goal Complete!</Text>
+                    <Text className="font-inter_medium text-base text-gray-500 text-center mb-6">
                         You hit your ${targetAmount.toLocaleString()} target for "{goalName}"
                     </Text>
 
                     <TouchableOpacity onPress={onClose} className="bg-black px-10 py-4 rounded-full w-full items-center">
-                        <Text className="text-white font-rubik_bold text-lg">Nice!</Text>
+                        <Text className="text-white font-inter_bold text-lg">Nice!</Text>
                     </TouchableOpacity>
                 </Animated.View>
             </View>

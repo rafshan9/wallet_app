@@ -54,8 +54,8 @@ export default function FAB() {
     return (
         <View className="items-center justify-end relative z-50">
             <Animated.View className="absolute items-center justify-center" style={item2Style}>
-                <View className="absolute right-[80px] bg-yellow py-2 rounded-full w-40 items-center justify-center">
-                    <Text className="text-black font-rubik_medium">Add Transaction</Text>
+                <View className="absolute right-[68px] bg-yellow py-2 rounded-full w-36 items-center justify-center">
+                    <Text className="text-black font-inter_medium text-sm">Add Transaction</Text>
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.8}
@@ -63,15 +63,15 @@ export default function FAB() {
                         toggleMenu();
                         openModal();
                     }}
-                    className="h-20 w-20 bg-yellow rounded-full justify-center items-center shadow-xl"
+                    className="h-14 w-14 bg-yellow rounded-full justify-center items-center shadow-xl"
                 >
-                    <Feather name="shopping-bag" size={32} color="black" />
+                    <Feather name="shopping-bag" size={24} color="black" />
                 </TouchableOpacity>
             </Animated.View>
 
             <Animated.View className="absolute items-center justify-center" style={item1Style}>
-                <View className="absolute right-[80px] bg-dark_blue py-2 rounded-full w-24 items-center justify-center">
-                    <Text className="text-white font-rubik_medium">Notes</Text>
+                <View className="absolute right-[68px] bg-dark_blue py-2 rounded-full w-20 items-center justify-center">
+                    <Text className="text-white font-inter_medium text-sm">Notes</Text>
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.8}
@@ -79,30 +79,28 @@ export default function FAB() {
                         toggleMenu();
                         openNoteModal();
                     }}
-                    className="h-20 w-20 bg-dark_blue rounded-full justify-center items-center shadow-xl"
+                    className="h-14 w-14 bg-dark_blue rounded-full justify-center items-center shadow-xl"
                 >
-                    <Feather name="file-text" size={32} color="white" />
+                    <Feather name="file-text" size={24} color="white" />
                 </TouchableOpacity>
             </Animated.View>
 
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={toggleMenu}
-                className="h-20 w-20 bg-red rounded-full justify-center items-center z-50 shadow-xl"
+                className="h-14 w-14 bg-red rounded-full justify-center items-center z-50 shadow-xl"
             >
                 <Animated.View style={{ transform: [{ rotate: rotation }] }}>
-                    <View className="justify-center items-center w-8 h-8">
-                        <View className="absolute w-1.5 h-8 bg-white rounded-full" />
-                        <View className="absolute w-8 h-1.5 bg-white rounded-full" />
+                    <View className="justify-center items-center w-6 h-6">
+                        <View className="absolute w-1 h-6 bg-white rounded-full" />
+                        <View className="absolute w-6 h-1 bg-white rounded-full" />
                     </View>
                 </Animated.View>
             </TouchableOpacity>
 
             <AddFundModal
                 visible={isAddModalOpen}
-                onClose={() => {
-                    closeModal();
-                }}
+                onClose={closeModal}
             />
 
             <NoteModal

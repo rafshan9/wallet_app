@@ -41,7 +41,7 @@ export default function MonthYearPickerModal({
                 <View className="bg-very_dark_blue rounded-t-3xl p-6 pb-10">
                     {/* Header */}
                     <View className="flex-row justify-between items-center mb-6">
-                        <Text className="text-xl font-rubik_medium text-white">Select Month</Text>
+                        <Text className="text-xl font-inter_medium text-white">Select Month</Text>
                         <TouchableOpacity
                             className='bg-yellow rounded-full p-2 border-2 border-black'
                             onPress={onClose}><Feather name="x" size={24} color="black" /></TouchableOpacity>
@@ -52,7 +52,7 @@ export default function MonthYearPickerModal({
                         <TouchableOpacity onPress={() => setYear(year - 1)}>
                             <Feather name="chevron-left" size={24} color="black" />
                         </TouchableOpacity>
-                        <Text className="text-lg font-rubik_bold text-black">{year}</Text>
+                        <Text className="text-lg font-inter_bold text-black">{year}</Text>
                         <TouchableOpacity onPress={() => setYear(year + 1)}>
                             <Feather name="chevron-right" size={24} color="black" />
                         </TouchableOpacity>
@@ -72,7 +72,7 @@ export default function MonthYearPickerModal({
                                     onPress={() => setMonth(m)}
                                     className={`w-[30%] py-3 mb-4 rounded-xl items-center shadow-sm ${bg}`}
                                 >
-                                    <Text className={`font-rubik_medium ${textColor}`}>{m}</Text>
+                                    <Text className={`font-inter_medium ${textColor}`}>{m}</Text>
                                 </TouchableOpacity>
                             );
                         })}
@@ -83,7 +83,7 @@ export default function MonthYearPickerModal({
                         onPress={onSelect}
                         className="bg-black py-4 rounded-full mt-2 items-center"
                     >
-                        <Text className="text-white font-rubik_medium text-lg">View Receipt</Text>
+                        <Text className="text-white font-inter_medium text-lg">View Receipt</Text>
                     </TouchableOpacity>
                 </View>
             </View>

@@ -43,12 +43,12 @@ export default function Navbar({ state, navigation }: TabBarProps) {
 
     return (
         <View
-            className="w-80 h-20 bg-very_dark_blue rounded-full flex-row items-center relative mr-4 px-2"
+            className="w-72 h-16 bg-very_dark_blue rounded-full flex-row items-center relative mr-4 px-2"
             onLayout={(event) => setBarWidth(event.nativeEvent.layout.width)}
         >
             {barWidth > 0 && (
                 <Animated.View
-                    className="absolute h-16 bg-white rounded-full"
+                    className="absolute h-12 bg-white rounded-full"
                     style={{
                         width: pillWidth,
                         left: 8,
@@ -93,7 +93,7 @@ export default function Navbar({ state, navigation }: TabBarProps) {
                         >
                             <Feather
                                 name={icon}
-                                size={28}
+                                size={24}
                                 color={isActive ? "black" : "#c2c2c2ff"}
                             />
                         </Animated.View>

@@ -64,7 +64,7 @@ export default function CashFlowScreen() {
                         <ExpensePieChart total={`$${totalExpenses.toFixed(2)}`} categories={categoryBreakdown} />
 
                         <View className="flex-row justify-between items-center mb-4">
-                            <Text className="text-xl font-rubik_bold">Recent Activity</Text>
+                            <Text className="text-xl font-inter_bold">Recent Activity</Text>
                             <View className="flex-row justify-between items-center gap-2">
                                 <TouchableOpacity
                                     onPress={() => setIsFilterOpen(true)}
@@ -77,7 +77,7 @@ export default function CashFlowScreen() {
                                     className="flex-row items-center bg-maroon border-2 border-black/40 rounded-full px-6 py-4"
                                 >
                                     <Feather name="plus" size={16} color="white" />
-                                    <Text className="text-sm font-rubik_bold text-white ml-1">Add New</Text>
+                                    <Text className="text-sm font-inter_bold text-white ml-1">Add New</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -85,7 +85,7 @@ export default function CashFlowScreen() {
                 }
                 renderSectionHeader={({ section }) => (
                     <View className="bg-background pt-2 pb-3">
-                        <Text className="font-rubik_bold text-base text-black/60">
+                        <Text className="font-inter_bold text-base text-black/60">
                             {section.title}
                         </Text>
                     </View>
@@ -101,10 +101,10 @@ export default function CashFlowScreen() {
                                     <Feather name="arrow-down-circle" size={20} color="#22C55E" />
                                 </View>
                                 <View className="flex-1">
-                                    <Text className="text-lg font-rubik_medium">{tx.title}</Text>
-                                    <Text className="text-sm font-rubik_regular text-gray-500 mt-1">{formattedDate}</Text>
+                                    <Text className="text-lg font-inter_medium">{tx.title}</Text>
+                                    <Text className="text-sm font-inter_regular text-gray-500 mt-1">{formattedDate}</Text>
                                 </View>
-                                <Text className="text-lg font-rubik_bold text-green">
+                                <Text className="text-lg font-inter_bold text-green">
                                     +${parsedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </Text>
                             </View>
@@ -125,12 +125,12 @@ export default function CashFlowScreen() {
                                 <Feather name="shopping-bag" size={20} color={style.text === 'text-white' ? 'white' : 'black'} />
                             </View>
                             <View className="flex-1">
-                                <Text className={`text-lg font-rubik_medium ${style.text}`}>{tx.title}</Text>
-                                <Text className={`text-sm font-rubik_regular mt-1 ${style.text === 'text-white' ? 'text-white/70' : 'text-black/60'}`}>
+                                <Text className={`text-lg font-inter_medium ${style.text}`}>{tx.title}</Text>
+                                <Text className={`text-sm font-inter_regular mt-1 ${style.text === 'text-white' ? 'text-white/70' : 'text-black/60'}`}>
                                     {formattedDate}
                                 </Text>
                             </View>
-                            <Text className={`text-lg font-rubik_bold ${style.text}`}>
+                            <Text className={`text-lg font-inter_bold ${style.text}`}>
                                 -${parsedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </Text>
                         </View>

@@ -1,16 +1,17 @@
-import { useRef } from 'react';
-import { Animated, View, ActivityIndicator } from 'react-native';
+import { Animated, View, ActivityIndicator, useWindowDimensions } from 'react-native';
 import WalletCard from './WalletCard';
 import { useCashFlow } from '../../hooks/useCashFlow';
 import { useGoals } from '../../hooks/useGoals';
+import { CARD_BACKGROUND_COLORS } from '../../constants/cardColors';
 
-const CARD_WIDTH = 288;
+type Props = {
+    scrollX: Animated.Value;
+};
 
-export default function CardSlider() {
+export default function CardSlider({ scrollX }: Props) {
+    const { width: SCREEN_WIDTH } = useWindowDimensions();
     const { totalIncome, totalExpenses, isLoading: isCashFlowLoading } = useCashFlow();
     const { totalSaved, totalTarget, isLoading: isGoalsLoading } = useGoals();
-
-    const scrollX = useRef(new Animated.Value(0)).current;
 
     const remainingFunds = totalIncome - totalExpenses - totalSaved;
 
@@ -20,85 +21,108 @@ export default function CardSlider() {
     const CARDS_DATA = [
         {
             id: '1',
-            title: 'Expenses',
-            amount: formatCurrency(totalExpenses),
-            subtitle: 'Total spent \nthis month',
-            bgColor: 'bg-red',
+            title: 'Remaining Funds',
+            amount: formatCurrency(remainingFunds),
+            subtitle: `Total Deposited this month:\n${formatCurrency(totalIncome)}`,
+            isLight: false,
+            amountColorClass: 'text-yellow',
         },
         {
             id: '2',
-            title: 'Remaining Funds',
-            amount: formatCurrency(remainingFunds),
-            subtitle: `Total Deposited:\n${formatCurrency(totalIncome)}`,
-            bgColor: 'bg-dark_blue',
+            title: 'Saving Goals',
+            amount: formatCurrency(totalSaved),
+            subtitle: `Total goals target:\n${formatCurrency(totalTarget)}`,
+            isLight: true,
+            amountColorClass: 'text-black',
         },
         {
             id: '3',
-            title: 'Savings Goals',
-            amount: formatCurrency(totalSaved),
-            subtitle: `Total goals target:\n${formatCurrency(totalTarget)}`,
-            bgColor: 'bg-yellow',
+            title: 'Monthly Expenses',
+            amount: formatCurrency(totalExpenses),
+            subtitle: 'Total spent\nthis month',
+            isLight: false,
+            amountColorClass: 'text-background_green',
         },
     ];
 
     if (isCashFlowLoading || isGoalsLoading) {
         return (
-            <View className="mt-4 mx-0 h-48 justify-center items-center">
+            <View className="mt-4 h-64 justify-center items-center">
                 <ActivityIndicator size="large" color="#000000" />
             </View>
         );
     }
 
+    const inputRange = CARDS_DATA.map((_, i) => i * SCREEN_WIDTH);
+
+    const animatedBgColor = scrollX.interpolate({
+        inputRange,
+        outputRange: CARD_BACKGROUND_COLORS,
+    });
+
+    const animatedDotColor = scrollX.interpolate({
+        inputRange,
+        outputRange: CARDS_DATA.map((c) => (c.isLight ? '#000000' : '#FFFFFF')),
+    });
+
     return (
-        <View className="mt-4 mx-0">
+        <Animated.View style={{ backgroundColor: animatedBgColor }}>
             <Animated.FlatList
                 data={CARDS_DATA}
                 keyExtractor={(item) => item.id}
                 horizontal
+                pagingEnabled
                 showsHorizontalScrollIndicator={false}
-                snapToAlignment="center"
-                snapToInterval={CARD_WIDTH}
                 decelerationRate="fast"
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                    { useNativeDriver: true }
+                    { useNativeDriver: false }
                 )}
                 scrollEventThrottle={16}
-                renderItem={({ item, index }) => {
-                    const inputRange = [
-                        (index - 1) * CARD_WIDTH,
-                        index * CARD_WIDTH,
-                        (index + 1) * CARD_WIDTH,
-                    ];
-
-                    const scale = scrollX.interpolate({
-                        inputRange,
-                        outputRange: [0.88, 1, 0.88],
-                        extrapolate: 'clamp',
-                    });
-
-                    const opacity = scrollX.interpolate({
-                        inputRange,
-                        outputRange: [0.5, 1, 0.5],
-                        extrapolate: 'clamp',
-                    });
-
-                    return (
-                        <Animated.View style={{ transform: [{ scale }], opacity }}>
-                            <WalletCard
-                                title={item.title}
-                                amount={item.amount}
-                                subtitle={item.subtitle}
-                                bgClass={item.bgColor}
-                            />
-                        </Animated.View>
-                    );
-                }}
-                contentContainerStyle={{
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                }}
+                renderItem={({ item }) => (
+                    <View style={{ width: SCREEN_WIDTH }}>
+                        <WalletCard
+                            title={item.title}
+                            amount={item.amount}
+                            subtitle={item.subtitle}
+                            isLight={item.isLight}
+                            amountColorClass={item.amountColorClass}
+                        />
+                    </View>
+                )}
             />
-        </View>
+
+            <View className="flex-row justify-center items-center pb-5 gap-2">
+                {CARDS_DATA.map((_, index) => {
+                    const dotInputRange = [
+                        (index - 1) * SCREEN_WIDTH,
+                        index * SCREEN_WIDTH,
+                        (index + 1) * SCREEN_WIDTH,
+                    ];
+                    const dotWidth = scrollX.interpolate({
+                        inputRange: dotInputRange,
+                        outputRange: [8, 20, 8],
+                        extrapolate: 'clamp',
+                    });
+                    const dotOpacity = scrollX.interpolate({
+                        inputRange: dotInputRange,
+                        outputRange: [0.4, 1, 0.4],
+                        extrapolate: 'clamp',
+                    });
+                    return (
+                        <Animated.View
+                            key={index}
+                            style={{
+                                width: dotWidth,
+                                height: 8,
+                                borderRadius: 4,
+                                backgroundColor: animatedDotColor,
+                                opacity: dotOpacity,
+                            }}
+                        />
+                    );
+                })}
+            </View>
+        </Animated.View>
     );
 }

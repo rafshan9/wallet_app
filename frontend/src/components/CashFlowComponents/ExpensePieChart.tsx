@@ -30,9 +30,9 @@ export default function ExpensePieChart({ total, categories }: ExpensePieChartPr
             className="bg-black rounded-2xl p-6 mb-8"
             onLayout={(e) => setRowWidth(e.nativeEvent.layout.width)}
         >
-            <Text className="font-rubik_medium text-xs text-white/50 mb-4">Spending by category</Text>
+            <Text className="font-inter_medium text-xs text-white/50 mb-4">Spending by category</Text>
 
-            <View className="flex-row items-center">
+            <View className="items-center">
                 <View style={{ width: '70%' }} className="items-center justify-center">
                     {chartSize > 0 && (
                         <View style={{ width: chartSize, height: chartSize }}>
@@ -70,29 +70,39 @@ export default function ExpensePieChart({ total, categories }: ExpensePieChartPr
                             </View>
 
                             <View className="absolute inset-0 items-center justify-center">
-                                <Text className="font-rubik_bold text-sm text-white">Total</Text>
-                                <Text className="font-rubik_medium text-xs text-white/60">{total}</Text>
+                                <Text className="font-inter_bold text-sm text-white">Total</Text>
+                                <Text className="font-inter_medium text-xs text-white/60">{total}</Text>
                             </View>
                         </View>
                     )}
                 </View>
 
-                <View style={{ width: '30%' }}>
-                    {categories.map((cat) => (
-                        <View key={cat.label} className="mb-3">
-                            <View className="flex-row items-center mb-0.5">
-                                <View
-                                    className="h-2.5 w-2.5 rounded-full mr-1.5"
-                                    style={{ backgroundColor: cat.hex }}
-                                />
-                                <Text className="font-rubik_medium text-xs text-white" numberOfLines={1}>{cat.label}</Text>
-                            </View>
-                            <Text className="font-rubik_regular text-xs text-white/50 ml-4">
-                                ${cat.amount.toFixed(2)} · {cat.percent}%
+
+            </View>
+            {/* Move this block directly below your PieChart container */}
+            <View className="flex-row flex-wrap justify-start w-full mt-6 px-2 gap-y-4">
+                {categories.map((cat) => (
+                    <View key={cat.label} className="w-[33%] pr-2">
+                        <View className="flex-row items-center mb-1">
+                            <View
+                                className="h-2.5 w-2.5 rounded-full mr-1.5"
+                                style={{ backgroundColor: cat.hex }}
+                            />
+                            <Text
+                                className="font-inter_medium text-xs text-white flex-1"
+                                numberOfLines={1}
+                            >
+                                {cat.label}
                             </Text>
                         </View>
-                    ))}
-                </View>
+                        <Text
+                            className="font-inter_regular text-[10px] text-white/50 ml-4"
+                            numberOfLines={1}
+                        >
+                            ${cat.amount.toFixed(2)} · {cat.percent}%
+                        </Text>
+                    </View>
+                ))}
             </View>
         </View>
     );

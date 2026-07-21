@@ -55,7 +55,7 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                 <View className="bg-very_dark_blue w-full rounded-t-[40px] p-8 border-2 border-black">
 
                     <View className="flex-row justify-between items-center mb-8">
-                        <Text className="text-3xl font-rubik_bold text-white">New Goal</Text>
+                        <Text className="text-3xl font-inter_bold text-white">New Goal</Text>
                         <TouchableOpacity
                             className="bg-yellow rounded-full p-2 border-2 border-black"
                             onPress={onClose}>
@@ -68,7 +68,7 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                         value={name}
                         onChangeText={setName}
                         placeholderTextColor="rgba(255,255,255,0.5)"
-                        className="text-2xl font-rubik_bold text-white mb-6"
+                        className="text-2xl font-inter_bold text-white mb-6"
                     />
 
                     <TextInput
@@ -77,12 +77,12 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                         value={targetAmount}
                         onChangeText={setTargetAmount}
                         placeholderTextColor="rgba(255,255,255,0.5)"
-                        className="text-5xl font-rubik_bold text-white text-center mb-8"
+                        className="text-5xl font-inter_bold text-white text-center mb-8"
                         style={{ lineHeight: 64, paddingTop: 8 }}
                     />
 
                     {/* Restored Color Picker UI */}
-                    <Text className="text-white/60 font-rubik_medium text-sm mb-3">Choose a color</Text>
+                    <Text className="text-white/60 font-inter_medium text-sm mb-3">Choose a color</Text>
                     <View className="flex-row flex-wrap mb-8">
                         {COLOR_OPTIONS.map((opt) => {
                             const isSelected = selectedColor === opt.color;
@@ -110,7 +110,7 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                             <ActivityIndicator color="white" />
                         ) : (
                             <>
-                                <Text className="text-white font-rubik_bold text-lg mr-2">Create Goal</Text>
+                                <Text className="text-white font-inter_bold text-lg mr-2">Create Goal</Text>
                                 <Feather name="check" size={20} color="white" />
                             </>
                         )}

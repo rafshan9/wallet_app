@@ -54,39 +54,39 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
             <View className="flex-1 justify-end bg-black/40">
                 <View className="bg-white rounded-t-[32px] border-2 border-black px-6 pt-6" style={{ maxHeight: '85%' }}>
                     <View className="flex-row justify-between items-center mb-6">
-                        <Text className="font-rubik_bold text-xl">Add Payment</Text>
+                        <Text className="font-inter_bold text-xl">Add Payment</Text>
                         <TouchableOpacity onPress={onClose} hitSlop={8}>
                             <Feather name="x" size={22} color="black" />
                         </TouchableOpacity>
                     </View>
 
                     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
-                        <Text className="font-rubik_medium text-xs text-gray-400 mb-2 uppercase">Name</Text>
+                        <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Name</Text>
                         <TextInput
                             value={name}
                             onChangeText={setName}
                             placeholder="e.g. Rent"
-                            className="border-2 border-black/10 rounded-2xl px-4 py-3 font-rubik_medium mb-4"
+                            className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
                         />
 
-                        <Text className="font-rubik_medium text-xs text-gray-400 mb-2 uppercase">Amount</Text>
+                        <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Amount</Text>
                         <TextInput
                             value={amount}
                             onChangeText={setAmount}
                             placeholder="0.00"
                             keyboardType="decimal-pad"
-                            className="border-2 border-black/10 rounded-2xl px-4 py-3 font-rubik_medium mb-4"
+                            className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
                         />
 
-                        <Text className="font-rubik_medium text-xs text-gray-400 mb-2 uppercase">Due date</Text>
+                        <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Due date</Text>
                         <TextInput
                             value={dueDate}
                             onChangeText={setDueDate}
                             placeholder="YYYY-MM-DD"
-                            className="border-2 border-black/10 rounded-2xl px-4 py-3 font-rubik_medium mb-4"
+                            className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
                         />
 
-                        <Text className="font-rubik_medium text-xs text-gray-400 mb-2 uppercase">Category</Text>
+                        <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Category</Text>
                         <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4">
                             {(Object.keys(CATEGORY_STYLES) as PaymentCategory[]).map((key) => {
                                 const style = CATEGORY_STYLES[key];
@@ -98,7 +98,7 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
                                         className={`flex-row items-center px-4 py-2 rounded-full mr-2 ${selected ? style.bg : 'bg-black/5'}`}
                                     >
                                         <Feather name={style.icon} size={14} color={selected ? 'white' : 'black'} />
-                                        <Text className={`ml-2 font-rubik_medium text-xs ${selected ? 'text-white' : 'text-black'}`}>
+                                        <Text className={`ml-2 font-inter_medium text-xs ${selected ? 'text-white' : 'text-black'}`}>
                                             {style.label}
                                         </Text>
                                     </TouchableOpacity>
@@ -110,7 +110,7 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
                             onPress={() => setIsRecurring((prev) => !prev)}
                             className="flex-row items-center justify-between border-2 border-black/10 rounded-2xl px-4 py-3 mb-4"
                         >
-                            <Text className="font-rubik_medium">Repeats</Text>
+                            <Text className="font-inter_medium">Repeats</Text>
                             <View className={`w-12 h-7 rounded-full justify-center px-1 ${isRecurring ? 'bg-black' : 'bg-black/10'}`}>
                                 <View className={`w-5 h-5 rounded-full bg-white ${isRecurring ? 'self-end' : 'self-start'}`} />
                             </View>
@@ -124,7 +124,7 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
                                         onPress={() => setFrequency(freq)}
                                         className={`px-4 py-2 rounded-full mr-2 ${frequency === freq ? 'bg-black' : 'bg-black/5'}`}
                                     >
-                                        <Text className={`font-rubik_medium text-xs capitalize ${frequency === freq ? 'text-white' : 'text-black'}`}>
+                                        <Text className={`font-inter_medium text-xs capitalize ${frequency === freq ? 'text-white' : 'text-black'}`}>
                                             {freq}
                                         </Text>
                                     </TouchableOpacity>
@@ -137,7 +137,7 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
                             disabled={isSaving}
                             className="bg-black py-4 rounded-full items-center mt-2"
                         >
-                            <Text className="text-white font-rubik_bold">{isSaving ? 'Saving...' : 'Save Payment'}</Text>
+                            <Text className="text-white font-inter_bold">{isSaving ? 'Saving...' : 'Save Payment'}</Text>
                         </TouchableOpacity>
                     </ScrollView>
                 </View>

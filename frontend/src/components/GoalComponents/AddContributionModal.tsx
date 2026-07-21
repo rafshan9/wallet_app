@@ -54,7 +54,7 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
             <View className="flex-1 justify-center bg-black/80 px-6">
                 <View className="bg-dark_blue w-full rounded-[40px] p-8 border-2 border-black">
                     <View className="flex-row justify-between items-center mb-6">
-                        <Text className="text-2xl font-rubik_bold text-white">Add to {goal?.name}</Text>
+                        <Text className="text-2xl font-inter_bold text-white">Add to {goal?.name}</Text>
                         <TouchableOpacity onPress={onClose}>
                             <Feather name="x" size={24} color="white" />
                         </TouchableOpacity>
@@ -66,7 +66,7 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
                         value={amount}
                         onChangeText={setAmount}
                         placeholderTextColor="rgba(255,255,255,0.5)"
-                        className="text-5xl font-rubik_bold text-white text-center mb-8"
+                        className="text-5xl font-inter_bold text-white text-center mb-8"
                         style={{ lineHeight: 64, paddingTop: 8 }}
                     />
 
@@ -78,7 +78,7 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
                         {isLoading ? (
                             <ActivityIndicator color="black" />
                         ) : (
-                            <Text className="text-black font-rubik_bold text-lg">Confirm Transfer</Text>
+                            <Text className="text-black font-inter_bold text-lg">Confirm Transfer</Text>
                         )}
                     </TouchableOpacity>
                 </View>
