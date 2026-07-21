@@ -8,6 +8,7 @@ import AddContributionModal from '../../components/GoalComponents/AddContributio
 import CelebrationModal from '../../components/GoalComponents/CelebrationModal';
 import { useGoals } from '../../hooks/useGoals';
 import TopBar from '../../components/TopBar';
+import PlusIcon from '../../../assets/icons/plus_white.svg';
 
 const BAR_COLORS = ['#34d399', '#0eff66ff', '#ffde0fff', '#3b08f7ff', '#f43f5e', '#fb923c', '#a855f7'];
 
@@ -33,7 +34,7 @@ export default function GoalScreen() {
     const completedGoals = goals.filter((g) => g.savedAmount >= g.targetAmount);
 
     return (
-        <View className="flex-1 bg-background pt-16">
+        <View className="flex-1 bg-background_green pt-16">
             <TopBar />
 
             <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 140 }}>
@@ -72,8 +73,8 @@ export default function GoalScreen() {
                 <View className="flex-row justify-between items-center mb-6">
                     <Text className="text-xl font-inter_bold">Your Goals</Text>
                     {goals.length > 0 && (
-                        <TouchableOpacity activeOpacity={0.8} onPress={() => setIsModalOpen(true)} className="flex-row items-center bg-dark_blue border-2 border-black/40 rounded-full px-6 py-4">
-                            <Feather name="plus" size={16} color="white" />
+                        <TouchableOpacity activeOpacity={0.8} onPress={() => setIsModalOpen(true)} className="flex-row items-center bg-black border-2 border-black/40 rounded-full px-6 py-4">
+                            <PlusIcon width={14} height={14} />
                             <Text className="text-sm font-inter_bold text-white ml-1">Add New</Text>
                         </TouchableOpacity>
                     )}
@@ -81,7 +82,7 @@ export default function GoalScreen() {
 
                 {/* 3. Empty State Handling */}
                 {goals.length === 0 ? (
-                    <View className="items-center justify-center py-12 mt-4 bg-white rounded-3xl border-2 border-black/10 border-dashed">
+                    <View className="items-center justify-center py-12 mt-4 bg-white rounded-3xl ">
                         <View className="h-20 w-20 bg-black/5 rounded-full justify-center items-center mb-4">
                             <Feather name="target" size={32} color="black" />
                         </View>
@@ -98,7 +99,7 @@ export default function GoalScreen() {
                         {/* 4. Active Goals List (Wrapped in TouchableOpacity for Routing) */}
                         {activeGoals.length > 0 && (
                             <View className="mb-4">
-                                <Text className="text-sm font-inter_bold text-gray-400 mb-4 uppercase tracking-wider">In Progress</Text>
+                                <Text className="text-sm font-inter_bold text-black mb-4 uppercase tracking-wider">In Progress</Text>
                                 {activeGoals.map((goal) => (
                                     <TouchableOpacity key={goal.id} activeOpacity={0.9} onPress={() => router.push(`/goal/${goal.id}`)}>
                                         <GoalCard

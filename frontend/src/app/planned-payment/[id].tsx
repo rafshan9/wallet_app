@@ -69,7 +69,7 @@ export default function PlannedPaymentDetailScreen() {
     const style = CATEGORY_STYLES[category];
 
     return (
-        <View className="flex-1 bg-dark_blue pt-16 px-6">
+        <View className="flex-1 bg-black pt-16 px-6">
             <View className="flex-row items-center justify-between mb-8">
                 <TouchableOpacity
                     onPress={() => router.back()}
@@ -98,11 +98,11 @@ export default function PlannedPaymentDetailScreen() {
                 </View>
             </View>
 
-            <TouchableOpacity onPress={handleMarkPaid} className="bg-yellow py-4 rounded-full items-center mb-3">
+            <TouchableOpacity onPress={handleMarkPaid} className="bg-background_green py-4 rounded-full items-center mb-3">
                 <Text className="font-inter_bold">Mark as Paid</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleDelete} className="bg-red border-2 border-white/30 py-4 rounded-full items-center">
+            <TouchableOpacity onPress={handleDelete} className="bg-background_red border-2 border-white/30 py-4 rounded-full items-center">
                 <Text className="text-white font-inter_bold">Delete</Text>
             </TouchableOpacity>
         </View>

@@ -11,6 +11,9 @@ import { useAlert } from '../../components/AlertModal';
 import { useNotes, Note } from '../../hooks/useNotes';
 import { useAppStore } from '../../store';
 import { CARD_BACKGROUND_COLORS } from '../../constants/cardColors';
+import RecentActivity from '../../components/HomeScreenComponents/RecentActivity'
+import { useCashFlow } from '../../hooks/useCashFlow';
+
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -31,7 +34,7 @@ export default function HomeScreen() {
   const handlePressPayment = (id: string) => router.push(`/planned-payment/${id}`);
   const handleAddPress = () => setIsAddModalOpen(true);
   const handleViewAll = () => router.push('/planned-payment');
-
+  const { transactions } = useCashFlow();
   const handleAddNotePress = () => openNoteModal();
   const handleEditNotePress = (note: Note) => openNoteModal(note);
   const handleDeleteNotePress = (note: Note) => {
@@ -64,6 +67,8 @@ export default function HomeScreen() {
       >
         <CardSlider scrollX={scrollX} />
         <View className="px-6">
+
+          <RecentActivity transactions={transactions} scrollX={scrollX} />
           <PlannedPaymentsCard
             payments={upcoming}
             totalDueThisWeek={totalDueThisWeek}

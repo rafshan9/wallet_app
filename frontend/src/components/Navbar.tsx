@@ -1,8 +1,19 @@
 import { View, TouchableOpacity, Animated } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { useState, useRef, useEffect } from 'react';
+import HouseBlack from '../../assets/icons/house_black.svg';
+import HouseWhite from '../../assets/icons/house_white.svg';
+import PieWhite from '../../assets/icons/pie_white.svg';
+import PieBlack from '../../assets/icons/pie_black.svg';
+import GoalBlack from '../../assets/icons/goal_black.svg';
+import GoalWhite from '../../assets/icons/goal_white.svg';
 
 const TABS = ['home', 'pie-chart', 'target'] as const;
+
+const ICONS = [
+    { Black: HouseBlack, White: HouseWhite },
+    { Black: PieBlack, White: PieWhite },
+    { Black: GoalBlack, White: GoalWhite },
+];
 
 export type TabBarProps = {
     state: {
@@ -43,7 +54,7 @@ export default function Navbar({ state, navigation }: TabBarProps) {
 
     return (
         <View
-            className="w-72 h-16 bg-very_dark_blue rounded-full flex-row items-center relative mr-4 px-2"
+            className="w-72 h-16 bg-black rounded-full flex-row items-center relative mr-4 px-2 "
             onLayout={(event) => setBarWidth(event.nativeEvent.layout.width)}
         >
             {barWidth > 0 && (
@@ -68,6 +79,7 @@ export default function Navbar({ state, navigation }: TabBarProps) {
 
             {TABS.map((icon, index) => {
                 const isActive = activeIndex === index;
+                const IconComponent = isActive ? ICONS[index].Black : ICONS[index].White;
 
                 return (
                     <TouchableOpacity
@@ -91,11 +103,7 @@ export default function Navbar({ state, navigation }: TabBarProps) {
                                 }]
                             }}
                         >
-                            <Feather
-                                name={icon}
-                                size={24}
-                                color={isActive ? "black" : "#c2c2c2ff"}
-                            />
+                            <IconComponent width={24} height={24} />
                         </Animated.View>
                     </TouchableOpacity>
                 );

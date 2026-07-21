@@ -16,11 +16,11 @@ type ExpensePieChartProps = {
 
 export default function ExpensePieChart({ total, categories }: ExpensePieChartProps) {
     const [rowWidth, setRowWidth] = useState(0);
-
-    const chartColumnWidth = rowWidth * 0.7;
+    const chartColumnWidth = rowWidth * 0.4;
     const chartSize = Math.min(chartColumnWidth * 0.85, 200);
-    const strokeWidth = chartSize * 0.22;
-    const radius = (chartSize - strokeWidth) / 2;
+    const outerRadius = chartSize / 2;
+    const strokeWidth = outerRadius;
+    const radius = strokeWidth / 2;
     const circumference = 2 * Math.PI * radius;
 
     let cumulativePercent = 0;
@@ -30,10 +30,10 @@ export default function ExpensePieChart({ total, categories }: ExpensePieChartPr
             className="bg-black rounded-2xl p-6 mb-8"
             onLayout={(e) => setRowWidth(e.nativeEvent.layout.width)}
         >
-            <Text className="font-inter_medium text-xs text-white/50 mb-4">Spending by category</Text>
+            <Text className="font-inter_bold text-lg text-white p-2 mb-4">Spending by category</Text>
 
-            <View className="items-center">
-                <View style={{ width: '70%' }} className="items-center justify-center">
+            <View className="flex-row items-center justify-between">
+                <View className="items-center justify-center">
                     {chartSize > 0 && (
                         <View style={{ width: chartSize, height: chartSize }}>
                             <View style={{ transform: [{ rotate: '-90deg' }] }}>
@@ -68,35 +68,34 @@ export default function ExpensePieChart({ total, categories }: ExpensePieChartPr
                                     })}
                                 </Svg>
                             </View>
-
-                            <View className="absolute inset-0 items-center justify-center">
-                                <Text className="font-inter_bold text-sm text-white">Total</Text>
-                                <Text className="font-inter_medium text-xs text-white/60">{total}</Text>
-                            </View>
                         </View>
                     )}
                 </View>
-
-
+                <View className="flex-1 pl-8 justify-center">
+                    <Text className="font-inter_bold text-xl text-white/60 mb-2">Total</Text>
+                    <Text className="font-alfa text-5xl text-[#FDE047]">
+                        {total.split('.')[0]}
+                    </Text>
+                </View>
             </View>
-            {/* Move this block directly below your PieChart container */}
+
             <View className="flex-row flex-wrap justify-start w-full mt-6 px-2 gap-y-4">
                 {categories.map((cat) => (
-                    <View key={cat.label} className="w-[33%] pr-2">
+                    <View key={cat.label} className="w-[50%] pr-2">
                         <View className="flex-row items-center mb-1">
                             <View
                                 className="h-2.5 w-2.5 rounded-full mr-1.5"
                                 style={{ backgroundColor: cat.hex }}
                             />
                             <Text
-                                className="font-inter_medium text-xs text-white flex-1"
+                                className="font-inter_bold text-sm text-white flex-1"
                                 numberOfLines={1}
                             >
                                 {cat.label}
                             </Text>
                         </View>
                         <Text
-                            className="font-inter_regular text-[10px] text-white/50 ml-4"
+                            className="font-inter_bold text-[10px] text-background_green ml-4"
                             numberOfLines={1}
                         >
                             ${cat.amount.toFixed(2)} · {cat.percent}%

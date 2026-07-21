@@ -24,7 +24,7 @@ export default function AllPlannedPaymentsScreen() {
     }
 
     return (
-        <View className="flex-1 bg-very_dark_blue pt-16 px-6">
+        <View className="flex-1 bg-black pt-16 px-6">
             <View className="flex-row items-center mb-8">
                 <TouchableOpacity
                     onPress={() => router.back()}
@@ -46,13 +46,13 @@ export default function AllPlannedPaymentsScreen() {
                             <TouchableOpacity
                                 key={payment.id}
                                 onPress={() => router.push(`/planned-payment/${payment.id}`)}
-                                className="flex-row items-center bg-background p-4 rounded-3xl mb-3 border-2 border-black border-dashed"
+                                className="flex-row items-center bg-background p-4 rounded-3xl mb-3 "
                             >
                                 <View className={`w-10 h-10 rounded-full ${style.bg} items-center justify-center mr-3`}>
                                     <Feather name={style.icon} size={16} color="white" />
                                 </View>
-                                <View className="flex-1">
-                                    <Text className="font-inter_medium text-base">{payment.name}</Text>
+                                <View className="flex-1 p-2">
+                                    <Text className="font-inter_black text-lg text-base">{payment.name}</Text>
                                     <Text className="font-inter_regular text-xs text-gray-400">
                                         {payment.isRecurring ? `${payment.frequency} · ` : ''}
                                         {new Date(payment.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}

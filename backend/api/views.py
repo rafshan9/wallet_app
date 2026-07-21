@@ -3,8 +3,6 @@ from rest_framework import generics, viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer, NoteSerializer
-from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment, Note
 from datetime import timedelta
 import google.generativeai as genai
 import tempfile
@@ -12,6 +10,10 @@ import os
 import json
 from rest_framework.decorators import api_view, permission_classes
 from django.conf import settings
+from rest_framework.views import APIView
+from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer, NoteSerializer
+from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment, Note
+
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -102,6 +104,22 @@ class NoteViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
+class DeleteAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        user = request.user
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+        
 #Gemini voice to text
 genai.configure(api_key=settings.GEMINI_API_KEY)
 

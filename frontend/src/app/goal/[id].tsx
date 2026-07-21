@@ -120,11 +120,11 @@ export default function GoalDetailScreen() {
                 ) : (
                     contributions.map((tx) => (
                         <View key={tx.id} className="flex-row items-center bg-yellow p-4 rounded-3xl mb-4 border-2 border-black/10">
-                            <View className="h-12 w-12 rounded-full bg-white/60 justify-center items-center mr-4">
-                                <Feather name="arrow-up-right" size={20} color="#000000ff" />
+                            <View className="h-12 w-12 rounded-full bg-black justify-center items-center mr-4">
+                                <Feather name="arrow-up-right" size={20} color="#f9f9f9ff" />
                             </View>
                             <View className="flex-1">
-                                <Text className="text-lg font-inter_medium">Added Funds</Text>
+                                <Text className="text-lg font-inter_black">Added Funds</Text>
                                 <Text className="text-sm font-inter_regular text-black mt-1">
                                     {new Date(tx.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                                 </Text>

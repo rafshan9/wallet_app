@@ -1,10 +1,11 @@
 import { View, TouchableOpacity, Animated, Text } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { useState, useRef } from 'react';
 import AddFundModal from './CashFlowComponents/AddFundModal';
 import NoteModal from './NoteComponents/NoteModal';
 import { useAppStore } from '../store';
 import { useNotes } from '../hooks/useNotes';
+import PlusIcon from '../../assets/icons/plus_sign.svg';
+
 
 export default function FAB() {
     const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +56,7 @@ export default function FAB() {
         <View className="items-center justify-end relative z-50">
             <Animated.View className="absolute items-center justify-center" style={item2Style}>
                 <View className="absolute right-[68px] bg-yellow py-2 rounded-full w-36 items-center justify-center">
-                    <Text className="text-black font-inter_medium text-sm">Add Transaction</Text>
+                    <Text className="text-black font-inter_bold text-sm">Add Transaction</Text>
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.8}
@@ -65,13 +66,13 @@ export default function FAB() {
                     }}
                     className="h-14 w-14 bg-yellow rounded-full justify-center items-center shadow-xl"
                 >
-                    <Feather name="shopping-bag" size={24} color="black" />
+                    <PlusIcon width={24} height={24} />
                 </TouchableOpacity>
             </Animated.View>
 
             <Animated.View className="absolute items-center justify-center" style={item1Style}>
                 <View className="absolute right-[68px] bg-dark_blue py-2 rounded-full w-20 items-center justify-center">
-                    <Text className="text-white font-inter_medium text-sm">Notes</Text>
+                    <Text className="text-white font-inter_bold text-sm">Notes</Text>
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.8}
@@ -81,20 +82,17 @@ export default function FAB() {
                     }}
                     className="h-14 w-14 bg-dark_blue rounded-full justify-center items-center shadow-xl"
                 >
-                    <Feather name="file-text" size={24} color="white" />
+                    <PlusIcon width={24} height={24} />
                 </TouchableOpacity>
             </Animated.View>
 
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={toggleMenu}
-                className="h-14 w-14 bg-red rounded-full justify-center items-center z-50 shadow-xl"
+                className="h-14 w-14 bg-white rounded-full justify-center items-center z-50 shadow-xl"
             >
                 <Animated.View style={{ transform: [{ rotate: rotation }] }}>
-                    <View className="justify-center items-center w-6 h-6">
-                        <View className="absolute w-1 h-6 bg-white rounded-full" />
-                        <View className="absolute w-6 h-1 bg-white rounded-full" />
-                    </View>
+                    <PlusIcon width={24} height={24} />
                 </Animated.View>
             </TouchableOpacity>
 

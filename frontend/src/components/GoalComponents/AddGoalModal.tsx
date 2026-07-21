@@ -9,9 +9,9 @@ type AddGoalModalProps = {
 };
 
 const COLOR_OPTIONS = [
-    { color: 'bg-light_blue' },
-    { color: 'bg-yellow' },
-    { color: 'bg-teal' },
+    { color: 'bg-black' },
+    { color: 'bg-[#143D60]' },
+    { color: 'bg-[#D10363]' },
     { color: 'bg-white' },
 ];
 

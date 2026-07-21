@@ -31,9 +31,10 @@ export default function SignUpScreen() {
     };
 
     return (
-        <View className="flex-1 bg-background justify-center px-6">
-            <Text className="text-4xl font-inter_bold mb-8 text-center">Create Account</Text>
-
+        <View className="flex-1 bg-background_blue justify-center px-6">
+            <View className="bg-yellow mb-4 p-2 self-center">
+                <Text className="text-4xl font-alfa text-black text-center">SPENDS</Text>
+            </View>
             <TextInput
                 placeholder="Username"
                 autoCapitalize="none"
@@ -56,17 +57,23 @@ export default function SignUpScreen() {
                 onChangeText={setPassword}
                 className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg mb-8 placeholder:text-gray-400"
             />
-
             <TouchableOpacity
+                className="relative self-center mb-6"
                 onPress={handleSignUp}
-                className="bg-green py-4 rounded-full border-2 border-black items-center shadow-md mb-6"
+                activeOpacity={0.8}
             >
-                <Text className="text-black font-inter_bold text-xl">Sign Up</Text>
+                {/* The Solid Shadow */}
+                <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
+
+                {/* The Button */}
+                <View className="bg-very_dark_blue py-4 px-16 border-2 border-black items-center">
+                    <Text className="font-inter_bold text-white text-xl">Sign Up</Text>
+                </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => router.push('/login')}>
-                <Text className="text-center font-inter_medium text-gray-600">
-                    Already have an account? <Text className="text-black font-inter_bold underline">Login</Text>
+                <Text className="text-center font-inter_medium text-white">
+                    Already have an account? <Text className="text-white font-inter_bold underline">Login</Text>
                 </Text>
             </TouchableOpacity>
         </View>

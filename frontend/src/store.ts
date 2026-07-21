@@ -1,20 +1,32 @@
 import { create } from 'zustand';
 import { Note } from './hooks/useNotes';
 
+interface User {
+    first_name: string;
+    last_name: string;
+    email: string;
+}
+
 interface AppState {
+    user: User | null;
+    setUser: (user: User | null) => void;
+
     isAddModalOpen: boolean;
-    refreshTrigger: number; // We change this number to trigger data fetches
+    refreshTrigger: number;
     openModal: () => void;
     closeModal: () => void;
     triggerRefresh: () => void;
 
     isNoteModalOpen: boolean;
-    editingNote: Note | null; // null = creating a new note, set = editing an existing one
+    editingNote: Note | null;
     openNoteModal: (note?: Note | null) => void;
     closeNoteModal: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
+    user: null,
+    setUser: (user) => set({ user }),
+
     isAddModalOpen: false,
     refreshTrigger: 0,
     openModal: () => set({ isAddModalOpen: true }),

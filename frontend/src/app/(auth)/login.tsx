@@ -27,8 +27,10 @@ export default function LoginScreen() {
     };
 
     return (
-        <View className="flex-1 bg-background justify-center px-6">
-            <Text className="text-4xl font-inter_bold mb-8 text-center">Welcome Back</Text>
+        <View className="flex-1 bg-background_red justify-center px-6">
+            <View className="bg-yellow mb-4 p-2 self-center">
+                <Text className="text-4xl font-alfa text-black text-center">SPENDS</Text>
+            </View>
 
             <TextInput
                 placeholder="Username"
@@ -46,15 +48,22 @@ export default function LoginScreen() {
             />
 
             <TouchableOpacity
-                className="bg-yellow py-4 rounded-full border-2 border-black items-center shadow-md mb-6"
+                className="relative self-center mb-6"
                 onPress={handleLogin}
+                activeOpacity={0.8}
             >
-                <Text className="font-inter_bold text-xl">Login</Text>
+                {/* The Solid Shadow */}
+                <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
+
+                {/* The Button */}
+                <View className="bg-yellow py-4 px-16 border-2 border-black items-center">
+                    <Text className="font-inter_bold text-xl">Login</Text>
+                </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => router.push('/signup')}>
-                <Text className="text-center font-inter_medium text-gray-600">
-                    Don't have an account? <Text className="text-black font-inter_bold underline">Sign Up</Text>
+                <Text className="text-center font-inter_medium text-white/80">
+                    Don't have an account? <Text className="text-white font-inter_bold underline">Sign Up</Text>
                 </Text>
             </TouchableOpacity>
         </View>

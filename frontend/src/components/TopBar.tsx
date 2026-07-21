@@ -9,7 +9,7 @@ const PAGE_TITLES: Record<string, string> = {
 };
 
 const PILL_WIDTH = 88;
-const PILL_HEIGHT = 32;
+const PILL_HEIGHT = 34;
 
 export default function TopBar() {
     const router = useRouter();
@@ -46,7 +46,7 @@ export default function TopBar() {
                         activeOpacity={isHome ? 1 : 0.8}
                         disabled={isHome}
                         onPress={() => router.back()}
-                        className="bg-yellow rounded-full border-[1px] border-yellow"
+                        className="bg-yellow rounded-3xl border-[1px] border-yellow"
                         style={{ width: PILL_WIDTH, height: PILL_HEIGHT, overflow: 'hidden' }}
                     >
                         <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }, spendsStyle]}>

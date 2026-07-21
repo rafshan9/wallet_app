@@ -53,7 +53,7 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
     };
 
     return (
-        <View className={`${goal.color} rounded-3xl p-5 mb-4 border-2 border-dashed border-black`}>
+        <View className={`${goal.color} rounded-3xl p-5 mb-4`}>
             <View className="flex-row justify-between items-start mb-4">
                 <View className="flex-1 mr-2">
                     <Text className={`font-inter_bold text-lg ${textColor}`}>{goal.name}</Text>

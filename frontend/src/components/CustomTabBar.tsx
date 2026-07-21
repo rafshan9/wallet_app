@@ -5,7 +5,8 @@ import FAB from './FAB';
 export default function CustomTabBar({ state, navigation }: TabBarProps) {
     return (
         <View
-            className="absolute bottom-12 left-4 right-4 sm:left-6 sm:right-6 flex-row justify-between items-center" pointerEvents="box-none"
+            className="absolute bottom-12 left-0 right-0 flex-row justify-center items-center"
+            pointerEvents="box-none"
         >
             <Navbar state={state} navigation={navigation} />
             <FAB />

@@ -16,8 +16,7 @@ export default function CardSlider({ scrollX }: Props) {
     const remainingFunds = totalIncome - totalExpenses - totalSaved;
 
     const formatCurrency = (amount: number) =>
-        `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
+        `$${Math.floor(amount).toLocaleString()}`
     const CARDS_DATA = [
         {
             id: '1',
@@ -25,7 +24,7 @@ export default function CardSlider({ scrollX }: Props) {
             amount: formatCurrency(remainingFunds),
             subtitle: `Total Deposited this month:\n${formatCurrency(totalIncome)}`,
             isLight: false,
-            amountColorClass: 'text-yellow',
+            amountColorClass: 'text-white',
         },
         {
             id: '2',

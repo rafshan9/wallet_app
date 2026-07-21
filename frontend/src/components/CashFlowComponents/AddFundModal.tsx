@@ -129,7 +129,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                     onPress={() => setType('expense')}
                                     className={`flex-1 items-center py-3 rounded-full ${type === 'expense' ? 'bg-white' : ''}`}
                                 >
-                                    <Text className={`font-inter_bold text-sm ${type === 'expense' ? 'text-black' : 'text-white/50'}`}>
+                                    <Text className={`font-inter_black text-sm ${type === 'expense' ? 'text-black' : 'text-white/50'}`}>
                                         Expense
                                     </Text>
                                 </TouchableOpacity>
@@ -140,7 +140,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                     }}
                                     className={`flex-1 items-center py-3 rounded-full ${type === 'income' ? 'bg-white' : ''}`}
                                 >
-                                    <Text className={`font-inter_bold text-sm ${type === 'income' ? 'text-black' : 'text-white/50'}`}>
+                                    <Text className={`font-inter_black text-sm ${type === 'income' ? 'text-black' : 'text-white/50'}`}>
                                         Income
                                     </Text>
                                 </TouchableOpacity>
@@ -149,6 +149,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                             <TextInput
                                 placeholder="$0.00"
                                 keyboardType="numeric"
+                                placeholderTextColor="rgba(255,255,255,0.5)"
                                 scrollEnabled={false}
                                 multiline={false}
                                 value={amount}
