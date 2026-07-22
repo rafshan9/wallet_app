@@ -18,9 +18,9 @@ export default function AiReviewModal({ visible, onClose, onConfirm, scannedData
     }, [scannedData]);
 
     const updateItemAmount = (index: number, newAmount: string) => {
-        const updated = [...items];
-        updated[index].amount = parseFloat(newAmount) || 0;
-        setItems(updated);
+        setItems((prev) =>
+            prev.map((item, i) => (i === index ? { ...item, amount: parseFloat(newAmount) || 0 } : item))
+        );
     };
 
     return (

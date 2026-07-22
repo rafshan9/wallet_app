@@ -13,6 +13,7 @@ router.register(r'notes', NoteViewSet, basename='note')
 
 urlpatterns = [
     path('transactions/voice/', views.process_voice_expense, name='voice-expense'),
+    path('notes/voice/', views.process_voice_note, name='voice-note'),
     path('account/delete/', views.DeleteAccountView.as_view(), name='delete-account'),
     path('account/profile/', UserProfileView.as_view(), name='user-profile'), # <-- New endpoint
     path('', include(router.urls)),

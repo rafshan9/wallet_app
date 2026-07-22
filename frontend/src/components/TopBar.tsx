@@ -50,12 +50,12 @@ export default function TopBar() {
                         style={{ width: PILL_WIDTH, height: PILL_HEIGHT, overflow: 'hidden' }}
                     >
                         <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }, spendsStyle]}>
-                            <Text className="font-inter_black text-sm text-black">SPENDS</Text>
+                            <Text className="font-inter_black text-sm">SPENDS</Text>
                         </Animated.View>
 
                         <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }, backStyle]}>
                             <Feather name="chevron-left" size={16} color="black" />
-                            <Text className="font-inter_bold text-sm text-black ml-1">BACK</Text>
+                            <Text className="font-inter_black text-sm  ml-1">BACK</Text>
                         </Animated.View>
                     </TouchableOpacity>
                 </View>

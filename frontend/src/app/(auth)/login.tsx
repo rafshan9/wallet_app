@@ -3,6 +3,8 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
+import api from '../../../utils/axios';
+import { useAppStore } from '../../../src/store';
 
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -19,6 +21,9 @@ export default function LoginScreen() {
             });
             await SecureStore.setItemAsync('accessToken', response.data.access);
             await SecureStore.setItemAsync('refreshToken', response.data.refresh);
+
+            const profileRes = await api.get('/account/profile/');
+            useAppStore.getState().setUser(profileRes.data);
 
             router.replace('/');
         } catch (error) {

@@ -1,8 +1,9 @@
-import { View, Text, TextInput, TouchableOpacity, Modal, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Modal, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { useAlert } from '../AlertModal';
 import { Note } from '../../hooks/useNotes';
+import { useVoiceRecording } from '../../hooks/useVoiceRecording';
 
 type Props = {
     visible: boolean;
@@ -15,6 +16,12 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
     const [content, setContent] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const showAlert = useAlert();
+    const { isRecording, isProcessing, startRecording, stopRecording } = useVoiceRecording<{ text: string }>(
+        '/notes/voice/',
+        (data) => {
+            setContent((prev) => (prev ? `${prev}\n${data.text}` : data.text));
+        }
+    );
 
     useEffect(() => {
         setContent(note?.content ?? '');
@@ -80,10 +87,16 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
                                 <Feather name="camera" size={20} color="black" />
                             </TouchableOpacity>
                             <TouchableOpacity
-                                onPress={handleVoicePress}
-                                className="h-14 w-14 bg-yellow rounded-full items-center justify-center border-2 border-black"
+                                onPress={isRecording ? stopRecording : startRecording}
+                                disabled={isProcessing}
+                                className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red-500' : 'bg-yellow'
+                                    }`}
                             >
-                                <Feather name="mic" size={20} color="black" />
+                                {isProcessing ? (
+                                    <ActivityIndicator color="black" />
+                                ) : (
+                                    <Feather name={isRecording ? "square" : "mic"} size={20} color="black" />
+                                )}
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handleSave} disabled={isSaving} className="flex-1 bg-black py-4 rounded-full items-center">
                                 <Text className="text-white font-inter_bold">{isSaving ? 'Saving...' : 'Save Note'}</Text>

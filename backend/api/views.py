@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from datetime import timedelta
-import google.generativeai as genai
+from google import genai
 import tempfile
 import os
 import json
@@ -121,7 +121,8 @@ class UserProfileView(APIView):
         return Response(serializer.data)
         
 #Gemini voice to text
-genai.configure(api_key=settings.GEMINI_API_KEY)
+client = genai.Client(api_key=settings.GEMINI_API_KEY)
+#Expense
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -130,33 +131,62 @@ def process_voice_expense(request):
     if not audio_file:
         return Response({"error": "No audio file"}, status=400)
 
-    # Save incoming audio to a temporary file
     with tempfile.NamedTemporaryFile(delete=False, suffix='.m4a') as temp_audio:
         for chunk in audio_file.chunks():
             temp_audio.write(chunk)
         temp_path = temp_audio.name
 
     try:
-        # Upload to Gemini
-        gemini_file = genai.upload_file(temp_path)
-        
-        # Enforce your strict JSON schema
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        gemini_file = client.files.upload(file=temp_path)
+
         prompt = """
         Extract the expense details from this audio. 
         Return ONLY a JSON array matching this exact format, with no markdown formatting:
         [{"name": "Merchant Name", "amount": 0.00, "category": "CATEGORY_NAME"}]
         """
-        
-        response = model.generate_content([prompt, gemini_file])
-        
-        # Clean up files immediately
+
+        response = client.models.generate_content(
+            model='gemini-3.5-flash',
+            contents=[prompt, gemini_file]
+        )
+
         os.remove(temp_path)
-        genai.delete_file(gemini_file.name)
-        
-        # Parse and return to Expo
+        client.files.delete(name=gemini_file.name)
+
         raw_text = response.text.strip().removeprefix('```json').removesuffix('```').strip()
         return Response(json.loads(raw_text))
+
+    except Exception as e:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        return Response({"error": str(e)}, status=500)
+
+#Voice note
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def process_voice_note(request):
+    audio_file = request.FILES.get('audio')
+    if not audio_file:
+        return Response({"error": "No audio file"}, status=400)
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.m4a') as temp_audio:
+        for chunk in audio_file.chunks():
+            temp_audio.write(chunk)
+        temp_path = temp_audio.name
+
+    try:
+        gemini_file = client.files.upload(file=temp_path)
+        prompt = "Transcribe this audio exactly as spoken. Return only the transcription text, with no extra commentary, labels, or formatting."
+
+        response = client.models.generate_content(
+            model='gemini-3.5-flash',
+            contents=[prompt, gemini_file]
+        )
+
+        os.remove(temp_path)
+        client.files.delete(name=gemini_file.name)
+
+        return Response({"text": response.text.strip()})
 
     except Exception as e:
         if os.path.exists(temp_path):

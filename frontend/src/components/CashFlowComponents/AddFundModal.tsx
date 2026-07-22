@@ -7,6 +7,7 @@ import { useAppStore } from '../../store'
 import { useAlert } from '../AlertModal';
 import ScannerButton from '../ui/ScannerButton';
 import AiReviewModal from './AiReviewModal';
+import { useVoiceRecording } from '../../hooks/useVoiceRecording';
 
 
 type AddExpenseModalProps = {
@@ -27,6 +28,20 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
     const [scannedData, setScannedData] = useState<any[]>([]);
     const [reviewVisible, setReviewVisible] = useState(false);
 
+    const handleVoiceResult = (expenses: { name: string; amount: number; category: string }[]) => {
+        if (!expenses || expenses.length === 0) {
+            showAlert({ title: 'Nothing captured', message: "Couldn't detect an expense in that recording. Try again." });
+            return;
+        }
+        setScannedData(expenses);
+        setReviewVisible(true);
+        setType('expense');
+    };
+
+    const { isRecording, isProcessing, startRecording, stopRecording } = useVoiceRecording(
+        '/transactions/voice/',
+        handleVoiceResult
+    );
 
     const handleScanComplete = (data: any) => {
         setIsScanning(false);
@@ -105,10 +120,12 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                         >
 
                             {/* AI Processing Overlay */}
-                            {isScanning && (
+                            {(isScanning || isProcessing) && (
                                 <View className="absolute inset-0 bg-very_dark_blue/80 z-50 justify-center items-center rounded-t-[40px]">
                                     <ActivityIndicator size="large" color="#fff" />
-                                    <Text className="mt-4 font-inter_bold text-white text-lg">Analyzing receipt...</Text>
+                                    <Text className="mt-4 font-inter_bold text-white text-lg">
+                                        {isScanning ? 'Analyzing receipt...' : 'Transcribing your recording...'}
+                                    </Text>
                                 </View>
                             )}
 
@@ -202,14 +219,24 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
 
                             <View className="flex-row justify-between items-center mb-8">
                                 <View className="flex-row gap-4">
-                                    <View className="flex-row gap-4">
-                                        <ScannerButton
-                                            isScanning={isScanning}
-                                            onScanStart={() => setIsScanning(true)}
-                                            onScanComplete={handleScanComplete}
-                                        />
+                                    <ScannerButton
+                                        isScanning={isScanning}
+                                        onScanStart={() => setIsScanning(true)}
+                                        onScanComplete={handleScanComplete}
+                                    />
 
-                                    </View>
+                                    <TouchableOpacity
+                                        onPress={isRecording ? stopRecording : startRecording}
+                                        disabled={isProcessing}
+                                        className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red-500' : 'bg-yellow'
+                                            }`}
+                                    >
+                                        {isProcessing ? (
+                                            <ActivityIndicator color="black" />
+                                        ) : (
+                                            <Feather name={isRecording ? 'square' : 'mic'} size={20} color="black" />
+                                        )}
+                                    </TouchableOpacity>
                                 </View>
 
                                 <TouchableOpacity

@@ -17,7 +17,7 @@ export default function ProfileScreen() {
     const handleLogout = async () => {
         try {
             await SecureStore.deleteItemAsync('accessToken');
-            // useAppStore.getState().setUser(null); // Optional: clear user from store if you added this
+            useAppStore.getState().setUser(null);
             router.replace('/login');
         } catch (error) {
             console.error("Failed to log out:", error);
@@ -41,7 +41,10 @@ export default function ProfileScreen() {
                             // 2. Remove token from SecureStore
                             await SecureStore.deleteItemAsync('accessToken');
 
-                            // 3. Redirect to login
+                            // 3. Clear user from store
+                            useAppStore.getState().setUser(null);
+
+                            // 4. Redirect to login
                             router.replace('/login');
                         } catch (error) {
                             console.error("Failed to delete account:", error);
@@ -52,7 +55,7 @@ export default function ProfileScreen() {
         );
     };
     return (
-        <ScrollView className="flex-1 bg-background_blue pt-16 px-6">
+        <ScrollView className="flex-1 bg-dark_blue pt-16 px-6">
 
             {/* Top Bar with Back Button */}
             <View className="flex-row items-center mb-8">

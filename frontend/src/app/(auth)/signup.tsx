@@ -7,17 +7,26 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export default function SignUpScreen() {
     const router = useRouter();
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSignUp = async () => {
+        if (!firstName.trim() || !lastName.trim() || !username.trim() || !email.trim() || !password) {
+            Alert.alert('Missing Info', 'Please fill in all fields.');
+            return;
+        }
+
         try {
             // Remember to replace with your local IP address
             await axios.post(`${API_URL}/api/signup/`, {
                 username,
                 email,
-                password
+                password,
+                first_name: firstName.trim(),
+                last_name: lastName.trim(),
             });
 
             Alert.alert('Success', 'Account created! Please log in.');
@@ -35,6 +44,24 @@ export default function SignUpScreen() {
             <View className="bg-yellow mb-4 p-2 self-center">
                 <Text className="text-4xl font-alfa text-black text-center">SPENDS</Text>
             </View>
+
+            <View className="flex-row gap-3 mb-4">
+                <TextInput
+                    placeholder="First Name"
+                    autoCapitalize="words"
+                    value={firstName}
+                    onChangeText={setFirstName}
+                    className="flex-1 bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                />
+                <TextInput
+                    placeholder="Last Name"
+                    autoCapitalize="words"
+                    value={lastName}
+                    onChangeText={setLastName}
+                    className="flex-1 bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                />
+            </View>
+
             <TextInput
                 placeholder="Username"
                 autoCapitalize="none"
