@@ -53,22 +53,31 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
         setIsScanning(false);
     };
 
+    const VALID_CATEGORIES = [
+        'GROCERIES', 'SUBSCRIPTIONS', 'MEMBERSHIP', 'BILLS',
+        'TRANSPORT', 'DINING', 'SHOPPING', 'ENTERTAINMENT', 'RENT', 'OTHER',
+    ];
+
     const handleSaveScannedItems = async (items: { name: string; amount: number; category: string }[]) => {
         for (const item of items) {
+            const normalizedCategory = VALID_CATEGORIES.includes(item.category.toUpperCase())
+                ? item.category.toUpperCase()
+                : 'OTHER';
+
             try {
                 await api.post('/transactions/', {
                     type: 'EXPENSE',
                     title: item.name,
                     amount: item.amount.toString(),
-                    category: item.category.toUpperCase(), // Matching your CATEGORY_HEX format
+                    category: normalizedCategory,
                 });
-            } catch (error) {
-                console.error("Error saving:", item.name, error);
+            } catch (error: any) {
+                console.error("Error saving:", item.name, error.response?.data);
             }
         }
 
-        setReviewVisible(false); // Close AI review modal
-        onClose(); // Close AddFundModal to trigger the refresh
+        setReviewVisible(false);
+        onClose();
     };
 
     const handleSubmit = async () => {

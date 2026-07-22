@@ -140,9 +140,14 @@ def process_voice_expense(request):
         gemini_file = client.files.upload(file=temp_path)
 
         prompt = """
-        Extract the expense details from this audio. 
+        Extract the expense details from this audio.
         Return ONLY a JSON array matching this exact format, with no markdown formatting:
         [{"name": "Merchant Name", "amount": 0.00, "category": "CATEGORY_NAME"}]
+
+        CATEGORY_NAME must be exactly one of these values, with no others allowed:
+        GROCERIES, SUBSCRIPTIONS, MEMBERSHIP, BILLS, TRANSPORT, DINING, SHOPPING, ENTERTAINMENT, RENT, OTHER
+
+        Pick the closest match. If nothing fits well, use OTHER.
         """
 
         response = client.models.generate_content(
