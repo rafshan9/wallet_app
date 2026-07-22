@@ -58,12 +58,12 @@ export function AlertModalProvider({ children }: { children: ReactNode }) {
                                         onPress={() => handlePress(button)}
                                         // Use w-full for single buttons, and flex-1 for side-by-side buttons
                                         className={`py-3 rounded-full items-center justify-center ${buttons.length > 1 ? 'flex-1' : 'w-full'
-                                            } ${isDestructive ? 'bg-red-500' : isCancel ? 'bg-black/5' : 'bg-black'}`}
+                                            } ${isDestructive ? 'bg-red' : isCancel ? 'bg-black/5' : 'bg-black'}`}
                                     >
                                         {/* Bulletproof inline color to prevent NativeWind fallback issues */}
                                         <Text
                                             className="font-inter_bold text-sm"
-                                            style={{ color: isCancel ? '#000000' : '#FFFFFF' }}
+                                            style={{ color: isCancel ? '#000000' : '#ffffffff' }}
                                         >
                                             {button.text}
                                         </Text>

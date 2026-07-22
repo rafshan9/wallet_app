@@ -1,8 +1,8 @@
-import { View, Text, TextInput, TouchableOpacity, Modal, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Modal, KeyboardAvoidingView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { useAlert } from '../AlertModal';
-import { Note } from '../../hooks/useNotes';
+import { Note, useAddVoiceNote } from '../../hooks/useNotes'; // Import the new mutation
 import { useVoiceRecording } from '../../hooks/useVoiceRecording';
 
 type Props = {
@@ -16,12 +16,26 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
     const [content, setContent] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const showAlert = useAlert();
-    const { isRecording, isProcessing, startRecording, stopRecording } = useVoiceRecording<{ text: string }>(
-        '/notes/voice/',
-        (data) => {
-            setContent((prev) => (prev ? `${prev}\n${data.text}` : data.text));
+
+    // 1. Initialize the mutation
+    const { mutate: addVoiceNote } = useAddVoiceNote();
+
+    // 2. Wire up the decoupled hook
+    const { isRecording, startRecording, stopRecording } = useVoiceRecording((uri) => {
+        // Instantly hide the modal
+        onClose();
+
+        const formData = new FormData();
+        formData.append('audio', { uri, name: 'recording.m4a', type: 'audio/m4a' } as any);
+
+        // Optional: Send typed text along with the audio if they typed before recording
+        if (content.trim()) {
+            formData.append('text', content.trim());
         }
-    );
+
+        // Fire the background process
+        addVoiceNote(formData);
+    });
 
     useEffect(() => {
         setContent(note?.content ?? '');
@@ -44,20 +58,9 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
         }
     };
 
-    const handleCameraPress = () => {
-        // TODO: wire up camera capture for notes
-    };
-
-    const handleVoicePress = () => {
-        // TODO: wire up voice-to-text for notes
-    };
-
     return (
         <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-            <KeyboardAvoidingView
-                behavior="padding"
-                className="flex-1"
-            >
+            <KeyboardAvoidingView behavior="padding" className="flex-1">
                 <View className="flex-1 justify-end bg-black/40">
                     <View className="bg-very_dark_blue rounded-t-[32px] border-2 border-black px-6 pt-6 pb-8">
                         <View className="flex-row justify-between items-center mb-6">
@@ -80,23 +83,13 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
                         />
 
                         <View className="flex-row items-center gap-3">
-                            <TouchableOpacity
-                                onPress={handleCameraPress}
-                                className="h-14 w-14 bg-yellow rounded-full items-center justify-center border-2 border-black"
-                            >
-                                <Feather name="camera" size={20} color="black" />
-                            </TouchableOpacity>
+                            {/* Removed disabled state and ActivityIndicator */}
                             <TouchableOpacity
                                 onPress={isRecording ? stopRecording : startRecording}
-                                disabled={isProcessing}
-                                className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red-500' : 'bg-yellow'
+                                className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red' : 'bg-yellow'
                                     }`}
                             >
-                                {isProcessing ? (
-                                    <ActivityIndicator color="black" />
-                                ) : (
-                                    <Feather name={isRecording ? "square" : "mic"} size={20} color="black" />
-                                )}
+                                <Feather name={isRecording ? "square" : "mic"} size={20} color="black" />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handleSave} disabled={isSaving} className="flex-1 bg-black py-4 rounded-full items-center">
                                 <Text className="text-white font-inter_bold">{isSaving ? 'Saving...' : 'Save Note'}</Text>

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
     useAudioRecorder,
     useAudioRecorderState,
@@ -7,12 +6,10 @@ import {
     setAudioModeAsync,
 } from 'expo-audio';
 import { Alert } from 'react-native';
-import api from '../../utils/axios';
 
-export const useVoiceRecording = <T = any>(endpoint: string, onResult?: (data: T) => void) => {
+export const useVoiceRecording = (onRecordingComplete: (uri: string) => void) => {
     const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
     const recorderState = useAudioRecorderState(audioRecorder);
-    const [isProcessing, setIsProcessing] = useState(false);
 
     async function startRecording() {
         try {
@@ -35,31 +32,13 @@ export const useVoiceRecording = <T = any>(endpoint: string, onResult?: (data: T
         if (!recorderState.isRecording) return;
         await audioRecorder.stop();
 
-        const uri = audioRecorder.uri;
-        if (uri) await uploadAudio(uri);
-    }
-
-    async function uploadAudio(uri: string) {
-        setIsProcessing(true);
-        const formData = new FormData();
-        formData.append('audio', { uri, name: 'recording.m4a', type: 'audio/m4a' } as any);
-
-        try {
-            const response = await api.post(endpoint, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
-            onResult?.(response.data);
-        } catch (error) {
-            console.error('Upload error', error);
-            Alert.alert('Error', 'Failed to process recording.');
-        } finally {
-            setIsProcessing(false);
+        if (audioRecorder.uri) {
+            onRecordingComplete(audioRecorder.uri);
         }
     }
 
     return {
         isRecording: recorderState.isRecording,
-        isProcessing,
         startRecording,
         stopRecording,
     };

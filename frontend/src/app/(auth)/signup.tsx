@@ -1,7 +1,10 @@
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import axios from 'axios';
+import { useAlert } from '../../components/AlertModal';
+import PasswordValidator from '../../components/PasswordValidator';
+import { Feather } from '@expo/vector-icons';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -12,15 +15,24 @@ export default function SignUpScreen() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const showAlert = useAlert();
+    const [errorFields, setErrorFields] = useState<string[]>([]);
 
     const handleSignUp = async () => {
-        if (!firstName.trim() || !lastName.trim() || !username.trim() || !email.trim() || !password) {
-            Alert.alert('Missing Info', 'Please fill in all fields.');
+        if (!firstName.trim() || !lastName.trim() || !username.trim() || !email.trim() || !password || !confirmPassword) {
+            showAlert({ title: 'Missing Info', message: 'Please fill in all fields.' });
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            showAlert({ title: 'Error', message: 'Passwords do not match.' });
             return;
         }
 
         try {
-            // Remember to replace with your local IP address
             await axios.post(`${API_URL}/api/signup/`, {
                 username,
                 email,
@@ -29,13 +41,11 @@ export default function SignUpScreen() {
                 last_name: lastName.trim(),
             });
 
-            Alert.alert('Success', 'Account created! Please log in.');
+            showAlert({ title: 'Success', message: 'Account created! Please log in.' });
             router.replace('/login');
         } catch (error: any) {
-            // This will print the exact Django error to your VS Code terminal
             console.log("BACKEND ERROR:", error.response?.data || error.message);
-
-            Alert.alert('Error', 'Could not create account. Check your details.');
+            showAlert({ title: 'Error', message: 'Could not create account. Check your details.' });
         }
     };
 
@@ -77,13 +87,44 @@ export default function SignUpScreen() {
                 onChangeText={setEmail}
                 className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg mb-4 placeholder:text-gray-400"
             />
-            <TextInput
-                placeholder="Password"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-                className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg mb-8 placeholder:text-gray-400"
-            />
+            <View className="relative mb-4">
+                <TextInput
+                    placeholder="Password"
+                    secureTextEntry={!showPassword}
+                    value={password}
+                    autoCapitalize='none'
+                    onChangeText={setPassword}
+                    // Added pr-14, removed mb-8
+                    className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                />
+                <TouchableOpacity
+                    className="absolute right-4 top-5 z-10"
+                    onPress={() => setShowPassword(!showPassword)}
+                >
+                    <Feather name={showPassword ? "eye" : "eye-off"} size={24} color="gray" />
+                </TouchableOpacity>
+            </View>
+
+            <PasswordValidator password={password} />
+
+            <View className="relative mb-8">
+                <TextInput
+                    placeholder="Confirm Password"
+                    secureTextEntry={!showConfirmPassword}
+                    value={confirmPassword}
+                    autoCapitalize="none"
+                    onChangeText={setConfirmPassword}
+                    // Added pr-14, removed mb-8
+                    className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                />
+                <TouchableOpacity
+                    className="absolute right-4 top-5 z-10"
+                    onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                    <Feather name={showConfirmPassword ? "eye" : "eye-off"} size={24} color="gray" />
+                </TouchableOpacity>
+            </View>
+
             <TouchableOpacity
                 className="relative self-center mb-6"
                 onPress={handleSignUp}

@@ -1,17 +1,21 @@
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import api from '../../../utils/axios';
 import { useAppStore } from '../../../src/store';
-
+import { useAlert } from '../../components/AlertModal';
+import { Feather } from '@expo/vector-icons';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
+
 export default function LoginScreen() {
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const showAlert = useAlert();
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = async () => {
         try {
@@ -27,7 +31,7 @@ export default function LoginScreen() {
 
             router.replace('/');
         } catch (error) {
-            Alert.alert('Error', 'Invalid credentials');
+            showAlert({ title: 'Error', message: 'Invalid credentials' });
         }
     };
 
@@ -44,13 +48,22 @@ export default function LoginScreen() {
                 onChangeText={setUsername}
                 className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg mb-4 placeholder:text-gray-400"
             />
-            <TextInput
-                placeholder="Password"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-                className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg mb-8 placeholder:text-gray-400"
-            />
+            <View className="relative mb-4">
+                <TextInput
+                    placeholder="Password"
+                    secureTextEntry={!showPassword}
+                    value={password}
+                    onChangeText={setPassword}
+                    className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                />
+                <TouchableOpacity
+                    className="absolute right-4 top-5"
+                    onPress={() => setShowPassword(!showPassword)}
+                >
+                    <Feather name={showPassword ? "eye" : "eye-off"} size={24} color="gray" />
+                </TouchableOpacity>
+            </View>
+
 
             <TouchableOpacity
                 className="relative self-center mb-6"

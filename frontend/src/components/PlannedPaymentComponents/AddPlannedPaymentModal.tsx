@@ -1,10 +1,20 @@
 // components/AddPlannedPaymentModal.tsx
-import { View, Text, TextInput, TouchableOpacity, Modal, Alert, ScrollView } from 'react-native';
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Modal,
+    ScrollView,
+    KeyboardAvoidingView,
+    Platform
+} from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import api from '../../../utils/axios';
 import { CATEGORY_STYLES, FREQUENCIES, PaymentCategory } from '../../constants/paymentCategories';
 import { useAlert } from '../AlertModal';
+
 type Props = {
     visible: boolean;
     onClose: () => void;
@@ -19,10 +29,12 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
     const [frequency, setFrequency] = useState<typeof FREQUENCIES[number]>('monthly');
     const [isSaving, setIsSaving] = useState(false);
 
+    // Fixed destructuring here based on your previous setup
+    const showAlert = useAlert();
+
     const reset = () => {
         setName(''); setAmount(''); setDueDate(''); setCategory('other'); setIsRecurring(false); setFrequency('monthly');
     };
-    const showAlert = useAlert();
 
     const handleSave = async () => {
         if (!name.trim() || !amount || !dueDate) {
@@ -51,97 +63,112 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
 
     return (
         <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-            <View className="flex-1 justify-end bg-black/40">
-                <View className="bg-white rounded-t-[32px] border-2 border-black px-6 pt-6" style={{ maxHeight: '85%' }}>
-                    <View className="flex-row justify-between items-center mb-6">
-                        <Text className="font-inter_bold text-xl">Add Payment</Text>
-                        <TouchableOpacity onPress={onClose} hitSlop={8}>
-                            <Feather name="x" size={22} color="black" />
-                        </TouchableOpacity>
-                    </View>
+            {/* 1. Root level KeyboardAvoidingView */}
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+            >
+                {/* 2. Backdrop container */}
+                <View className="flex-1 justify-end bg-black/40">
 
-                    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
-                        <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Name</Text>
-                        <TextInput
-                            value={name}
-                            onChangeText={setName}
-                            placeholder="e.g. Rent"
-                            className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
-                        />
+                    {/* 3. White bottom sheet */}
+                    <View className="bg-white rounded-t-[32px] border-2 border-black px-6 pt-6" style={{ maxHeight: '85%' }}>
 
-                        <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Amount</Text>
-                        <TextInput
-                            value={amount}
-                            onChangeText={setAmount}
-                            placeholder="0.00"
-                            keyboardType="decimal-pad"
-                            className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
-                        />
+                        <View className="flex-row justify-between items-center mb-6">
+                            <Text className="font-inter_bold text-xl">Add Payment</Text>
+                            <TouchableOpacity onPress={onClose} hitSlop={8}>
+                                <Feather name="x" size={22} color="black" />
+                            </TouchableOpacity>
+                        </View>
 
-                        <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Due date</Text>
-                        <TextInput
-                            value={dueDate}
-                            onChangeText={setDueDate}
-                            placeholder="YYYY-MM-DD"
-                            className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
-                        />
+                        {/* 4. ScrollView */}
+                        <ScrollView
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
+                            keyboardShouldPersistTaps="handled"
+                        >
+                            <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Name</Text>
+                            <TextInput
+                                value={name}
+                                onChangeText={setName}
+                                placeholder="e.g. Rent"
+                                className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
+                            />
 
-                        <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Category</Text>
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4">
-                            {(Object.keys(CATEGORY_STYLES) as PaymentCategory[]).map((key) => {
-                                const style = CATEGORY_STYLES[key];
-                                const selected = category === key;
-                                return (
-                                    <TouchableOpacity
-                                        key={key}
-                                        onPress={() => setCategory(key)}
-                                        className={`flex-row items-center px-4 py-2 rounded-full mr-2 ${selected ? style.bg : 'bg-black/5'}`}
-                                    >
-                                        <Feather name={style.icon} size={14} color={selected ? 'white' : 'black'} />
-                                        <Text className={`ml-2 font-inter_medium text-xs ${selected ? 'text-white' : 'text-black'}`}>
-                                            {style.label}
-                                        </Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
+                            <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Amount</Text>
+                            <TextInput
+                                value={amount}
+                                onChangeText={setAmount}
+                                placeholder="0.00"
+                                keyboardType="decimal-pad"
+                                className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
+                            />
+
+                            <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Due date</Text>
+                            <TextInput
+                                value={dueDate}
+                                onChangeText={setDueDate}
+                                placeholder="YYYY-MM-DD"
+                                className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
+                            />
+
+                            <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Category</Text>
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4">
+                                {(Object.keys(CATEGORY_STYLES) as PaymentCategory[]).map((key) => {
+                                    const style = CATEGORY_STYLES[key];
+                                    const selected = category === key;
+                                    return (
+                                        <TouchableOpacity
+                                            key={key}
+                                            onPress={() => setCategory(key)}
+                                            className={`flex-row items-center px-4 py-2 rounded-full mr-2 ${selected ? style.bg : 'bg-black/5'}`}
+                                        >
+                                            <Feather name={style.icon} size={14} color={selected ? 'white' : 'black'} />
+                                            <Text className={`ml-2 font-inter_medium text-xs ${selected ? 'text-white' : 'text-black'}`}>
+                                                {style.label}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    );
+                                })}
+                            </ScrollView>
+
+                            <TouchableOpacity
+                                onPress={() => setIsRecurring((prev) => !prev)}
+                                className="flex-row items-center justify-between border-2 border-black/10 rounded-2xl px-4 py-3 mb-4"
+                            >
+                                <Text className="font-inter_medium">Repeats</Text>
+                                <View className={`w-12 h-7 rounded-full justify-center px-1 ${isRecurring ? 'bg-black' : 'bg-black/10'}`}>
+                                    <View className={`w-5 h-5 rounded-full bg-white ${isRecurring ? 'self-end' : 'self-start'}`} />
+                                </View>
+                            </TouchableOpacity>
+
+                            {isRecurring && (
+                                <View className="flex-row mb-4">
+                                    {FREQUENCIES.map((freq) => (
+                                        <TouchableOpacity
+                                            key={freq}
+                                            onPress={() => setFrequency(freq)}
+                                            className={`px-4 py-2 rounded-full mr-2 ${frequency === freq ? 'bg-black' : 'bg-black/5'}`}
+                                        >
+                                            <Text className={`font-inter_medium text-xs capitalize ${frequency === freq ? 'text-white' : 'text-black'}`}>
+                                                {freq}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                            )}
+
+                            <TouchableOpacity
+                                onPress={handleSave}
+                                disabled={isSaving}
+                                className="bg-black py-4 rounded-full items-center mt-2"
+                            >
+                                <Text className="text-white font-inter_bold">{isSaving ? 'Saving...' : 'Save Payment'}</Text>
+                            </TouchableOpacity>
                         </ScrollView>
-
-                        <TouchableOpacity
-                            onPress={() => setIsRecurring((prev) => !prev)}
-                            className="flex-row items-center justify-between border-2 border-black/10 rounded-2xl px-4 py-3 mb-4"
-                        >
-                            <Text className="font-inter_medium">Repeats</Text>
-                            <View className={`w-12 h-7 rounded-full justify-center px-1 ${isRecurring ? 'bg-black' : 'bg-black/10'}`}>
-                                <View className={`w-5 h-5 rounded-full bg-white ${isRecurring ? 'self-end' : 'self-start'}`} />
-                            </View>
-                        </TouchableOpacity>
-
-                        {isRecurring && (
-                            <View className="flex-row mb-4">
-                                {FREQUENCIES.map((freq) => (
-                                    <TouchableOpacity
-                                        key={freq}
-                                        onPress={() => setFrequency(freq)}
-                                        className={`px-4 py-2 rounded-full mr-2 ${frequency === freq ? 'bg-black' : 'bg-black/5'}`}
-                                    >
-                                        <Text className={`font-inter_medium text-xs capitalize ${frequency === freq ? 'text-white' : 'text-black'}`}>
-                                            {freq}
-                                        </Text>
-                                    </TouchableOpacity>
-                                ))}
-                            </View>
-                        )}
-
-                        <TouchableOpacity
-                            onPress={handleSave}
-                            disabled={isSaving}
-                            className="bg-black py-4 rounded-full items-center mt-2"
-                        >
-                            <Text className="text-white font-inter_bold">{isSaving ? 'Saving...' : 'Save Payment'}</Text>
-                        </TouchableOpacity>
-                    </ScrollView>
+                    </View>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         </Modal>
     );
 }

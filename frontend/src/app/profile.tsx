@@ -1,13 +1,16 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import api from '../../utils/axios';
 import { useAppStore } from '../../src/store';
+import { useAlert } from '../components/AlertModal';
 
 export default function ProfileScreen() {
     const router = useRouter();
     const { user } = useAppStore();
+    const showAlert = useAlert();
 
     const fullName = user ? `${user.first_name} ${user.last_name}` : 'User Name';
     const email = user?.email || 'user@example.com';
@@ -25,26 +28,20 @@ export default function ProfileScreen() {
     };
 
     const handleDeleteAccount = () => {
-        Alert.alert(
-            "Delete Account",
-            "Are you sure? This action cannot be undone.",
-            [
+        // This looks almost exactly like your original Alert.alert!
+        showAlert({
+            title: "Delete Account",
+            message: "Are you sure? This action cannot be undone.",
+            buttons: [
                 { text: "Cancel", style: "cancel" },
                 {
                     text: "Delete",
                     style: "destructive",
                     onPress: async () => {
                         try {
-                            // 1. Send delete request
                             await api.delete('/account/delete/');
-
-                            // 2. Remove token from SecureStore
                             await SecureStore.deleteItemAsync('accessToken');
-
-                            // 3. Clear user from store
                             useAppStore.getState().setUser(null);
-
-                            // 4. Redirect to login
                             router.replace('/login');
                         } catch (error) {
                             console.error("Failed to delete account:", error);
@@ -52,7 +49,7 @@ export default function ProfileScreen() {
                     }
                 }
             ]
-        );
+        });
     };
     return (
         <ScrollView className="flex-1 bg-dark_blue pt-16 px-6">
@@ -134,7 +131,6 @@ export default function ProfileScreen() {
                     <Text className="font-inter_bold text-white text-xl">Delete Account</Text>
                 </View>
             </TouchableOpacity>
-
         </ScrollView>
     );
 }

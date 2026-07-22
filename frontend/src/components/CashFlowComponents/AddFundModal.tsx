@@ -237,7 +237,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                     <TouchableOpacity
                                         onPress={isRecording ? stopRecording : startRecording}
                                         disabled={isProcessing}
-                                        className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red-500' : 'bg-yellow'
+                                        className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red' : 'bg-yellow'
                                             }`}
                                     >
                                         {isProcessing ? (

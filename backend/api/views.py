@@ -8,6 +8,7 @@ from google import genai
 import tempfile
 import os
 import json
+import requests
 from rest_framework.decorators import api_view, permission_classes
 from django.conf import settings
 from rest_framework.views import APIView
@@ -122,8 +123,10 @@ class UserProfileView(APIView):
         
 #Gemini voice to text
 client = genai.Client(api_key=settings.GEMINI_API_KEY)
-#Expense
 
+#Groke voice to text 
+
+#Expense
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def process_voice_expense(request):
@@ -166,7 +169,7 @@ def process_voice_expense(request):
             os.remove(temp_path)
         return Response({"error": str(e)}, status=500)
 
-#Voice note
+#Voice note using gemini 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def process_voice_note(request):
@@ -197,3 +200,4 @@ def process_voice_note(request):
         if os.path.exists(temp_path):
             os.remove(temp_path)
         return Response({"error": str(e)}, status=500)
+
