@@ -5,21 +5,106 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from datetime import timedelta
 from google import genai
+from rest_framework.throttling import ScopedRateThrottle
 import tempfile
 import os
+from django.http import HttpResponse
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 import json
 import requests
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.core.mail import send_mail
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from django.conf import settings
 from rest_framework.views import APIView
 from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer, NoteSerializer
 from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment, Note
+from google.oauth2 import id_token as google_id_token
+from google.auth.transport import requests as google_requests
+
+
+
+def send_verification_email(user):
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    verify_link = f"{settings.EMAIL_VERIFY_BASE_URL}?uid={uid}&token={token}"
+    send_mail(
+        subject='Verify your email',
+        message=f'Tap this link to verify your account: {verify_link}',
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[user.email],
+    )
 
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save()  # your UserSerializer.create() already sets is_active=False
+        send_verification_email(user)
+
+
+class VerifyEmailView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        uid = request.GET.get('uid')
+        token = request.GET.get('token')
+
+        error_html = """
+        <html><body style="font-family: sans-serif; text-align: center; padding: 40px;">
+            <h2>❌ Invalid or expired link</h2>
+            <p>Please request a new verification email from the app.</p>
+        </body></html>
+        """
+
+        if not uid or not token:
+            return HttpResponse(error_html, status=400)
+
+        try:
+            user_id = force_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(pk=user_id)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return HttpResponse(error_html, status=400)
+
+        if not default_token_generator.check_token(user, token):
+            return HttpResponse(error_html, status=400)
+
+        if not user.is_active:
+            user.is_active = True
+            user.save(update_fields=['is_active'])
+
+        success_html = """
+        <html><body style="font-family: sans-serif; text-align: center; padding: 40px;">
+            <h2>✅ Email verified</h2>
+            <p>You can close this tab and open the app.</p>
+        </body></html>
+        """
+        return HttpResponse(success_html)
+
+class ResendVerificationEmailView(APIView):
+    permission_classes = (AllowAny,)
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'resend_verification'
+
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({'detail': 'email is required'}, status=400)
+
+        user = User.objects.filter(email__iexact=email, is_active=False).first()
+        if user:
+            send_verification_email(user)
+
+        # Same response whether or not the account exists / is already verified —
+        # otherwise this endpoint becomes a way to check which emails are registered.
+        return Response({'detail': 'If that email needs verifying, a new link has been sent.'})
 
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
@@ -30,6 +115,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        
 
 class SavingsGoalViewSet(viewsets.ModelViewSet):
     serializer_class = SavingsGoalSerializer
@@ -120,11 +206,58 @@ class UserProfileView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+
+
+# Google auth
+class GoogleAuthView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        token = request.data.get('id_token')
+        if not token:
+            return Response({'detail': 'id_token is required'}, status=400)
+
+        try:
+            idinfo = google_id_token.verify_oauth2_token(
+                token, google_requests.Request(), settings.GOOGLE_OAUTH_CLIENT_ID
+            )
+        except ValueError:
+            return Response({'detail': 'Invalid Google token'}, status=401)
+
+        if not idinfo.get('email_verified'):
+            return Response({'detail': 'Google email not verified'}, status=401)
+
+        email = idinfo['email']
+        user = User.objects.filter(email__iexact=email).first()
+
+        if user is None:
+            username = base = email.split('@')[0]
+            suffix = 1
+            while User.objects.filter(username=username).exists():
+                username = f"{base}{suffix}"
+                suffix += 1
+            user = User.objects.create(
+                username=username,
+                email=email,
+                first_name=idinfo.get('given_name', ''),
+                last_name=idinfo.get('family_name', ''),
+            )
+            user.set_unusable_password()
+            user.save()
+        elif not user.is_active:
+            # Google just proved this person really owns this email — reclaim the account
+            # from whatever password-signup stub was sitting on it, and lock out that password
+            # since it may not belong to the real owner.
+            user.is_active = True
+            user.set_unusable_password()
+            user.save()
+
+        refresh = RefreshToken.for_user(user)
+        return Response({'access': str(refresh.access_token), 'refresh': str(refresh)})
         
 #Gemini voice to text
 client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-#Groke voice to text 
 
 #Expense
 @api_view(['POST'])

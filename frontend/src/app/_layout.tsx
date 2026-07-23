@@ -9,6 +9,8 @@ import '../../global.css';
 import { AlertModalProvider } from '../components/AlertModal';
 import api from '../../utils/axios';
 import { useAppStore } from '../../src/store';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,6 +25,13 @@ export default function RootLayout() {
     Inter_900Black,
     AlfaSlabOne_400Regular,
   });
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+      iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+    });
+  }, []);
 
   const [userLoaded, setUserLoaded] = useState(false);
 

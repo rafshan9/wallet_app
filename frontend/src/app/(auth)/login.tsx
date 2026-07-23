@@ -7,6 +7,8 @@ import api from '../../../utils/axios';
 import { useAppStore } from '../../../src/store';
 import { useAlert } from '../../components/AlertModal';
 import { Feather } from '@expo/vector-icons';
+import { useGoogleAuth } from '../../hooks/useGoogleAuth';
+import GoogleAuthButton from '../../components/GoogleAuthButton';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -16,6 +18,8 @@ export default function LoginScreen() {
     const [password, setPassword] = useState('');
     const showAlert = useAlert();
     const [showPassword, setShowPassword] = useState(false);
+    const [loginFailed, setLoginFailed] = useState(false);
+    const { handleGoogleAuth } = useGoogleAuth();
 
     const handleLogin = async () => {
         try {
@@ -31,7 +35,8 @@ export default function LoginScreen() {
 
             router.replace('/');
         } catch (error) {
-            showAlert({ title: 'Error', message: 'Invalid credentials' });
+            setLoginFailed(true);
+            showAlert({ title: 'Error', message: 'Invalid credentials, or your email may not be verified yet.' });
         }
     };
 
@@ -48,7 +53,7 @@ export default function LoginScreen() {
                 onChangeText={setUsername}
                 className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg mb-4 placeholder:text-gray-400"
             />
-            <View className="relative mb-4">
+            <View className="relative mb-2">
                 <TextInput
                     placeholder="Password"
                     secureTextEntry={!showPassword}
@@ -64,20 +69,32 @@ export default function LoginScreen() {
                 </TouchableOpacity>
             </View>
 
+            <TouchableOpacity onPress={() => router.push('/')} className="mb-4">
+                <Text className="text-right font-inter_medium text-white/70 underline">
+                    Forgot password?
+                </Text>
+            </TouchableOpacity>
 
             <TouchableOpacity
                 className="relative self-center mb-6"
                 onPress={handleLogin}
                 activeOpacity={0.8}
             >
-                {/* The Solid Shadow */}
                 <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
-
-                {/* The Button */}
                 <View className="bg-yellow py-4 px-16 border-2 border-black items-center">
                     <Text className="font-inter_bold text-xl">Login</Text>
                 </View>
             </TouchableOpacity>
+
+            <GoogleAuthButton onPress={handleGoogleAuth} />
+
+            {loginFailed && (
+                <TouchableOpacity onPress={() => router.push('/verify-pending')} className="mb-2">
+                    <Text className="text-center font-inter_medium text-white/70 underline">
+                        Didn't verify your email yet?
+                    </Text>
+                </TouchableOpacity>
+            )}
 
             <TouchableOpacity onPress={() => router.push('/signup')}>
                 <Text className="text-center font-inter_medium text-white/80">

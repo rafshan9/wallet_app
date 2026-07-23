@@ -1,6 +1,6 @@
-import { View, Text, Modal, TextInput, TouchableOpacity, ActivityIndicator, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, Text, Modal, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { CATEGORIES } from '../../constants/categories';
 import api from '../../../utils/axios'
 import { useAppStore } from '../../store'
@@ -8,6 +8,8 @@ import { useAlert } from '../AlertModal';
 import ScannerButton from '../ui/ScannerButton';
 import AiReviewModal from './AiReviewModal';
 import { useVoiceRecording } from '../../hooks/useVoiceRecording';
+import { Animated } from 'react-native';
+
 
 
 type AddExpenseModalProps = {
@@ -27,6 +29,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
     const [isScanning, setIsScanning] = useState(false);
     const [scannedData, setScannedData] = useState<any[]>([]);
     const [reviewVisible, setReviewVisible] = useState(false);
+    const blinkAnim = useRef(new Animated.Value(1)).current;
 
     const handleVoiceResult = (expenses: { name: string; amount: number; category: string }[]) => {
         if (!expenses || expenses.length === 0) {
@@ -42,6 +45,34 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
         '/transactions/voice/',
         handleVoiceResult
     );
+
+    useEffect(() => {
+        if (isRecording) {
+            const blink = Animated.loop(
+                Animated.sequence([
+                    Animated.timing(blinkAnim, {
+                        toValue: 0.3,
+                        duration: 500,
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(blinkAnim, {
+                        toValue: 1,
+                        duration: 500,
+                        useNativeDriver: true,
+                    }),
+                ])
+            );
+            blink.start();
+            return () => {
+                blink.stop();
+                blinkAnim.setValue(1);
+            };
+        }
+    }, [isRecording]);
+
+
+
+
 
     const handleScanComplete = (data: any) => {
         setIsScanning(false);
@@ -107,7 +138,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
             onClose();
         } catch (error) {
             console.error(error);
-            Alert.alert('Error', 'Failed to save transaction.');
+            showAlert({ title: 'Error', message: 'Failed to save transaction.' });
         } finally {
             setIsLoading(false);
         }
@@ -237,9 +268,12 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                     <TouchableOpacity
                                         onPress={isRecording ? stopRecording : startRecording}
                                         disabled={isProcessing}
-                                        className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red' : 'bg-yellow'
-                                            }`}
+                                        className="h-14 w-14 rounded-full items-center justify-center border-2 border-black overflow-hidden"
                                     >
+                                        <Animated.View
+                                            className={`absolute inset-0 rounded-full ${isRecording ? 'bg-red' : 'bg-yellow'}`}
+                                            style={{ opacity: isRecording ? blinkAnim : 1 }}
+                                        />
                                         {isProcessing ? (
                                             <ActivityIndicator color="black" />
                                         ) : (

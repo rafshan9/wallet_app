@@ -1,9 +1,10 @@
 import { View, Text, TextInput, TouchableOpacity, Modal, KeyboardAvoidingView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useAlert } from '../AlertModal';
-import { Note, useAddVoiceNote } from '../../hooks/useNotes'; // Import the new mutation
-import { useVoiceRecording } from '../../hooks/useVoiceRecording';
+import { Note } from '../../hooks/useNotes';
+import { useSpeechToText } from '../../hooks/useSpeechToText';
+import { Animated } from 'react-native';
 
 type Props = {
     visible: boolean;
@@ -16,26 +17,25 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
     const [content, setContent] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const showAlert = useAlert();
-
-    // 1. Initialize the mutation
-    const { mutate: addVoiceNote } = useAddVoiceNote();
-
-    // 2. Wire up the decoupled hook
-    const { isRecording, startRecording, stopRecording } = useVoiceRecording((uri) => {
-        // Instantly hide the modal
-        onClose();
-
-        const formData = new FormData();
-        formData.append('audio', { uri, name: 'recording.m4a', type: 'audio/m4a' } as any);
-
-        // Optional: Send typed text along with the audio if they typed before recording
-        if (content.trim()) {
-            formData.append('text', content.trim());
-        }
-
-        // Fire the background process
-        addVoiceNote(formData);
+    const { isRecording, isProcessing, startRecording, stopRecording } = useSpeechToText((text) => {
+        setContent(text);
     });
+    const pulseAnim = useRef(new Animated.Value(1)).current;
+
+    useEffect(() => {
+        if (isRecording) {
+            Animated.loop(
+                Animated.sequence([
+                    Animated.timing(pulseAnim, { toValue: 0.3, duration: 600, useNativeDriver: true }),
+                    Animated.timing(pulseAnim, { toValue: 1, duration: 600, useNativeDriver: true }),
+                ])
+            ).start();
+        } else {
+            pulseAnim.setValue(1);
+        }
+    }, [isRecording]);
+
+
 
     useEffect(() => {
         setContent(note?.content ?? '');
@@ -83,14 +83,14 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
                         />
 
                         <View className="flex-row items-center gap-3">
-                            {/* Removed disabled state and ActivityIndicator */}
-                            <TouchableOpacity
-                                onPress={isRecording ? stopRecording : startRecording}
-                                className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red' : 'bg-yellow'
-                                    }`}
-                            >
-                                <Feather name={isRecording ? "square" : "mic"} size={20} color="black" />
-                            </TouchableOpacity>
+                            <Animated.View style={{ opacity: pulseAnim }}>
+                                <TouchableOpacity
+                                    onPress={isRecording ? stopRecording : startRecording}
+                                    className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red' : 'bg-[#E6F4FE]'}`}
+                                >
+                                    <Feather name={isRecording ? "square" : "mic"} size={20} color="black" />
+                                </TouchableOpacity>
+                            </Animated.View>
                             <TouchableOpacity onPress={handleSave} disabled={isSaving} className="flex-1 bg-black py-4 rounded-full items-center">
                                 <Text className="text-white font-inter_bold">{isSaving ? 'Saving...' : 'Save Note'}</Text>
                             </TouchableOpacity>
