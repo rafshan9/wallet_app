@@ -58,6 +58,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = ['https://walletapp-production-1d63.up.railway.app']
 
 # Configure DRF to use JWT
 REST_FRAMEWORK = {
