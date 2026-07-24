@@ -14,6 +14,7 @@ import { useState } from 'react';
 import api from '../../../utils/axios';
 import { CATEGORY_STYLES, FREQUENCIES, PaymentCategory } from '../../constants/paymentCategories';
 import { useAlert } from '../AlertModal';
+import DateTimePicker from '@expo/ui/community/datetime-picker';
 
 type Props = {
     visible: boolean;
@@ -28,6 +29,16 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
     const [isRecurring, setIsRecurring] = useState(false);
     const [frequency, setFrequency] = useState<typeof FREQUENCIES[number]>('monthly');
     const [isSaving, setIsSaving] = useState(false);
+    const [showDueDatePicker, setShowDueDatePicker] = useState(false);
+
+    const formatDate = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const dueDateValue = dueDate ? new Date(dueDate) : new Date();
 
     // Fixed destructuring here based on your previous setup
     const showAlert = useAlert();
@@ -105,12 +116,29 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
                             />
 
                             <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Due date</Text>
-                            <TextInput
-                                value={dueDate}
-                                onChangeText={setDueDate}
-                                placeholder="YYYY-MM-DD"
-                                className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
-                            />
+                            <TouchableOpacity
+                                onPress={() => setShowDueDatePicker(true)}
+                                className="border-2 border-black/10 rounded-2xl px-4 py-3 mb-4 flex-row items-center justify-between"
+                            >
+                                <Text className={`font-inter_medium ${dueDate ? 'text-black' : 'text-gray-400'}`}>
+                                    {dueDate || 'YYYY-MM-DD'}
+                                </Text>
+                                <Feather name="calendar" size={20} color="gray" />
+                            </TouchableOpacity>
+
+                            {showDueDatePicker && (
+                                <DateTimePicker
+                                    value={dueDateValue}
+                                    mode="date"
+                                    presentation="dialog"
+                                    minimumDate={new Date()}
+                                    onValueChange={(event, selectedDate) => {
+                                        setShowDueDatePicker(false);
+                                        setDueDate(formatDate(selectedDate));
+                                    }}
+                                    onDismiss={() => setShowDueDatePicker(false)}
+                                />
+                            )}
 
                             <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Category</Text>
                             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4">

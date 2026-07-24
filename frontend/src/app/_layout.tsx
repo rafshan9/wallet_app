@@ -11,10 +11,8 @@ import api from '../../utils/axios';
 import { useAppStore } from '../../src/store';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
-
 SplashScreen.preventAutoHideAsync();
 
-// Moved outside to prevent recreating on every render
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
@@ -25,6 +23,11 @@ export default function RootLayout() {
     Inter_900Black,
     AlfaSlabOne_400Regular,
   });
+
+  // subscribe to the store — this must be a hook, not getState(), so
+  // RootLayout re-renders (and Stack.Protected re-evaluates) whenever
+  // the interceptor logs someone out mid-session
+  const user = useAppStore((state) => state.user);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -42,9 +45,12 @@ export default function RootLayout() {
         try {
           const res = await api.get('/account/profile/');
           useAppStore.getState().setUser(res.data);
-        } catch (err) {
-          console.error('Failed to load user profile:', err);
-          await SecureStore.deleteItemAsync('accessToken');
+        } catch (err: any) {
+          if (err?.response?.status !== 401) {
+            // network/server error, not an invalid token — don't wipe a possibly-valid session
+            console.error('Failed to load user profile:', err);
+          }
+          // on a real 401, the axios interceptor already cleared tokens + setUser(null)
         }
       }
       setUserLoaded(true);
@@ -66,10 +72,15 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <AlertModalProvider>
         <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="goal/[id]" />
-          <Stack.Screen name="profile" />
+          <Stack.Protected guard={!!user}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="goal/[id]" />
+            <Stack.Screen name="profile" />
+          </Stack.Protected>
+
+          <Stack.Protected guard={!user}>
+            <Stack.Screen name="(auth)" />
+          </Stack.Protected>
         </Stack>
       </AlertModalProvider>
     </QueryClientProvider>

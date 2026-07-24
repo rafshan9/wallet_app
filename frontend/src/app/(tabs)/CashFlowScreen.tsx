@@ -15,6 +15,7 @@ import { useAlert } from '../../components/AlertModal';
 import PlusIcon from '@/assets/icons/plus_sign.svg';
 import { CATEGORIES } from '../../constants/categories';
 import SavingsWhite from '../../../assets/icons/savings_white.svg';
+import api from '../../../utils/axios';
 
 
 export default function CashFlowScreen() {
@@ -47,6 +48,28 @@ export default function CashFlowScreen() {
             </View>
         );
     }
+
+    const handleDelete = (id: number | string, title: string) => {
+        showAlert({
+            title: 'Delete transaction?',
+            message: `This will permanently remove "${title}".`,
+            buttons: [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: async () => {
+                        try {
+                            await api.delete(`/transactions/${id}/`);
+                            fetchTransactions();
+                        } catch (err) {
+                            showAlert({ title: 'Error', message: 'Could not delete transaction.' });
+                        }
+                    },
+                },
+            ],
+        });
+    };
 
     const sections = groupTransactionsByWeek(transactions);
 
@@ -81,7 +104,6 @@ export default function CashFlowScreen() {
                 }
                 ListHeaderComponent={
                     <>
-                        {/* Assuming the explanatory text is built into these chart components as seen in your first screenshot */}
                         <MonthlyCashFlowChart deposited={totalIncome} expense={totalExpenses} savings={totalSavings} />
 
                         <ExpensePieChart total={`$${totalExpenses.toFixed(2)}`} categories={categoryBreakdown} />
@@ -130,9 +152,12 @@ export default function CashFlowScreen() {
                                     <Text className="text-lg font-inter_black">{tx.title}</Text>
                                     <Text className="text-sm font-inter_regular text-gray-500 mt-1">{formattedDate}</Text>
                                 </View>
-                                <Text className="text-lg font-inter_bold text-green">
+                                <Text className="text-lg font-inter_bold text-green mr-3">
                                     +${parsedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </Text>
+                                <TouchableOpacity onPress={() => handleDelete(tx.id, tx.title)} className="p-1">
+                                    <Feather name="trash-2" size={18} color="#9CA3AF" />
+                                </TouchableOpacity>
                             </View>
                         );
                     }
@@ -152,12 +177,9 @@ export default function CashFlowScreen() {
 
                     return (
                         <View className={`flex-row items-center ${style.color} p-5 rounded-3xl mb-4`}>
-
                             {(() => {
                                 const Icon = (style as any).icon || CATEGORIES.find(c => c.label.toLowerCase() === tx.category.toLowerCase())?.icon;
-
                                 if (!Icon) return null;
-
                                 return (
                                     <View className="mr-4 bg-black rounded-full justify-center items-center h-10 w-10">
                                         <Icon width={18} height={18} color="white" />
@@ -171,9 +193,16 @@ export default function CashFlowScreen() {
                                     {formattedDate}
                                 </Text>
                             </View>
-                            <Text className={`text-lg font-inter_black ${style.text}`}>
+                            <Text className={`text-lg font-inter_black ${style.text} mr-3`}>
                                 -${parsedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </Text>
+                            <TouchableOpacity onPress={() => handleDelete(tx.id, tx.title)} className="p-1">
+                                <Feather
+                                    name="trash-2"
+                                    size={18}
+                                    color={style.text === 'text-white' ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.4)'}
+                                />
+                            </TouchableOpacity>
                         </View>
                     );
                 }}
