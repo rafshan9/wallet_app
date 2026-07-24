@@ -302,6 +302,38 @@ def process_voice_expense(request):
             os.remove(temp_path)
         return Response({"error": str(e)}, status=500)
 
+# Voice to text expense
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def process_expense_text(request):
+    text = request.data.get('text')
+    if not text:
+        return Response({"error": "No text provided"}, status=400)
+
+    prompt = f"""
+    Extract the expense details from this text: "{text}"
+
+    Return ONLY a JSON array matching this exact format, with no markdown formatting:
+    [{{"name": "Merchant Name", "amount": 0.00, "category": "CATEGORY_NAME"}}]
+
+    CATEGORY_NAME must be exactly one of these values, with no others allowed:
+    GROCERIES, SUBSCRIPTIONS, MEMBERSHIP, BILLS, TRANSPORT, DINING, SHOPPING, ENTERTAINMENT, RENT, OTHER
+
+    Pick the closest match. If nothing fits well, use OTHER.
+    If multiple expenses are mentioned, return one object per expense.
+    """
+
+    try:
+        response = client.models.generate_content(
+            model='gemini-3.5-flash',
+            contents=[prompt]
+        )
+        raw_text = response.text.strip().removeprefix('```json').removesuffix('```').strip()
+        return Response(json.loads(raw_text))
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+
 #Voice note using gemini 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

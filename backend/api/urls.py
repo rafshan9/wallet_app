@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import TransactionViewSet, SavingsGoalViewSet, GoalContributionViewSet, PlannedPaymentViewSet, NoteViewSet, process_voice_expense, DeleteAccountView, UserProfileView, GoogleAuthView, VerifyEmailView, ResendVerificationEmailView
+from .views import TransactionViewSet, SavingsGoalViewSet, GoalContributionViewSet, PlannedPaymentViewSet, NoteViewSet, process_voice_expense, DeleteAccountView, UserProfileView, GoogleAuthView, VerifyEmailView, ResendVerificationEmailView, process_expense_text
 from . import views
 
 
@@ -12,6 +12,7 @@ router.register(r'planned-payments', PlannedPaymentViewSet, basename='planned-pa
 router.register(r'notes', NoteViewSet, basename='note')
 
 urlpatterns = [
+    path('transactions/voice-text/', views.process_expense_text, name='voice-expense-text'),
     path('transactions/voice/', views.process_voice_expense, name='voice-expense'),
     path('notes/voice/', views.process_voice_note, name='voice-note'),
     path('account/delete/', views.DeleteAccountView.as_view(), name='delete-account'),
