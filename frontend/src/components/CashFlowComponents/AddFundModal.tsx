@@ -112,7 +112,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                 console.error("Error saving:", item.name, error.response?.data);
             }
         }
-
+        triggerRefresh();
         setReviewVisible(false);
         onClose();
     };
@@ -139,7 +139,6 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
             setTitle('');
             setSelectedCategory(null);
             setType('expense');
-
             triggerRefresh();
             onClose();
         } catch (error) {

@@ -2,36 +2,28 @@ import { View, Text, Animated } from 'react-native';
 import { Transaction } from '../../hooks/useCashFlow';
 import { ActivityBlock } from './ActivityBlock';
 
-import SubscriptionIcon from '../../../assets/icons/subscription_icon.svg';
-import TransportIcon from '../../../assets/icons/transport_icon.svg';
-import MembershipIcon from '../../../assets/icons/membership_icon.svg';
-import DiningIcon from '../../../assets/icons/dining_icon.svg';
-import ShoppingIcon from '../../../assets/icons/shopping_icon.svg';
-import RentIcon from '../../../assets/icons/rent_icon.svg';
-import EntertainmentIcon from '../../../assets/icons/entertainment_icon.svg';
-import BillsIcon from '../../../assets/icons/bills_icon.svg';
-import GroceriesIcon from '../../../assets/icons/groceries_icon.svg';
-
-const CATEGORY_ICONS: Record<string, any> = {
-    GROCERIES: GroceriesIcon,
-    SUBSCRIPTIONS: SubscriptionIcon,
-    ENTERTAINMENT: EntertainmentIcon,
-    SHOPPING: ShoppingIcon,
-    MEMBERSHIP: MembershipIcon,
-    DINING: DiningIcon,
-    TRANSPORTATION: TransportIcon,
-    BILLS: BillsIcon,
-    OTHER: EntertainmentIcon,
+// Replaced icons with vibrant colors matching your neo-brutalist reference
+const CATEGORY_COLORS: Record<string, string> = {
+    GROCERIES: '#D23E60',       // Blue
+    SUBSCRIPTIONS: '#D23E60',    // Teal
+    ENTERTAINMENT: '#D23E60',    // Pink
+    SHOPPING: '#4775E9',        // Orange
+    MEMBERSHIP: '#FFAE00',      // Purple
+    DINING: '#FFAE00',          // Yellow
+    TRANSPORTATION: '#4775E9',  // Blue
+    BILLS: '#4775E9',           // Pink
+    OTHER: '#4775E9',          // Orange
 };
 
 export default function RecentActivity({
     transactions = [],
-    scrollX
+    scrollX // Kept in the interface so the parent component doesn't break, but no longer passed to the child
 }: {
     transactions: Transaction[];
-    scrollX: Animated.Value; // Changed from SharedValue to Animated.Value
+    scrollX: Animated.Value;
 }) {
-    const recentItems = transactions.slice(0, 4);
+    // 1. Slice to max 9 items
+    const recentItems = transactions.slice(0, 9);
 
     return (
         <View className="mt-6 mb-4">
@@ -39,16 +31,16 @@ export default function RecentActivity({
                 Recent Activity
             </Text>
 
-            <View className="flex-row flex-wrap justify-between">
+            {/* 2. Changed to justify-start to allow the varying width pills to pack neatly from the left */}
+            <View className="flex-row flex-wrap justify-start">
                 {recentItems.map((item) => {
-                    const IconComponent = CATEGORY_ICONS[item.category] || EntertainmentIcon;
+                    const color = CATEGORY_COLORS[item.category] || '#4361EE';
 
                     return (
                         <ActivityBlock
                             key={item.id}
                             item={item}
-                            IconComponent={IconComponent}
-                            scrollX={scrollX}
+                            color={color}
                         />
                     );
                 })}

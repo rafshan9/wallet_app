@@ -1,63 +1,31 @@
-import { useMemo } from 'react';
-import { View, Text, TouchableOpacity, useWindowDimensions, Animated } from 'react-native';
-import { SvgProps } from 'react-native-svg';
+import { View, Text } from 'react-native';
 import { Transaction } from '../../hooks/useCashFlow';
 
 interface ActivityBlockProps {
     item: Transaction;
-    IconComponent: React.FC<SvgProps>;
-    scrollX: Animated.Value;
+    color?: string; // Optional: Pass different colors for the pills like the image
 }
 
-const AnimatedText = Animated.createAnimatedComponent(Text);
-
-export function ActivityBlock({ item, IconComponent, scrollX }: ActivityBlockProps) {
-    const { width } = useWindowDimensions();
-    const AnimatedIcon = useMemo(
-        () => Animated.createAnimatedComponent(IconComponent),
-        [IconComponent]
-    );
-
-    const backgroundColor = scrollX.interpolate({
-        inputRange: [0, width, width * 2],
-        outputRange: ['#1A1831', '#000000', '#161E54'],
-        extrapolate: 'clamp'
-    });
-
-    const contentColor = scrollX.interpolate({
-        inputRange: [0, width, width * 2],
-        outputRange: ['#FFFFFF', '#FFFFFF', '#FFFFFF'],
-        extrapolate: 'clamp'
-    });
-
-
-
+export function ActivityBlock({ item, color = '#4361EE' }: ActivityBlockProps) {
     return (
-        <Animated.View
-            className="w-[48%] aspect-square rounded-3xl p-7 justify-center mb-4"
-            style={{ backgroundColor }}
-        >
-            <AnimatedIcon
-                width={48}
-                height={48}
-                style={{ marginBottom: 16 }}
-            />
-
-            <View>
-                <AnimatedText
-                    className="font-alfa text-xl capitalize"
-                    style={{ color: contentColor }}
-                    numberOfLines={1}
+        // maxWidth ensures no more than 3 fit in a row (33.3% minus margins)
+        <View className="m-2" style={{ maxWidth: '30%' }}>
+            {/* Dark Black Shadow Background */}
+            <View className="bg-black rounded-full">
+                {/* Foreground Pill (Shifted up and left) */}
+                <View
+                    className="px-4 py-3 rounded-full border-2 border-black -translate-y-1.5 -translate-x-1.5 flex-row items-center justify-center"
+                    style={{ backgroundColor: color }}
                 >
-                    {item.category.toLowerCase()}
-                </AnimatedText>
-                <AnimatedText
-                    className="font-alfa text-3xl mt-2"
-                    style={{ color: contentColor }}
-                >
-                    ${Math.floor(Number(item.amount))}
-                </AnimatedText>
+                    <Text
+                        className="font-inter_black text-white text-xs capitalize"
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                    >
+                        {item.title.toLowerCase()} ${Math.floor(Number(item.amount))}
+                    </Text>
+                </View>
             </View>
-        </Animated.View>
+        </View>
     );
 }
