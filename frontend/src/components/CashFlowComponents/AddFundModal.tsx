@@ -1,4 +1,4 @@
-import { View, Text, Modal, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, ScrollView, Animated } from 'react-native';
+import { View, Text, Modal, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, Animated, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useRef, useState, useEffect } from 'react';
 import { CATEGORIES } from '../../constants/categories';
@@ -8,6 +8,7 @@ import { useAlert } from '../AlertModal';
 import ScannerButton from '../ui/ScannerButton';
 import AiReviewModal from './AiReviewModal';
 import { useSpeechToText } from '../../hooks/useSpeechToText';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 type AddExpenseModalProps = {
     visible: boolean;
@@ -151,7 +152,11 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
 
     return (
         <Modal visible={visible} animationType="slide" transparent={true}>
-            <KeyboardAvoidingView behavior="padding" className="flex-1">
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                automaticOffset
+                className="flex-1 justify-center bg-black/80 px-6"
+            >
                 <View className="flex-1 justify-end bg-black/80">
                     <View className="bg-very_dark_blue w-full rounded-t-[40px] p-8 border-2 border-black max-h-[90%]">
                         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">

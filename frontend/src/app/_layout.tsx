@@ -10,6 +10,9 @@ import { AlertModalProvider } from '../components/AlertModal';
 import api from '../../utils/axios';
 import { useAppStore } from '../../src/store';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
+
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -69,20 +72,22 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AlertModalProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Protected guard={!!user}>
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="goal/[id]" />
-            <Stack.Screen name="profile" />
-          </Stack.Protected>
+    <KeyboardProvider>
+      <QueryClientProvider client={queryClient}>
+        <AlertModalProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Protected guard={!!user}>
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="goal/[id]" />
+              <Stack.Screen name="profile" />
+            </Stack.Protected>
 
-          <Stack.Protected guard={!user}>
-            <Stack.Screen name="(auth)" />
-          </Stack.Protected>
-        </Stack>
-      </AlertModalProvider>
-    </QueryClientProvider>
+            <Stack.Protected guard={!user}>
+              <Stack.Screen name="(auth)" />
+            </Stack.Protected>
+          </Stack>
+        </AlertModalProvider>
+      </QueryClientProvider>
+    </KeyboardProvider>
   );
 }

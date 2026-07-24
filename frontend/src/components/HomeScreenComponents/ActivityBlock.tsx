@@ -3,26 +3,31 @@ import { Transaction } from '../../hooks/useCashFlow';
 
 interface ActivityBlockProps {
     item: Transaction;
-    color?: string; // Optional: Pass different colors for the pills like the image
+    color?: string;
+    maxWidth?: number;
 }
 
-export function ActivityBlock({ item, color = '#4361EE' }: ActivityBlockProps) {
+export function ActivityBlock({ item, color = '#4361EE', maxWidth }: ActivityBlockProps) {
     return (
-        // maxWidth ensures no more than 3 fit in a row (33.3% minus margins)
-        <View className="m-2" style={{ maxWidth: '30%' }}>
-            {/* Dark Black Shadow Background */}
+        <View className="self-start" style={maxWidth ? { maxWidth } : undefined}>
             <View className="bg-black rounded-full">
-                {/* Foreground Pill (Shifted up and left) */}
                 <View
-                    className="px-4 py-3 rounded-full border-2 border-black -translate-y-1.5 -translate-x-1.5 flex-row items-center justify-center"
+                    className="px-4 py-3 rounded-full border-2 border-black -translate-y-1.5 -translate-x-1.5 flex-row items-center"
                     style={{ backgroundColor: color }}
                 >
                     <Text
                         className="font-inter_black text-white text-xs capitalize"
                         numberOfLines={1}
                         ellipsizeMode="tail"
+                        style={{ flexShrink: 1 }}
                     >
-                        {item.title.toLowerCase()} ${Math.floor(Number(item.amount))}
+                        {item.title.toLowerCase()}
+                    </Text>
+                    <Text
+                        className="font-inter_black text-white text-xs"
+                        style={{ flexShrink: 0 }}
+                    >
+                        {' '}${Math.floor(Number(item.amount))}
                     </Text>
                 </View>
             </View>

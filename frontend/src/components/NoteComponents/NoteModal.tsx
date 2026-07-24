@@ -1,10 +1,12 @@
-import { View, Text, TextInput, TouchableOpacity, Modal, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Modal, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useRef, useState, useEffect } from 'react';
 import { useAlert } from '../AlertModal';
 import { Note } from '../../hooks/useNotes';
 import { useSpeechToText } from '../../hooks/useSpeechToText';
 import { Animated } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
+
 
 type Props = {
     visible: boolean;
@@ -17,7 +19,7 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
     const [content, setContent] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const showAlert = useAlert();
-    const { isRecording, isProcessing, startRecording, stopRecording } = useSpeechToText((text) => {
+    const { isRecording, startRecording, stopRecording } = useSpeechToText((text) => {
         setContent(text);
     });
     const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -60,7 +62,11 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
 
     return (
         <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-            <KeyboardAvoidingView behavior="padding" className="flex-1">
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                automaticOffset
+                className="flex-1 justify-center bg-black/80 px-6"
+            >
                 <View className="flex-1 justify-end bg-black/40">
                     <View className="bg-very_dark_blue rounded-t-[32px] border-2 border-black px-6 pt-6 pb-8">
                         <View className="flex-row justify-between items-center mb-6">

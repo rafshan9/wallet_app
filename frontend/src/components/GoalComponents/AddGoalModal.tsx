@@ -1,7 +1,8 @@
-import { View, Text, Modal, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, Modal, TextInput, TouchableOpacity, Alert, ActivityIndicator, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import api from '../../../utils/axios';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 type AddGoalModalProps = {
     visible: boolean;
@@ -22,7 +23,6 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async () => {
-        // Added validation to ensure a color is selected
         if (!name || !targetAmount || !selectedColor) {
             Alert.alert('Error', 'Please fill in all fields and select a color.');
             return;
@@ -36,7 +36,6 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                 color: selectedColor,
             });
 
-            // Reset and close
             setName('');
             setTargetAmount('');
             setSelectedColor(null);
@@ -51,7 +50,11 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
 
     return (
         <Modal visible={visible} animationType="slide" transparent={true}>
-            <View className="flex-1 justify-end bg-black/80">
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                automaticOffset
+                className="flex-1 justify-center bg-black/80 px-6"
+            >
                 <View className="bg-very_dark_blue w-full rounded-t-[40px] p-8 border-2 border-black">
 
                     <View className="flex-row justify-between items-center mb-8">
@@ -81,7 +84,6 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                         style={{ lineHeight: 64, paddingTop: 8 }}
                     />
 
-                    {/* Restored Color Picker UI */}
                     <Text className="text-white/60 font-inter_medium text-sm mb-3">Choose a color</Text>
                     <View className="flex-row flex-wrap mb-8">
                         {COLOR_OPTIONS.map((opt) => {
@@ -94,7 +96,7 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                                     style={{ borderColor: isSelected ? 'white' : 'transparent' }}
                                 >
                                     {isSelected && (
-                                        <Feather name="check" size={16} color={'black'} />
+                                        <Feather name="check" size={16} color={opt.color === 'bg-white' ? 'black' : 'white'} />
                                     )}
                                 </TouchableOpacity>
                             );
@@ -117,7 +119,7 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                     </TouchableOpacity>
 
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         </Modal>
     );
 }

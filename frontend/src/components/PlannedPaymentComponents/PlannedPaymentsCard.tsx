@@ -15,7 +15,7 @@ const CATEGORY_STYLES: Record<string, { icon: keyof typeof Feather.glyphMap; bg:
 function getStatus(dueDate: string) {
     const days = Math.ceil((new Date(dueDate).getTime() - Date.now()) / (1000 * 3600 * 24));
     if (days < 0) return { label: 'Overdue', color: 'text-red-500' };
-    if (days <= 3) return { label: 'Due soon', color: 'text-amber-500' };
+    if (days <= 3) return { label: 'Due soon', color: 'text-maroon/50' };
     return { label: 'Upcoming', color: 'text-gray-400' };
 }
 

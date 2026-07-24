@@ -1,8 +1,10 @@
-import { View, Text, Modal, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, Modal, TextInput, TouchableOpacity, Alert, ActivityIndicator, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import api from '../../../utils/axios';
 import { useAlert } from '../AlertModal';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
+
 
 type AddContributionModalProps = {
     visible: boolean;
@@ -25,13 +27,11 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
         const parsedAmount = amount.replace(/[^0-9.]/g, '');
 
         try {
-            // 1. Add to the savings goal
-            await api.post('/contributions/', { // Note: ensure this endpoint exists in Django!
+            await api.post('/contributions/', {
                 goal: goal.id,
                 amount: parsedAmount,
             });
 
-            // 2. Deduct from cash flow by logging it as an expense
             await api.post('/transactions/', {
                 type: 'EXPENSE',
                 amount: parsedAmount,
@@ -51,7 +51,11 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
 
     return (
         <Modal visible={visible} animationType="fade" transparent={true}>
-            <View className="flex-1 justify-center bg-black/80 px-6">
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                automaticOffset
+                className="flex-1 justify-end bg-black/80"
+            >
                 <View className="bg-dark_blue w-full rounded-[40px] p-8 border-2 border-black">
                     <View className="flex-row justify-between items-center mb-6">
                         <Text className="text-2xl font-inter_bold text-white">Add to {goal?.name}</Text>
@@ -82,7 +86,7 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
                         )}
                     </TouchableOpacity>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         </Modal>
     );
 }
