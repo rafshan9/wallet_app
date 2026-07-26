@@ -256,7 +256,65 @@ class ChangePasswordView(APIView):
 
 #-------------------------------------------------------------------------------------------------------
 
+import re
 
+class ChangeUsernameView(APIView):
+    """Lets an authenticated user change their username."""
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        new_username = request.data.get('username', '').strip()
+
+        if not new_username:
+            return Response({'error': 'Username is required.'}, status=400)
+
+        if len(new_username) < 3:
+            return Response({'error': 'Username must be at least 3 characters.'}, status=400)
+
+        if len(new_username) > 30:
+            return Response({'error': 'Username must be 30 characters or fewer.'}, status=400)
+
+        if not re.match(r'^[a-zA-Z0-9_]+$', new_username):
+            return Response({'error': 'Username can only contain letters, numbers, and underscores.'}, status=400)
+
+        if new_username.lower() == request.user.username.lower():
+            return Response({'error': 'That is already your username.'}, status=400)
+
+        if User.objects.filter(username__iexact=new_username).exists():
+            # Generate suggestions
+            base = new_username.rstrip('0123456789')
+            suggestions = []
+            import random
+            for _ in range(20):
+                candidate = f"{base}{random.randint(1, 999)}"
+                if not User.objects.filter(username__iexact=candidate).exists():
+                    suggestions.append(candidate)
+                if len(suggestions) == 3:
+                    break
+            return Response({
+                'error': 'That username is already taken.',
+                'suggestions': suggestions,
+            }, status=409)
+
+        request.user.username = new_username
+        request.user.save(update_fields=['username'])
+
+        return Response({'detail': 'Username changed successfully.', 'username': new_username})
+
+
+class CheckUsernameView(APIView):
+    """Check whether a username is available."""
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        username = request.GET.get('username', '').strip()
+        if not username:
+            return Response({'available': False, 'error': 'Username is required.'}, status=400)
+
+        is_own = username.lower() == request.user.username.lower()
+        taken = User.objects.filter(username__iexact=username).exists()
+
+        return Response({'available': is_own or not taken})
 
 
 
