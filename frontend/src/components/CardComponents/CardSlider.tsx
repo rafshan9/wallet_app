@@ -10,10 +10,20 @@ type Props = {
 
 export default function CardSlider({ scrollX }: Props) {
     const { width: SCREEN_WIDTH } = useWindowDimensions();
-    const { totalIncome, totalExpenses, isLoading: isCashFlowLoading } = useCashFlow();
+    const { totalIncome, totalExpenses, transactions, isLoading: isCashFlowLoading } = useCashFlow();
     const { totalSaved, totalTarget, isLoading: isGoalsLoading } = useGoals();
 
     const remainingFunds = totalIncome - totalExpenses - totalSaved;
+
+    // Calculate Today's Expenses
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayExpenses = transactions
+        .filter((t) => t.type === 'EXPENSE' && t.date === todayStr)
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+
+    // Calculate Avg Daily Expense
+    const currentDay = new Date().getDate();
+    const avgDailyExpense = totalExpenses / currentDay;
 
     const formatCurrency = (amount: number) =>
         `$${Math.floor(amount).toLocaleString()}`
@@ -38,7 +48,7 @@ export default function CardSlider({ scrollX }: Props) {
             id: '3',
             title: 'Monthly Expenses',
             amount: formatCurrency(totalExpenses),
-            subtitle: 'Total spent\nthis month',
+            subtitle: `Total spent this month\nAvg Daily: ${formatCurrency(avgDailyExpense)} • Today: ${formatCurrency(todayExpenses)}`,
             isLight: false,
             amountColorClass: 'text-background_green',
         },
