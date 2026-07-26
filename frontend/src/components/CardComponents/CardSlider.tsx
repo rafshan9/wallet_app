@@ -16,9 +16,16 @@ export default function CardSlider({ scrollX }: Props) {
     const remainingFunds = totalIncome - totalExpenses - totalSaved;
 
     // Calculate Today's Expenses
-    const todayStr = new Date().toISOString().split('T')[0];
+    const isToday = (dateStr: string) => {
+        const d1 = new Date(dateStr);
+        const d2 = new Date();
+        return d1.getFullYear() === d2.getFullYear() &&
+               d1.getMonth() === d2.getMonth() &&
+               d1.getDate() === d2.getDate();
+    };
+
     const todayExpenses = transactions
-        .filter((t) => t.type === 'EXPENSE' && t.date === todayStr)
+        .filter((t) => t.type === 'EXPENSE' && isToday(t.date))
         .reduce((sum, t) => sum + parseFloat(t.amount), 0);
 
     // Calculate Avg Daily Expense
@@ -27,6 +34,10 @@ export default function CardSlider({ scrollX }: Props) {
 
     const formatCurrency = (amount: number) =>
         `$${Math.floor(amount).toLocaleString()}`
+
+    const formatExact = (amount: number) => 
+        `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
     const CARDS_DATA = [
         {
             id: '1',
@@ -48,7 +59,7 @@ export default function CardSlider({ scrollX }: Props) {
             id: '3',
             title: 'Monthly Expenses',
             amount: formatCurrency(totalExpenses),
-            subtitle: `Total spent this month\nAvg Daily: ${formatCurrency(avgDailyExpense)} • Today: ${formatCurrency(todayExpenses)}`,
+            subtitle: `Total spent this month\nAvg Daily: ${formatExact(avgDailyExpense)} • Today: ${formatExact(todayExpenses)}`,
             isLight: false,
             amountColorClass: 'text-background_green',
         },
