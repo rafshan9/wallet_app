@@ -1,12 +1,10 @@
-import { View, Text, TextInput, TouchableOpacity, Modal, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Modal, KeyboardAvoidingView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useRef, useState, useEffect } from 'react';
 import { useAlert } from '../AlertModal';
 import { Note } from '../../hooks/useNotes';
 import { useSpeechToText } from '../../hooks/useSpeechToText';
 import { Animated } from 'react-native';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
-
 
 type Props = {
     visible: boolean;
@@ -19,10 +17,20 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
     const [content, setContent] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const showAlert = useAlert();
-    const { isRecording, startRecording, stopRecording } = useSpeechToText((text) => {
-        setContent(text);
+    const contentBeforeRecording = useRef('');
+    const { isRecording, transcript, startRecording, stopRecording } = useSpeechToText((text) => {
+        if (!visible) return;
+        setContent([contentBeforeRecording.current, text].filter(Boolean).join(' '));
     });
     const pulseAnim = useRef(new Animated.Value(1)).current;
+
+    useEffect(() => {
+        if (isRecording) {
+            setContent([contentBeforeRecording.current, transcript].filter(Boolean).join(' '));
+        }
+    }, [transcript, isRecording]);
+
+
 
     useEffect(() => {
         if (isRecording) {
@@ -62,11 +70,7 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
 
     return (
         <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                automaticOffset
-                className="flex-1 justify-center bg-black/80 px-6"
-            >
+            <KeyboardAvoidingView behavior="padding" className="flex-1">
                 <View className="flex-1 justify-end bg-black/40">
                     <View className="bg-very_dark_blue rounded-t-[32px] border-2 border-black px-6 pt-6 pb-8">
                         <View className="flex-row justify-between items-center mb-6">
@@ -91,7 +95,14 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
                         <View className="flex-row items-center gap-3">
                             <Animated.View style={{ opacity: pulseAnim }}>
                                 <TouchableOpacity
-                                    onPress={isRecording ? stopRecording : startRecording}
+                                    onPress={() => {
+                                        if (isRecording) {
+                                            stopRecording();
+                                        } else {
+                                            contentBeforeRecording.current = content;
+                                            startRecording();
+                                        }
+                                    }}
                                     className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red' : 'bg-[#E6F4FE]'}`}
                                 >
                                     <Feather name={isRecording ? "square" : "mic"} size={20} color="black" />

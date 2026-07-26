@@ -96,17 +96,21 @@ export default function FAB() {
                 </Animated.View>
             </TouchableOpacity>
 
-            <AddFundModal
-                visible={isAddModalOpen}
-                onClose={closeModal}
-            />
+            {isAddModalOpen && (
+                <AddFundModal
+                    visible={isAddModalOpen}
+                    onClose={closeModal}
+                />
+            )}
 
-            <NoteModal
-                visible={isNoteModalOpen}
-                note={editingNote}
-                onClose={closeNoteModal}
-                onSave={handleSaveNote}
-            />
+            {isNoteModalOpen && (
+                <NoteModal
+                    visible={isNoteModalOpen}
+                    note={editingNote}
+                    onClose={closeNoteModal}
+                    onSave={handleSaveNote}
+                />
+            )}
         </View>
     );
 }

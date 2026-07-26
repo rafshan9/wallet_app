@@ -8,6 +8,8 @@ from google import genai
 from rest_framework.throttling import ScopedRateThrottle
 import tempfile
 import os
+import resend
+from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.http import HttpResponse
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
@@ -46,8 +48,11 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
     def perform_create(self, serializer):
-        user = serializer.save()  # your UserSerializer.create() already sets is_active=False
+        user = serializer.save()  
         send_verification_email(user)
+
+resend.api_key = settings.RESEND_API_KEY
+signer = TimestampSigner()
 
 
 class VerifyEmailView(APIView):
@@ -88,6 +93,23 @@ class VerifyEmailView(APIView):
         """
         return HttpResponse(success_html)
 
+def send_verification_email(user):
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    verify_url = f"{settings.EMAIL_VERIFY_BASE_URL}?uid={uid}&token={token}"
+
+    resend.Emails.send({
+        "from": settings.DEFAULT_FROM_EMAIL,
+        "to": [user.email],
+        "subject": "Verify your Spends account",
+        "html": f"""
+            <p>Hi {user.first_name or user.username},</p>
+            <p>Confirm your email to activate your Spends account:</p>
+            <p><a href="{verify_url}">Verify email</a></p>
+        """,
+    })
+
+    
 class ResendVerificationEmailView(APIView):
     permission_classes = (AllowAny,)
     throttle_classes = [ScopedRateThrottle]
@@ -105,6 +127,12 @@ class ResendVerificationEmailView(APIView):
         # Same response whether or not the account exists / is already verified —
         # otherwise this endpoint becomes a way to check which emails are registered.
         return Response({'detail': 'If that email needs verifying, a new link has been sent.'})
+
+
+
+
+
+
 
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer

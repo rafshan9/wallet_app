@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useAlert } from '../AlertModal';
 
 type Goal = {
     id: string;
@@ -19,7 +20,7 @@ type GoalCardProps = {
 export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) {
     const percent = goal.targetAmount > 0 ? Math.min(100, Math.round((goal.savedAmount / goal.targetAmount) * 100)) : 0;
     const isCompleted = goal.savedAmount >= goal.targetAmount;
-
+    const showAlert = useAlert();
     const lightBackgrounds = ['bg-white', 'bg-yellow', 'bg-light_blue', 'bg-orange', 'bg-teal'];
     const textColor = lightBackgrounds.includes(goal.color) ? 'text-black' : 'text-white';
     const isDark = textColor === 'text-white';
@@ -42,14 +43,14 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
     }
 
     const handleDelete = () => {
-        Alert.alert(
-            'Delete Goal',
-            `Remove "${goal.name}"? This can't be undone.`,
-            [
+        showAlert({
+            title: 'Delete Goal',
+            message: `Remove "${goal.name}"? This can't be undone.`,
+            buttons: [
                 { text: 'Cancel', style: 'cancel' },
                 { text: 'Delete', style: 'destructive', onPress: () => onDelete(goal.id) },
             ]
-        );
+        });
     };
 
     return (

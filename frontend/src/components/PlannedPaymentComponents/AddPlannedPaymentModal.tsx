@@ -103,7 +103,8 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
                                 value={name}
                                 onChangeText={setName}
                                 placeholder="e.g. Rent"
-                                className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
+                                placeholderTextColor={'#808080'}
+                                className="border-2 border-black/10 rounded-2xl px-4 py-3  font-inter_medium mb-4"
                             />
 
                             <Text className="font-inter_medium text-xs text-gray-400 mb-2 uppercase">Amount</Text>
@@ -111,6 +112,7 @@ export default function AddPlannedPaymentModal({ visible, onClose }: Props) {
                                 value={amount}
                                 onChangeText={setAmount}
                                 placeholder="0.00"
+                                placeholderTextColor={'#808080'}
                                 keyboardType="decimal-pad"
                                 className="border-2 border-black/10 rounded-2xl px-4 py-3 font-inter_medium mb-4"
                             />

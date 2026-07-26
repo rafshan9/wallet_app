@@ -1,4 +1,4 @@
-import { View, Text, Modal, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, Animated, Platform } from 'react-native';
+import { View, Text, Modal, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, ScrollView, Animated } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useRef, useState, useEffect } from 'react';
 import { CATEGORIES } from '../../constants/categories';
@@ -8,7 +8,6 @@ import { useAlert } from '../AlertModal';
 import ScannerButton from '../ui/ScannerButton';
 import AiReviewModal from './AiReviewModal';
 import { useSpeechToText } from '../../hooks/useSpeechToText';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 type AddExpenseModalProps = {
     visible: boolean;
@@ -36,10 +35,10 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
     // Mirror the live transcript into the editable box while recording;
     // once stopped, the box is fully user-controlled (no more overwrites)
     useEffect(() => {
-        if (isRecording) {
+        if (isRecording && visible) {
             setEditableTranscript(transcript);
         }
-    }, [transcript, isRecording]);
+    }, [transcript, isRecording, visible]);
 
     useEffect(() => {
         if (isRecording) {
@@ -127,7 +126,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
             showAlert({ title: 'Error', message: 'Please select a category.' });
             return;
         }
-        setIsLoading(true)
+        setIsLoading(true);
 
         try {
             await api.post('/transactions/', {
@@ -140,23 +139,26 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
             setTitle('');
             setSelectedCategory(null);
             setType('expense');
-            triggerRefresh();
             onClose();
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            showAlert({ title: 'Error', message: 'Failed to save transaction.' });
+            if (error.code === 'ERR_NETWORK') {
+                // The save may well have gone through server-side even though we
+                // never got the confirmation back — don't tell the user it definitely failed.
+                showAlert({ title: 'Connection hiccup', message: "Lost connection right after saving — checking if it went through." });
+                onClose();
+            } else {
+                showAlert({ title: 'Error', message: 'Failed to save transaction.' });
+            }
         } finally {
             setIsLoading(false);
+            triggerRefresh(); // always refetch, success or not — this fixes the "have to reopen" symptom directly
         }
     };
 
     return (
         <Modal visible={visible} animationType="slide" transparent={true}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                automaticOffset
-                className="flex-1 justify-center bg-black/80 px-6"
-            >
+            <KeyboardAvoidingView behavior="padding" className="flex-1">
                 <View className="flex-1 justify-end bg-black/80">
                     <View className="bg-very_dark_blue w-full rounded-t-[40px] p-8 border-2 border-black max-h-[90%]">
                         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
@@ -208,9 +210,10 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
 
                             <TextInput
                                 placeholder={type === 'expense' ? 'What was this for?' : 'Where did this come from?'}
+                                placeholderTextColor={'#808080'}
                                 value={title}
                                 onChangeText={setTitle}
-                                className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg mb-6"
+                                className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium  text-lg mb-6"
                             />
 
                             {type === 'expense' && (

@@ -1,8 +1,7 @@
-import { View, Text, Modal, TextInput, TouchableOpacity, Alert, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, Modal, TextInput, TouchableOpacity, Alert, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import api from '../../../utils/axios';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 type AddGoalModalProps = {
     visible: boolean;
@@ -49,12 +48,8 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
     };
 
     return (
-        <Modal visible={visible} animationType="slide" transparent={true}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                automaticOffset
-                className="flex-1 justify-center bg-black/80 px-6"
-            >
+        <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+            <KeyboardAvoidingView behavior="padding" className="flex-1 justify-end">
                 <View className="bg-very_dark_blue w-full rounded-t-[40px] p-8 border-2 border-black">
 
                     <View className="flex-row justify-between items-center mb-8">

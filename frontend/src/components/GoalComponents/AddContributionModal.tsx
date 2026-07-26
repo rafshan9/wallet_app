@@ -1,10 +1,9 @@
-import { View, Text, Modal, TextInput, TouchableOpacity, Alert, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, Modal, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import api from '../../../utils/axios';
 import { useAlert } from '../AlertModal';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
-
+import { useAppStore } from '../../store';
 
 type AddContributionModalProps = {
     visible: boolean;
@@ -16,6 +15,7 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
     const [amount, setAmount] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const showAlert = useAlert();
+    const triggerRefresh = useAppStore((state) => state.triggerRefresh);
 
     const handleSubmit = async () => {
         if (!amount || !goal) {
@@ -27,25 +27,23 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
         const parsedAmount = amount.replace(/[^0-9.]/g, '');
 
         try {
-            await api.post('/contributions/', {
-                goal: goal.id,
+            await api.post(`/goals/${goal.id}/add_funds/`, {
                 amount: parsedAmount,
-            });
-
-            await api.post('/transactions/', {
-                type: 'EXPENSE',
-                amount: parsedAmount,
-                title: `Transferred to ${goal.name}`,
-                category: 'OTHER',
             });
 
             setAmount('');
             onClose();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to add funds:', error);
-            Alert.alert('Error', 'Failed to process contribution.');
+            if (error.code === 'ERR_NETWORK') {
+                showAlert({ title: 'Connection hiccup', message: "Lost connection right after saving — checking if it went through." });
+                onClose();
+            } else {
+                showAlert({ title: 'Error', message: 'Failed to process contribution.' });
+            }
         } finally {
             setIsLoading(false);
+            triggerRefresh();
         }
     };
 
@@ -53,8 +51,7 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
         <Modal visible={visible} animationType="fade" transparent={true}>
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                automaticOffset
-                className="flex-1 justify-end bg-black/80"
+                className="flex-1 justify-center bg-black/80 px-6"
             >
                 <View className="bg-dark_blue w-full rounded-[40px] p-8 border-2 border-black">
                     <View className="flex-row justify-between items-center mb-6">

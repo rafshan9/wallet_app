@@ -85,13 +85,15 @@ export default function HomeScreen() {
         </View>
       </ScrollView>
 
-      <AddPlannedPaymentModal
-        visible={isAddModalOpen}
-        onClose={() => {
-          setIsAddModalOpen(false);
-          fetchPayments();
-        }}
-      />
+      {isAddModalOpen && (
+        <AddPlannedPaymentModal
+          visible={isAddModalOpen}
+          onClose={() => {
+            setIsAddModalOpen(false);
+            fetchPayments();
+          }}
+        />
+      )}
     </Animated.View>
   );
 }

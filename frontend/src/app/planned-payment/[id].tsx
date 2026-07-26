@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import api from '../../../utils/axios';
 import { CATEGORY_STYLES, PaymentCategory } from '../../constants/paymentCategories';
 import { usePlannedPayments } from '../../hooks/usePlannedPayments';
+import { useAlert } from '../../components/AlertModal';
 
 export default function PlannedPaymentDetailScreen() {
     const { id } = useLocalSearchParams();
@@ -13,7 +14,7 @@ export default function PlannedPaymentDetailScreen() {
     const [payment, setPayment] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
     const { markPaid, deletePayment } = usePlannedPayments();
-
+    const showAlert = useAlert();
 
     useEffect(() => { fetchPayment(); }, [id]);
 
@@ -34,25 +35,29 @@ export default function PlannedPaymentDetailScreen() {
             router.back();
         } catch (error) {
             console.error('Failed to mark paid', error);
-            Alert.alert('Something went wrong', 'Could not update this payment.');
+            showAlert({ title: 'Something went wrong', message: 'Could not update this payment.' });
         }
     };
 
     const handleDelete = () => {
-        Alert.alert('Delete payment', `Remove "${payment.name}"? This can't be undone.`, [
-            { text: 'Cancel', style: 'cancel' },
-            {
-                text: 'Delete', style: 'destructive', onPress: async () => {
-                    try {
-                        await deletePayment(id as string);
-                        router.back();
-                    } catch (error) {
-                        console.error('Failed to delete payment', error);
-                        Alert.alert('Something went wrong', 'Could not delete this payment.');
+        showAlert({ // <-- Add opening brace
+            title: 'Delete payment',
+            message: `Remove "${payment.name}"? This can't be undone.`,
+            buttons: [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Delete', style: 'destructive', onPress: async () => {
+                        try {
+                            await deletePayment(id as string);
+                            router.back();
+                        } catch (error) {
+                            console.error('Failed to delete payment', error);
+                            showAlert({ title: 'Something went wrong', message: 'Could not delete this payment.' });
+                        }
                     }
-                }
-            },
-        ]);
+                },
+            ]
+        });
     };
 
     if (isLoading) {

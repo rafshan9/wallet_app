@@ -43,14 +43,13 @@ export default function CardSlider({ scrollX }: Props) {
             amountColorClass: 'text-background_green',
         },
     ];
-
-    if (isCashFlowLoading || isGoalsLoading) {
-        return (
-            <View className="mt-4 h-64 justify-center items-center">
-                <ActivityIndicator size="large" color="#000000" />
-            </View>
-        );
-    }
+    // if (isCashFlowLoading || isGoalsLoading) {
+    //     return (
+    //         <View className="mt-4 h-64 justify-center items-center">
+    //             <ActivityIndicator size="large" color="#000000" />
+    //         </View>
+    //     );
+    // }
 
     const inputRange = CARDS_DATA.map((_, i) => i * SCREEN_WIDTH);
 
@@ -71,6 +70,7 @@ export default function CardSlider({ scrollX }: Props) {
                 keyExtractor={(item) => item.id}
                 horizontal
                 pagingEnabled
+                removeClippedSubviews={false}
                 showsHorizontalScrollIndicator={false}
                 decelerationRate="fast"
                 onScroll={Animated.event(
@@ -79,7 +79,7 @@ export default function CardSlider({ scrollX }: Props) {
                 )}
                 scrollEventThrottle={16}
                 renderItem={({ item }) => (
-                    <View style={{ width: SCREEN_WIDTH }}>
+                    <View style={{ width: SCREEN_WIDTH }} className="h-64 mb-8">
                         <WalletCard
                             title={item.title}
                             amount={item.amount}
