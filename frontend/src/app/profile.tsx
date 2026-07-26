@@ -82,7 +82,10 @@ export default function ProfileScreen() {
 
             {/* Settings Links (Dummy) */}
             <View className="gap-y-4 mb-8">
-                <TouchableOpacity className="flex-row items-center justify-between bg-white p-5 rounded-2xl border-2 border-black shadow-sm">
+                <TouchableOpacity
+                    className="flex-row items-center justify-between bg-white p-5 rounded-2xl border-2 border-black shadow-sm"
+                    onPress={() => router.push('/account-settings')}
+                >
                     <View className="flex-row items-center">
                         <Feather name="settings" size={24} color="black" />
                         <Text className="ml-4 text-xl font-inter_medium text-black">Account Settings</Text>

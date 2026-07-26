@@ -134,7 +134,7 @@ class ResendVerificationEmailView(APIView):
 def send_password_reset_email(user):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
-    base_url = settings.PASSWORD_RESET_BASE_URL  # e.g. https://your-railway-domain.up.railway.app/api/auth/reset-redirect/
+    base_url = settings.PASSWORD_RESET_BASE_URL 
     reset_link = f"{base_url}?uid={uid}&token={token}"
 
     resend.Emails.send({
@@ -227,6 +227,32 @@ class PasswordResetRedirectView(APIView):
         </html>
         """
         return HttpResponse(html)
+
+
+class ChangePasswordView(APIView):
+    """Lets an authenticated user change their own password."""
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+
+        if not old_password or not new_password:
+            return Response({'error': 'old_password and new_password are required'}, status=400)
+
+        user = request.user
+        if not user.check_password(old_password):
+            return Response({'error': 'Current password is incorrect.'}, status=400)
+
+        try:
+            validate_password(new_password, user=user)
+        except DjangoValidationError as e:
+            return Response({'error': e.messages}, status=400)
+
+        user.set_password(new_password)
+        user.save(update_fields=['password'])
+
+        return Response({'detail': 'Password changed successfully.'})
 
 #-------------------------------------------------------------------------------------------------------
 

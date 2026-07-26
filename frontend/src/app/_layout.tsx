@@ -76,10 +76,13 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <AlertModalProvider>
           <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="reset-password" />
+
             <Stack.Protected guard={!!user}>
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="goal/[id]" />
               <Stack.Screen name="profile" />
+              <Stack.Screen name="account-settings" />
             </Stack.Protected>
 
             <Stack.Protected guard={!user}>
