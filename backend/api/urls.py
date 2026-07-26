@@ -26,5 +26,6 @@ urlpatterns = [
     path('account/change-password/', views.ChangePasswordView.as_view(), name='change-password'),
     path('account/change-username/', views.ChangeUsernameView.as_view(), name='change-username'),
     path('account/check-username/', views.CheckUsernameView.as_view(), name='check-username'),
+    path('account/change-name/', views.ChangeNameView.as_view(), name='change-name'),
     path('', include(router.urls)),
 ]

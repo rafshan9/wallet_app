@@ -258,6 +258,27 @@ class ChangePasswordView(APIView):
 
 import re
 
+class ChangeNameView(APIView):
+    """Lets an authenticated user change their first and last name."""
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        first_name = request.data.get('first_name', '').strip()
+        last_name = request.data.get('last_name', '').strip()
+
+        if not first_name:
+            return Response({'error': 'First name is required.'}, status=400)
+
+        request.user.first_name = first_name
+        request.user.last_name = last_name
+        request.user.save(update_fields=['first_name', 'last_name'])
+
+        return Response({
+            'detail': 'Name updated successfully.',
+            'first_name': first_name,
+            'last_name': last_name
+        })
+
 class ChangeUsernameView(APIView):
     """Lets an authenticated user change their username."""
     permission_classes = (IsAuthenticated,)

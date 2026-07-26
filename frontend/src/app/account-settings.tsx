@@ -13,6 +13,12 @@ export default function AccountSettingsScreen() {
     const { user } = useAppStore();
     const showAlert = useAlert();
 
+    // Change name state
+    const [showChangeName, setShowChangeName] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [isSavingName, setIsSavingName] = useState(false);
+
     // Change username state
     const [showChangeUsername, setShowChangeUsername] = useState(false);
     const [newUsername, setNewUsername] = useState('');
@@ -59,6 +65,41 @@ export default function AccountSettingsScreen() {
 
         return () => clearTimeout(timer);
     }, [newUsername]);
+
+    const handleChangeName = async () => {
+        const trimmedFirst = firstName.trim();
+        const trimmedLast = lastName.trim();
+
+        if (!trimmedFirst) {
+            showAlert({ title: 'Error', message: 'First name is required.' });
+            return;
+        }
+
+        setIsSavingName(true);
+        try {
+            const res = await api.post('/account/change-name/', { 
+                first_name: trimmedFirst,
+                last_name: trimmedLast
+            });
+            showAlert({ title: 'Success', message: 'Name updated.' });
+            const currentUser = useAppStore.getState().user;
+            if (currentUser) {
+                useAppStore.getState().setUser({ 
+                    ...currentUser, 
+                    first_name: res.data.first_name,
+                    last_name: res.data.last_name 
+                });
+            }
+            setShowChangeName(false);
+            setFirstName('');
+            setLastName('');
+        } catch (error: any) {
+            const message = error.response?.data?.error || 'Could not change name.';
+            showAlert({ title: 'Error', message });
+        } finally {
+            setIsSavingName(false);
+        }
+    };
 
     const handleChangeUsername = async () => {
         const trimmed = newUsername.trim();
@@ -189,12 +230,53 @@ export default function AccountSettingsScreen() {
             {/* Account Info Section */}
             <Text className="text-white/60 font-inter_bold text-sm uppercase tracking-wider mb-3 ml-1">Account</Text>
             <View className="gap-y-3 mb-8">
-                <View className="bg-white p-5 rounded-2xl border-2 border-black">
-                    <Text className="text-sm font-inter_medium text-gray-500 mb-1">Name</Text>
-                    <Text className="text-lg font-inter_bold text-black">
-                        {user ? `${user.first_name} ${user.last_name}` : '—'}
-                    </Text>
-                </View>
+                {/* Name Row */}
+                <SettingsRow
+                    icon="user"
+                    label={`Name: ${user ? `${user.first_name} ${user.last_name}` : '—'}`}
+                    onPress={() => {
+                        setShowChangeName(!showChangeName);
+                        if (!showChangeName) {
+                            setFirstName(user?.first_name || '');
+                            setLastName(user?.last_name || '');
+                        }
+                    }}
+                />
+
+                {/* Change Name Expandable */}
+                {showChangeName && (
+                    <View className="bg-white/10 p-5 rounded-2xl border-2 border-white/20">
+                        <View className="mb-4 gap-y-3">
+                            <TextInput
+                                placeholder="First Name"
+                                value={firstName}
+                                onChangeText={setFirstName}
+                                className="bg-white text-black px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                            />
+                            <TextInput
+                                placeholder="Last Name (Optional)"
+                                value={lastName}
+                                onChangeText={setLastName}
+                                className="bg-white text-black px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                            />
+                        </View>
+
+                        <TouchableOpacity
+                            className="relative self-center"
+                            onPress={handleChangeName}
+                            activeOpacity={0.8}
+                            disabled={isSavingName}
+                        >
+                            <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
+                            <View className="bg-yellow py-3 px-12 border-2 border-black items-center">
+                                <Text className="font-inter_bold text-black text-lg">
+                                    {isSavingName ? 'Saving...' : 'Update Name'}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                )}
+
                 <View className="bg-white p-5 rounded-2xl border-2 border-black">
                     <Text className="text-sm font-inter_medium text-gray-500 mb-1">Email</Text>
                     <Text className="text-lg font-inter_bold text-black">
