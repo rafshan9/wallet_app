@@ -30,18 +30,6 @@ from google.auth.transport import requests as google_requests
 
 
 
-def send_verification_email(user):
-    uid = urlsafe_base64_encode(force_bytes(user.pk))
-    token = default_token_generator.make_token(user)
-    verify_link = f"{settings.EMAIL_VERIFY_BASE_URL}?uid={uid}&token={token}"
-    send_mail(
-        subject='Verify your email',
-        message=f'Tap this link to verify your account: {verify_link}',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[user.email],
-    )
-
-
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
@@ -49,7 +37,12 @@ class RegisterView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         user = serializer.save()  
-        send_verification_email(user)
+        try:
+            send_verification_email(user)
+        except Exception as e:
+            print(f"VERIFICATION EMAIL FAILED: {e}")
+            # Account still gets created even if the email fails —
+            # they can request a resend via ResendVerificationEmailView.
 
 resend.api_key = settings.RESEND_API_KEY
 signer = TimestampSigner()
@@ -109,7 +102,7 @@ def send_verification_email(user):
         """,
     })
 
-    
+
 class ResendVerificationEmailView(APIView):
     permission_classes = (AllowAny,)
     throttle_classes = [ScopedRateThrottle]
