@@ -6,6 +6,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from datetime import timedelta
 from google import genai
 from rest_framework.throttling import ScopedRateThrottle
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.contrib.auth.password_validation import validate_password
 import tempfile
 import os
 import resend
@@ -43,6 +45,10 @@ class RegisterView(generics.CreateAPIView):
             print(f"VERIFICATION EMAIL FAILED: {e}")
             # Account still gets created even if the email fails —
             # they can request a resend via ResendVerificationEmailView.
+
+
+
+#Verify email -------------------------------------------------------------------------------
 
 resend.api_key = settings.RESEND_API_KEY
 signer = TimestampSigner()
@@ -121,6 +127,77 @@ class ResendVerificationEmailView(APIView):
         # otherwise this endpoint becomes a way to check which emails are registered.
         return Response({'detail': 'If that email needs verifying, a new link has been sent.'})
 
+#-------------------------------------------------------------------------------------------------------
+
+#Forgot password----------------------------------------------------------------------------------------
+
+def send_password_reset_email(user):
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    reset_link = f"spends://reset-password?uid={uid}&token={token}"
+
+    resend.Emails.send({
+        "from": settings.DEFAULT_FROM_EMAIL,
+        "to": [user.email],
+        "subject": "Reset your Spends password",
+        "html": f"""
+            <p>Hi {user.first_name or user.username},</p>
+            <p>Tap the link below to reset your Spends password. If you didn't request this, you can ignore this email.</p>
+            <p><a href="{reset_link}">Reset password</a></p>
+        """,
+    })
+
+
+class ForgotPasswordView(APIView):
+    permission_classes = (AllowAny,)
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'forgot_password'
+
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({'detail': 'email is required'}, status=400)
+
+        user = User.objects.filter(email__iexact=email).first()
+        if user:
+            send_password_reset_email(user)
+
+        # Same response whether or not the account exists —
+        # otherwise this endpoint becomes a way to check which emails are registered.
+        return Response({'detail': 'If that email exists, a reset link has been sent.'})
+
+
+class ResetPasswordView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        uid = request.data.get('uid')
+        token = request.data.get('token')
+        new_password = request.data.get('new_password')
+
+        if not uid or not token or not new_password:
+            return Response({'error': 'uid, token, and new_password are required'}, status=400)
+
+        try:
+            user_id = force_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(pk=user_id)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({'error': 'Invalid or expired link'}, status=400)
+
+        if not default_token_generator.check_token(user, token):
+            return Response({'error': 'Invalid or expired link'}, status=400)
+
+        try:
+            validate_password(new_password, user=user)
+        except DjangoValidationError as e:
+            return Response({'error': e.messages}, status=400)
+
+        user.set_password(new_password)
+        user.save(update_fields=['password'])
+
+        return Response({'detail': 'Password reset successful.'})
+
+#-------------------------------------------------------------------------------------------------------
 
 
 

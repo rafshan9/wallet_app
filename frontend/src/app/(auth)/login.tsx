@@ -69,10 +69,8 @@ export default function LoginScreen() {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={() => router.push('/')} className="mb-4">
-                <Text className="text-right font-inter_medium text-white/70 underline">
-                    Forgot password?
-                </Text>
+            <TouchableOpacity onPress={() => router.push('/forgot-password')} className="mb-6">
+                <Text className="text-right font-inter_medium text-white/80 underline">Forgot password?</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

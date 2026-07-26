@@ -67,6 +67,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_THROTTLE_RATES': {
         'resend_verification': '3/hour',
+        'forgot_password': '3/hour',
     },
 }
 
