@@ -134,7 +134,8 @@ class ResendVerificationEmailView(APIView):
 def send_password_reset_email(user):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
-    reset_link = f"spends://reset-password?uid={uid}&token={token}"
+    base_url = settings.PASSWORD_RESET_BASE_URL  # e.g. https://your-railway-domain.up.railway.app/api/auth/reset-redirect/
+    reset_link = f"{base_url}?uid={uid}&token={token}"
 
     resend.Emails.send({
         "from": settings.DEFAULT_FROM_EMAIL,
@@ -196,6 +197,36 @@ class ResetPasswordView(APIView):
         user.save(update_fields=['password'])
 
         return Response({'detail': 'Password reset successful.'})
+
+
+class PasswordResetRedirectView(APIView):
+    """
+    Email-safe HTTPS endpoint that redirects into the app via deep link.
+    Email clients won't render spends:// links, so the email points here instead.
+    """
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        uid = request.GET.get('uid', '')
+        token = request.GET.get('token', '')
+        deep_link = f"spends://reset-password?uid={uid}&token={token}"
+
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Redirecting to Spends…</title>
+            <script>window.location.href = "{deep_link}";</script>
+        </head>
+        <body style="font-family: sans-serif; text-align: center; padding: 40px;">
+            <h2>Redirecting to Spends…</h2>
+            <p>If the app didn't open, <a href="{deep_link}">tap here</a>.</p>
+        </body>
+        </html>
+        """
+        return HttpResponse(html)
 
 #-------------------------------------------------------------------------------------------------------
 

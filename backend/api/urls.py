@@ -21,6 +21,7 @@ urlpatterns = [
     path('auth/resend-verification/', views.ResendVerificationEmailView.as_view(), name='resend-verification'),
     path('auth/verify-email/', views.VerifyEmailView.as_view(), name='verify-email'),
     path('auth/forgot-password/', views.ForgotPasswordView.as_view(), name='forgot-password'),
-path('auth/reset-password/', views.ResetPasswordView.as_view(), name='reset-password'),
+    path('auth/reset-password/', views.ResetPasswordView.as_view(), name='reset-password'),
+    path('auth/reset-redirect/', views.PasswordResetRedirectView.as_view(), name='reset-redirect'),
     path('', include(router.urls)),
 ]

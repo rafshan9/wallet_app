@@ -165,6 +165,7 @@ RESEND_API_KEY  = os.environ.get('RESEND_API_KEY')
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@yourapp.com')
 EMAIL_VERIFY_BASE_URL = os.environ.get('EMAIL_VERIFY_BASE_URL', 'http://localhost:8000/api/auth/verify-email/')
+PASSWORD_RESET_BASE_URL = os.environ.get('PASSWORD_RESET_BASE_URL', 'http://localhost:8000/api/auth/reset-redirect/')
 
 
 
