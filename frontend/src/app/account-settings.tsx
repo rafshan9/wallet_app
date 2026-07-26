@@ -1,6 +1,6 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import api from '../../utils/axios';
@@ -13,6 +13,15 @@ export default function AccountSettingsScreen() {
     const { user } = useAppStore();
     const showAlert = useAlert();
 
+    // Change username state
+    const [showChangeUsername, setShowChangeUsername] = useState(false);
+    const [newUsername, setNewUsername] = useState('');
+    const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
+    const [usernameError, setUsernameError] = useState('');
+    const [usernameSuggestions, setUsernameSuggestions] = useState<string[]>([]);
+    const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+    const [isSavingUsername, setIsSavingUsername] = useState(false);
+
     // Change password state
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [oldPassword, setOldPassword] = useState('');
@@ -22,6 +31,63 @@ export default function AccountSettingsScreen() {
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+    // Debounced username availability check
+    useEffect(() => {
+        setUsernameAvailable(null);
+        setUsernameError('');
+        setUsernameSuggestions([]);
+
+        if (!newUsername.trim() || newUsername.trim().length < 3) return;
+
+        const timer = setTimeout(async () => {
+            setIsCheckingUsername(true);
+            try {
+                const res = await api.get('/account/check-username/', {
+                    params: { username: newUsername.trim() },
+                });
+                setUsernameAvailable(res.data.available);
+                if (!res.data.available) {
+                    setUsernameError('Username is taken.');
+                }
+            } catch {
+                // silently fail
+            } finally {
+                setIsCheckingUsername(false);
+            }
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [newUsername]);
+
+    const handleChangeUsername = async () => {
+        const trimmed = newUsername.trim();
+        if (!trimmed) {
+            showAlert({ title: 'Error', message: 'Please enter a username.' });
+            return;
+        }
+
+        setIsSavingUsername(true);
+        try {
+            const res = await api.post('/account/change-username/', { username: trimmed });
+            showAlert({ title: 'Success', message: 'Username updated.' });
+            const currentUser = useAppStore.getState().user;
+            if (currentUser) {
+                useAppStore.getState().setUser({ ...currentUser, username: res.data.username });
+            }
+            setShowChangeUsername(false);
+            setNewUsername('');
+        } catch (error: any) {
+            const data = error.response?.data;
+            const message = data?.error || 'Could not change username.';
+            if (data?.suggestions?.length) {
+                setUsernameSuggestions(data.suggestions);
+            }
+            showAlert({ title: 'Error', message });
+        } finally {
+            setIsSavingUsername(false);
+        }
+    };
 
     const handleChangePassword = async () => {
         if (!oldPassword || !newPassword || !confirmPassword) {
@@ -135,6 +201,92 @@ export default function AccountSettingsScreen() {
                         {user?.email || '—'}
                     </Text>
                 </View>
+
+                {/* Username Row */}
+                <SettingsRow
+                    icon="at-sign"
+                    label={`Username: ${user?.username || '—'}`}
+                    onPress={() => {
+                        setShowChangeUsername(!showChangeUsername);
+                        if (!showChangeUsername) setNewUsername('');
+                    }}
+                />
+
+                {/* Change Username Expandable */}
+                {showChangeUsername && (
+                    <View className="bg-white/10 p-5 rounded-2xl border-2 border-white/20">
+                        <View className="relative mb-2">
+                            <TextInput
+                                placeholder="New username"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                value={newUsername}
+                                onChangeText={setNewUsername}
+                                className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                            />
+                            {/* Availability indicator */}
+                            <View className="absolute right-4 top-5 z-10">
+                                {isCheckingUsername ? (
+                                    <ActivityIndicator size="small" color="gray" />
+                                ) : usernameAvailable === true ? (
+                                    <Feather name="check-circle" size={24} color="#22C55E" />
+                                ) : usernameAvailable === false ? (
+                                    <Feather name="x-circle" size={24} color="#EF4444" />
+                                ) : null}
+                            </View>
+                        </View>
+
+                        {/* Availability message */}
+                        {usernameAvailable === true && newUsername.trim().length >= 3 && (
+                            <Text className="text-green-400 font-inter_medium text-sm mb-3 ml-1">Username is available!</Text>
+                        )}
+                        {usernameError ? (
+                            <Text className="text-red-400 font-inter_medium text-sm mb-3 ml-1">{usernameError}</Text>
+                        ) : null}
+
+                        {/* Suggestions */}
+                        {usernameSuggestions.length > 0 && (
+                            <View className="mb-4">
+                                <Text className="text-white/70 font-inter_medium text-sm mb-2 ml-1">Try one of these:</Text>
+                                <View className="flex-row flex-wrap gap-2">
+                                    {usernameSuggestions.map((s) => (
+                                        <TouchableOpacity
+                                            key={s}
+                                            className="bg-yellow/90 px-4 py-2 rounded-xl border-2 border-black"
+                                            onPress={() => {
+                                                setNewUsername(s);
+                                                setUsernameSuggestions([]);
+                                                setUsernameError('');
+                                            }}
+                                        >
+                                            <Text className="font-inter_bold text-black">{s}</Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                            </View>
+                        )}
+
+                        {/* Validation hints */}
+                        <Text className="text-white/40 font-inter_medium text-xs mb-4 ml-1">
+                            3–30 characters. Letters, numbers, and underscores only.
+                        </Text>
+
+                        {/* Submit Button */}
+                        <TouchableOpacity
+                            className="relative self-center"
+                            onPress={handleChangeUsername}
+                            activeOpacity={0.8}
+                            disabled={isSavingUsername || usernameAvailable === false}
+                        >
+                            <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
+                            <View className={`py-3 px-12 border-2 border-black items-center ${usernameAvailable === false ? 'bg-gray-400' : 'bg-yellow'}`}>
+                                <Text className="font-inter_bold text-black text-lg">
+                                    {isSavingUsername ? 'Saving...' : 'Update Username'}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                )}
             </View>
 
             {/* Security Section */}
@@ -222,11 +374,6 @@ export default function AccountSettingsScreen() {
                     </View>
                 )}
 
-                <SettingsRow
-                    icon="mail"
-                    label="Reset Password via Email"
-                    onPress={() => router.push('/forgot-password')}
-                />
             </View>
 
             {/* Support Section */}
