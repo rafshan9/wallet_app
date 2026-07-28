@@ -24,6 +24,8 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
     });
     const pulseAnim = useRef(new Animated.Value(1)).current;
 
+
+    // Speech sync effect
     useEffect(() => {
         if (isRecording) {
             setContent([contentBeforeRecording.current, transcript].filter(Boolean).join(' '));
@@ -31,7 +33,7 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
     }, [transcript, isRecording]);
 
 
-
+    // Mic pulse
     useEffect(() => {
         if (isRecording) {
             Animated.loop(
@@ -46,7 +48,7 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
     }, [isRecording]);
 
 
-
+    // Pre-fills text input if exisiting note text exists or sets empty string
     useEffect(() => {
         setContent(note?.content ?? '');
     }, [note, visible]);

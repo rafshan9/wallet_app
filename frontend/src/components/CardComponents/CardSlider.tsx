@@ -20,8 +20,8 @@ export default function CardSlider({ scrollX }: Props) {
         const d1 = new Date(dateStr);
         const d2 = new Date();
         return d1.getFullYear() === d2.getFullYear() &&
-               d1.getMonth() === d2.getMonth() &&
-               d1.getDate() === d2.getDate();
+            d1.getMonth() === d2.getMonth() &&
+            d1.getDate() === d2.getDate();
     };
 
     const todayExpenses = transactions
@@ -35,7 +35,7 @@ export default function CardSlider({ scrollX }: Props) {
     const formatCurrency = (amount: number) =>
         `$${Math.floor(amount).toLocaleString()}`
 
-    const formatExact = (amount: number) => 
+    const formatExact = (amount: number) =>
         `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
     const CARDS_DATA = [

@@ -50,8 +50,6 @@ export function useNotes() {
                 queryClient.setQueryData(['notes'], context.previousNotes);
             }
         },
-        // We removed onSuccess: () => queryClient.invalidateQueries(...) 
-        // to stop the cache from resetting and wiping the 'temp-' note.
     });
 
     return {
@@ -64,7 +62,7 @@ export function useNotes() {
     };
 }
 
-// Added missing hook
+// Adding notes using voice input
 export const useAddVoiceNote = () => {
     const queryClient = useQueryClient();
 

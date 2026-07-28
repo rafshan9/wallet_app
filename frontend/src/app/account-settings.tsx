@@ -77,17 +77,17 @@ export default function AccountSettingsScreen() {
 
         setIsSavingName(true);
         try {
-            const res = await api.post('/account/change-name/', { 
+            const res = await api.post('/account/change-name/', {
                 first_name: trimmedFirst,
                 last_name: trimmedLast
             });
             showAlert({ title: 'Success', message: 'Name updated.' });
             const currentUser = useAppStore.getState().user;
             if (currentUser) {
-                useAppStore.getState().setUser({ 
-                    ...currentUser, 
+                useAppStore.getState().setUser({
+                    ...currentUser,
                     first_name: res.data.first_name,
-                    last_name: res.data.last_name 
+                    last_name: res.data.last_name
                 });
             }
             setShowChangeName(false);

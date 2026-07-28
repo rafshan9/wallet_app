@@ -9,6 +9,7 @@ const api = axios.create({
     baseURL: `${API_URL}/api`,
 });
 
+// Before any request goes out of the device, this appends the header with the access token if found 
 api.interceptors.request.use(
     async (config) => {
         const token = await SecureStore.getItemAsync('accessToken');
@@ -20,12 +21,9 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-const logout = async () => {
-    await SecureStore.deleteItemAsync('accessToken');
-    await SecureStore.deleteItemAsync('refreshToken');
-    useAppStore.getState().setUser(null);
-};
 
+
+// Token refresh logic and response interceptor
 let isRefreshing = false;
 let pendingQueue: { resolve: (token: string) => void; reject: (error: unknown) => void }[] = [];
 
@@ -37,6 +35,14 @@ const processQueue = (error: unknown, token: string | null = null) => {
     pendingQueue = [];
 };
 
+// clears tokens when user logsout
+const logout = async () => {
+    await SecureStore.deleteItemAsync('accessToken');
+    await SecureStore.deleteItemAsync('refreshToken');
+    useAppStore.getState().setUser(null);
+};
+
+// This checks every response from the server, if 401 found, it tries to refresh tokens
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
