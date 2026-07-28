@@ -174,7 +174,7 @@ export default function HeroSection() {
           >
             <div className="relative w-full h-[580px]">
               <Image
-                src="/first_image_desktop.png"
+                src="/first_image_desktop_2.png"
                 alt="SPENDS app screens showing remaining funds, saving goals, and monthly expenses"
                 fill
                 className="object-contain object-bottom"
@@ -255,7 +255,7 @@ export default function HeroSection() {
           >
             <div className="relative w-full h-[480px]">
               <Image
-                src="/first_image_desktop.png"
+                src="/first_image_desktop_2.png"
                 alt="SPENDS app screens"
                 fill
                 className="object-contain object-bottom"
