@@ -207,7 +207,7 @@ export default function AccountSettingsScreen() {
         >
             <View className="flex-row items-center flex-1">
                 <Feather name={icon as any} size={22} color={destructive ? '#DC2626' : 'black'} />
-                <Text className={`ml-4 text-lg font-inter_medium ${destructive ? 'text-red-600' : 'text-black'}`}>{label}</Text>
+                <Text className={`ml-4 text-lg font-jb_mono_medium ${destructive ? 'text-red-600' : 'text-black'}`}>{label}</Text>
             </View>
             {rightElement || (onPress && <Feather name="chevron-right" size={22} color="gray" />)}
         </TouchableOpacity>
@@ -224,11 +224,11 @@ export default function AccountSettingsScreen() {
                 >
                     <Feather name="arrow-left" size={24} color="black" />
                 </TouchableOpacity>
-                <Text className="text-2xl font-inter_bold ml-4 text-white">Account Settings</Text>
+                <Text className="text-2xl font-jb_mono_bold ml-4 text-white">Account Settings</Text>
             </View>
 
             {/* Account Info Section */}
-            <Text className="text-white/60 font-inter_bold text-sm uppercase tracking-wider mb-3 ml-1">Account</Text>
+            <Text className="text-white/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Account</Text>
             <View className="gap-y-3 mb-8">
                 {/* Name Row */}
                 <SettingsRow
@@ -251,13 +251,13 @@ export default function AccountSettingsScreen() {
                                 placeholder="First Name"
                                 value={firstName}
                                 onChangeText={setFirstName}
-                                className="bg-white text-black px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                                className="bg-white text-black px-6 py-4 rounded-2xl border-2 border-black font-jb_mono_medium text-lg placeholder:text-gray-400"
                             />
                             <TextInput
                                 placeholder="Last Name (Optional)"
                                 value={lastName}
                                 onChangeText={setLastName}
-                                className="bg-white text-black px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                                className="bg-white text-black px-6 py-4 rounded-2xl border-2 border-black font-jb_mono_medium text-lg placeholder:text-gray-400"
                             />
                         </View>
 
@@ -269,7 +269,7 @@ export default function AccountSettingsScreen() {
                         >
                             <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
                             <View className="bg-yellow py-3 px-12 border-2 border-black items-center">
-                                <Text className="font-inter_bold text-black text-lg">
+                                <Text className="font-jb_mono_bold text-black text-lg">
                                     {isSavingName ? 'Saving...' : 'Update Name'}
                                 </Text>
                             </View>
@@ -278,8 +278,8 @@ export default function AccountSettingsScreen() {
                 )}
 
                 <View className="bg-white p-5 rounded-2xl border-2 border-black">
-                    <Text className="text-sm font-inter_medium text-gray-500 mb-1">Email</Text>
-                    <Text className="text-lg font-inter_bold text-black">
+                    <Text className="text-sm font-jb_mono_medium text-gray-500 mb-1">Email</Text>
+                    <Text className="text-lg font-jb_mono_bold text-black">
                         {user?.email || '—'}
                     </Text>
                 </View>
@@ -304,7 +304,7 @@ export default function AccountSettingsScreen() {
                                 autoCorrect={false}
                                 value={newUsername}
                                 onChangeText={setNewUsername}
-                                className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                                className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-jb_mono_medium text-lg placeholder:text-gray-400"
                             />
                             {/* Availability indicator */}
                             <View className="absolute right-4 top-5 z-10">
@@ -320,16 +320,16 @@ export default function AccountSettingsScreen() {
 
                         {/* Availability message */}
                         {usernameAvailable === true && newUsername.trim().length >= 3 && (
-                            <Text className="text-green-400 font-inter_medium text-sm mb-3 ml-1">Username is available!</Text>
+                            <Text className="text-green-400 font-jb_mono_medium text-sm mb-3 ml-1">Username is available!</Text>
                         )}
                         {usernameError ? (
-                            <Text className="text-red-400 font-inter_medium text-sm mb-3 ml-1">{usernameError}</Text>
+                            <Text className="text-red-400 font-jb_mono_medium text-sm mb-3 ml-1">{usernameError}</Text>
                         ) : null}
 
                         {/* Suggestions */}
                         {usernameSuggestions.length > 0 && (
                             <View className="mb-4">
-                                <Text className="text-white/70 font-inter_medium text-sm mb-2 ml-1">Try one of these:</Text>
+                                <Text className="text-white/70 font-jb_mono_medium text-sm mb-2 ml-1">Try one of these:</Text>
                                 <View className="flex-row flex-wrap gap-2">
                                     {usernameSuggestions.map((s) => (
                                         <TouchableOpacity
@@ -341,7 +341,7 @@ export default function AccountSettingsScreen() {
                                                 setUsernameError('');
                                             }}
                                         >
-                                            <Text className="font-inter_bold text-black">{s}</Text>
+                                            <Text className="font-jb_mono_bold text-black">{s}</Text>
                                         </TouchableOpacity>
                                     ))}
                                 </View>
@@ -349,7 +349,7 @@ export default function AccountSettingsScreen() {
                         )}
 
                         {/* Validation hints */}
-                        <Text className="text-white/40 font-inter_medium text-xs mb-4 ml-1">
+                        <Text className="text-white/40 font-jb_mono_medium text-xs mb-4 ml-1">
                             3–30 characters. Letters, numbers, and underscores only.
                         </Text>
 
@@ -362,7 +362,7 @@ export default function AccountSettingsScreen() {
                         >
                             <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
                             <View className={`py-3 px-12 border-2 border-black items-center ${usernameAvailable === false ? 'bg-gray-400' : 'bg-yellow'}`}>
-                                <Text className="font-inter_bold text-black text-lg">
+                                <Text className="font-jb_mono_bold text-black text-lg">
                                     {isSavingUsername ? 'Saving...' : 'Update Username'}
                                 </Text>
                             </View>
@@ -372,7 +372,7 @@ export default function AccountSettingsScreen() {
             </View>
 
             {/* Security Section */}
-            <Text className="text-white/60 font-inter_bold text-sm uppercase tracking-wider mb-3 ml-1">Security</Text>
+            <Text className="text-white/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Security</Text>
             <View className="gap-y-3 mb-8">
                 <SettingsRow
                     icon="lock"
@@ -391,7 +391,7 @@ export default function AccountSettingsScreen() {
                                 value={oldPassword}
                                 autoCapitalize="none"
                                 onChangeText={setOldPassword}
-                                className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                                className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-jb_mono_medium text-lg placeholder:text-gray-400"
                             />
                             <TouchableOpacity
                                 className="absolute right-4 top-5 z-10"
@@ -409,7 +409,7 @@ export default function AccountSettingsScreen() {
                                 value={newPassword}
                                 autoCapitalize="none"
                                 onChangeText={setNewPassword}
-                                className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                                className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-jb_mono_medium text-lg placeholder:text-gray-400"
                             />
                             <TouchableOpacity
                                 className="absolute right-4 top-5 z-10"
@@ -429,7 +429,7 @@ export default function AccountSettingsScreen() {
                                 value={confirmPassword}
                                 autoCapitalize="none"
                                 onChangeText={setConfirmPassword}
-                                className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                                className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-jb_mono_medium text-lg placeholder:text-gray-400"
                             />
                             <TouchableOpacity
                                 className="absolute right-4 top-5 z-10"
@@ -448,7 +448,7 @@ export default function AccountSettingsScreen() {
                         >
                             <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
                             <View className="bg-yellow py-3 px-12 border-2 border-black items-center">
-                                <Text className="font-inter_bold text-black text-lg">
+                                <Text className="font-jb_mono_bold text-black text-lg">
                                     {isChangingPassword ? 'Saving...' : 'Update Password'}
                                 </Text>
                             </View>
@@ -459,7 +459,7 @@ export default function AccountSettingsScreen() {
             </View>
 
             {/* Support Section */}
-            <Text className="text-white/60 font-inter_bold text-sm uppercase tracking-wider mb-3 ml-1">Support</Text>
+            <Text className="text-white/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Support</Text>
             <View className="gap-y-3 mb-8">
                 <SettingsRow
                     icon="help-circle"
@@ -480,7 +480,7 @@ export default function AccountSettingsScreen() {
             </View>
 
             {/* Danger Zone */}
-            <Text className="text-red-400/60 font-inter_bold text-sm uppercase tracking-wider mb-3 ml-1">Danger Zone</Text>
+            <Text className="text-red-400/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Danger Zone</Text>
             <View className="gap-y-3 mb-8">
                 <TouchableOpacity
                     className="relative self-center mb-2"
@@ -490,7 +490,7 @@ export default function AccountSettingsScreen() {
                     <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
                     <View className="flex-row items-center justify-center gap-4 bg-yellow py-4 px-16 border-2 border-black">
                         <Feather name="log-out" size={22} color="black" />
-                        <Text className="font-inter_bold text-black text-lg">Log Out</Text>
+                        <Text className="font-jb_mono_bold text-black text-lg">Log Out</Text>
                     </View>
                 </TouchableOpacity>
 
@@ -502,13 +502,13 @@ export default function AccountSettingsScreen() {
                     <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
                     <View className="flex-row items-center justify-center gap-4 bg-background_red py-4 px-16 border-2 border-black">
                         <Feather name="trash-2" size={22} color="white" />
-                        <Text className="font-inter_bold text-white text-lg">Delete Account</Text>
+                        <Text className="font-jb_mono_bold text-white text-lg">Delete Account</Text>
                     </View>
                 </TouchableOpacity>
             </View>
 
             {/* App Version */}
-            <Text className="text-center text-white/30 font-inter_medium text-sm mb-4">Spends v1.0.0</Text>
+            <Text className="text-center text-white/30 font-jb_mono_medium text-sm mb-4">Spends v1.0.0</Text>
         </ScrollView>
     );
 }

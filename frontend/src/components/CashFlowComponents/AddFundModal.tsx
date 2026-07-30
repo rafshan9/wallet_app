@@ -160,20 +160,20 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
         <Modal visible={visible} animationType="slide" transparent={true}>
             <KeyboardAvoidingView behavior="padding" className="flex-1">
                 <View className="flex-1 justify-end bg-black/80">
-                    <View className="bg-very_dark_blue w-full rounded-t-[40px] p-8 border-2 border-black max-h-[90%]">
+                    <View className="bg-background w-full rounded-t-[40px] p-8 border-2 border-black max-h-[90%]">
                         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
 
                             {(isScanning || isExtracting) && (
                                 <View className="absolute inset-0 bg-very_dark_blue/80 z-50 justify-center items-center rounded-t-[40px]">
-                                    <ActivityIndicator size="large" color="#fff" />
-                                    <Text className="mt-4 font-inter_bold text-white text-lg">
+                                    <ActivityIndicator size="large" color="#000000" />
+                                    <Text className="mt-4 font-jb_mono_bold text-black text-lg">
                                         {isScanning ? 'Analyzing receipt...' : 'Extracting your expense...'}
                                     </Text>
                                 </View>
                             )}
 
                             <View className="flex-row justify-between items-center mb-8">
-                                <Text className="text-3xl font-inter_bold text-white">
+                                <Text className="text-3xl font-jb_mono_bold text-black">
                                     {type === 'expense' ? 'New Expense' : 'New Income'}
                                 </Text>
                                 <TouchableOpacity className="rounded-full border-2 border-black p-2 bg-yellow" onPress={onClose}>
@@ -181,30 +181,30 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                 </TouchableOpacity>
                             </View>
 
-                            <View className="flex-row bg-black/30 rounded-full p-1 mb-6">
+                            <View className="flex-row bg-very_dark_blue rounded-full p-1 mb-6">
                                 <TouchableOpacity
                                     onPress={() => setType('expense')}
                                     className={`flex-1 items-center py-3 rounded-full ${type === 'expense' ? 'bg-white' : ''}`}
                                 >
-                                    <Text className={`font-inter_black text-sm ${type === 'expense' ? 'text-black' : 'text-white/50'}`}>Expense</Text>
+                                    <Text className={`font-jb_mono_bold text-sm ${type === 'expense' ? 'text-black' : 'text-white/50'}`}>Expense</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() => { setType('income'); setSelectedCategory(null); }}
                                     className={`flex-1 items-center py-3 rounded-full ${type === 'income' ? 'bg-white' : ''}`}
                                 >
-                                    <Text className={`font-inter_black text-sm ${type === 'income' ? 'text-black' : 'text-white/50'}`}>Income</Text>
+                                    <Text className={`font-jb_mono_bold text-sm ${type === 'income' ? 'text-black' : 'text-white/50'}`}>Income</Text>
                                 </TouchableOpacity>
                             </View>
 
                             <TextInput
                                 placeholder="$0.00"
                                 keyboardType="numeric"
-                                placeholderTextColor="rgba(255,255,255,0.5)"
+                                placeholderTextColor="rgba(100, 100, 100, 0.5)"
                                 scrollEnabled={false}
                                 multiline={false}
                                 value={amount}
                                 onChangeText={setAmount}
-                                className="text-6xl font-inter_bold text-white text-center mb-8"
+                                className="text-6xl font-jb_mono_bold text-black text-center mb-8"
                                 style={{ textAlignVertical: 'center', includeFontPadding: false, paddingVertical: 0, height: 80 }}
                             />
 
@@ -213,7 +213,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                 placeholderTextColor={'#808080'}
                                 value={title}
                                 onChangeText={setTitle}
-                                className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium  text-lg mb-6"
+                                className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-jb_mono_medium  text-lg mb-6"
                             />
 
                             {type === 'expense' && (
@@ -230,7 +230,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                                 {isSelected && (
                                                     <Feather name="check" size={14} color={cat.text === 'text-white' ? 'white' : 'black'} style={{ marginRight: 4 }} />
                                                 )}
-                                                <Text className={`font-inter_medium text-sm ${cat.text}`}>{cat.label}</Text>
+                                                <Text className={`font-jb_mono_medium text-sm ${cat.text}`}>{cat.label}</Text>
                                             </TouchableOpacity>
                                         );
                                     })}
@@ -242,7 +242,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                 <View className="bg-black/30 rounded-2xl p-4 mb-6">
                                     <View className="flex-row items-center mb-2">
                                         <View className={`w-2 h-2 rounded-full mr-2 ${isRecording ? 'bg-red' : 'bg-white/30'}`} />
-                                        <Text className="text-white/60 font-inter_medium text-xs">
+                                        <Text className="text-white/60 font-jb_mono_medium text-xs">
                                             {isRecording ? 'Listening...' : 'Review your transcript'}
                                         </Text>
                                     </View>
@@ -253,20 +253,20 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                         editable={!isRecording}
                                         placeholder="Speak your expense..."
                                         placeholderTextColor="rgba(255,255,255,0.4)"
-                                        className="text-white font-inter_medium text-base"
+                                        className="text-white font-jb_mono_medium text-base"
                                         style={{ minHeight: 50, textAlignVertical: 'top' }}
                                     />
                                     {!isRecording && editableTranscript.length > 0 && (
                                         <View className="flex-row justify-end gap-3 mt-3">
                                             <TouchableOpacity onPress={() => setEditableTranscript('')}>
-                                                <Text className="text-white/60 font-inter_medium">Discard</Text>
+                                                <Text className="text-white/60 font-jb_mono_medium">Discard</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 onPress={handleSubmitTranscript}
                                                 disabled={isExtracting}
                                                 className="bg-yellow px-4 py-2 rounded-full flex-row items-center"
                                             >
-                                                <Text className="text-black font-inter_bold text-sm">Submit</Text>
+                                                <Text className="text-black font-jb_mono_bold text-sm">Submit</Text>
                                             </TouchableOpacity>
                                         </View>
                                     )}
@@ -302,7 +302,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                         <ActivityIndicator color="white" />
                                     ) : (
                                         <>
-                                            <Text className="text-white font-inter_bold text-lg mr-2">
+                                            <Text className="text-white font-jb_mono_bold text-xs mr-2">
                                                 {type === 'expense' ? 'Add Expense' : 'Add Income'}
                                             </Text>
                                             <Feather name="check" size={20} color="white" />

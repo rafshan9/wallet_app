@@ -31,7 +31,7 @@ export default function VerifyPendingScreen() {
 
     return (
         <View className="flex-1 bg-background_red justify-center px-6">
-            <Text className="text-2xl font-inter_bold text-white text-center mb-4">Check your email</Text>
+            <Text className="text-2xl font-jb_mono_bold text-white text-center mb-4">Check your email</Text>
 
             {emailParam ? (
                 <Text className="text-white/80 text-center mb-8">
@@ -44,18 +44,18 @@ export default function VerifyPendingScreen() {
                     keyboardType="email-address"
                     value={email}
                     onChangeText={setEmail}
-                    className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg mb-6 placeholder:text-gray-400"
+                    className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-jb_mono_medium text-lg mb-6 placeholder:text-gray-400"
                 />
             )}
 
             <TouchableOpacity onPress={handleResend} disabled={resending} className="mb-6">
-                <Text className="text-center font-inter_medium text-white/80 underline">
+                <Text className="text-center font-jb_mono_medium text-white/80 underline">
                     {resending ? 'Sending...' : "Didn't get it? Resend"}
                 </Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => router.replace('/login')}>
-                <Text className="text-center font-inter_bold text-white underline">Go to Login</Text>
+                <Text className="text-center font-jb_mono_bold text-white underline">Go to Login</Text>
             </TouchableOpacity>
         </View>
     );

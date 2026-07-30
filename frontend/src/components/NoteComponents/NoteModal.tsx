@@ -74,9 +74,9 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
         <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
             <KeyboardAvoidingView behavior="padding" className="flex-1">
                 <View className="flex-1 justify-end bg-black/40">
-                    <View className="bg-very_dark_blue rounded-t-[32px] border-2 border-black px-6 pt-6 pb-8">
+                    <View className="bg-black rounded-t-[32px] border-2 border-black px-6 pt-6 pb-8">
                         <View className="flex-row justify-between items-center mb-6">
-                            <Text className="font-inter_bold text-xl text-white">{note ? 'Edit Note' : 'New Note'}</Text>
+                            <Text className="font-jb_mono_bold text-xl text-white">{note ? 'Edit Note' : 'New Note'}</Text>
                             <TouchableOpacity className="bg-yellow rounded-full p-2 border-2 border-black" onPress={onClose} hitSlop={8}>
                                 <Feather name="x" size={22} color="black" />
                             </TouchableOpacity>
@@ -90,7 +90,7 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
                             multiline
                             numberOfLines={4}
                             autoFocus
-                            className="border-2 border-white/30 text-white rounded-2xl px-4 py-3 font-inter_medium mb-6"
+                            className="border-2 border-white/30 text-white rounded-2xl px-4 py-3 font-jb_mono_medium mb-6"
                             style={{ minHeight: 100, textAlignVertical: 'top' }}
                         />
 
@@ -105,13 +105,13 @@ export default function NoteModal({ visible, note, onClose, onSave }: Props) {
                                             startRecording();
                                         }
                                     }}
-                                    className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red' : 'bg-[#E6F4FE]'}`}
+                                    className={`h-14 w-14 rounded-full items-center justify-center border-2 border-black ${isRecording ? 'bg-red' : 'bg-green'}`}
                                 >
-                                    <Feather name={isRecording ? "square" : "mic"} size={20} color="black" />
+                                    <Feather name={isRecording ? "square" : "mic"} size={20} color="white" />
                                 </TouchableOpacity>
                             </Animated.View>
-                            <TouchableOpacity onPress={handleSave} disabled={isSaving} className="flex-1 bg-black py-4 rounded-full items-center">
-                                <Text className="text-white font-inter_bold">{isSaving ? 'Saving...' : 'Save Note'}</Text>
+                            <TouchableOpacity onPress={handleSave} disabled={isSaving} className="flex-1 bg-green py-4 rounded-full items-center">
+                                <Text className="text-white font-jb_mono_bold">{isSaving ? 'Saving...' : 'Save Note'}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

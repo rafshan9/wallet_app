@@ -1,6 +1,4 @@
 import { View, Text } from 'react-native';
-import Svg, { Circle } from 'react-native-svg';
-import { useState } from 'react';
 
 type CategoryBreakdown = {
     label: string;
@@ -15,93 +13,64 @@ type ExpensePieChartProps = {
 };
 
 export default function ExpensePieChart({ total, categories }: ExpensePieChartProps) {
-    const [rowWidth, setRowWidth] = useState(0);
-    const chartColumnWidth = rowWidth * 0.4;
-    const chartSize = Math.min(chartColumnWidth * 0.85, 200);
-    const outerRadius = chartSize / 2;
-    const strokeWidth = outerRadius;
-    const radius = strokeWidth / 2;
-    const circumference = 2 * Math.PI * radius;
-
-    let cumulativePercent = 0;
-
     return (
-        <View
-            className="bg-black rounded-2xl p-6 mb-8"
-            onLayout={(e) => setRowWidth(e.nativeEvent.layout.width)}
-        >
-            <Text className="font-inter_bold text-lg text-white p-2 mb-4">Spending by category</Text>
-
-            <View className="flex-row items-center justify-between">
-                <View className="items-center justify-center">
-                    {chartSize > 0 && (
-                        <View style={{ width: chartSize, height: chartSize }}>
-                            <View style={{ transform: [{ rotate: '-90deg' }] }}>
-                                <Svg width={chartSize} height={chartSize}>
-                                    <Circle
-                                        cx={chartSize / 2}
-                                        cy={chartSize / 2}
-                                        r={radius}
-                                        stroke="#333333"
-                                        strokeWidth={strokeWidth}
-                                        fill="none"
-                                    />
-                                    {categories.map((cat) => {
-                                        const segmentLength = (cat.percent / 100) * circumference;
-                                        const offset = -(cumulativePercent / 100) * circumference;
-                                        cumulativePercent += cat.percent;
-
-                                        return (
-                                            <Circle
-                                                key={cat.label}
-                                                cx={chartSize / 2}
-                                                cy={chartSize / 2}
-                                                r={radius}
-                                                stroke={cat.hex}
-                                                strokeWidth={strokeWidth}
-                                                strokeDasharray={`${segmentLength} ${circumference}`}
-                                                strokeDashoffset={offset}
-                                                strokeLinecap="butt"
-                                                fill="none"
-                                            />
-                                        );
-                                    })}
-                                </Svg>
-                            </View>
-                        </View>
-                    )}
-                </View>
-                <View className="flex-1 pl-8 justify-center">
-                    <Text className="font-inter_bold text-xl text-white/60 mb-2">Total</Text>
-                    <Text className="font-alfa text-5xl text-[#FDE047]">
-                        {total.split('.')[0]}
-                    </Text>
-                </View>
+        <View className="mb-8 overflow-hidden">
+            {/* Header */}
+            <View className="flex-row items-center justify-between px-5 py-4">
+                <Text className="font-jb_mono_bold text-sm text-black/50 tracking-widest uppercase">
+                    Spending by category
+                </Text>
+                <Text className="font-alfa text-4xl text-black">
+                    {total.split('.')[0]}
+                </Text>
             </View>
 
-            <View className="flex-row flex-wrap justify-start w-full mt-6 px-2 gap-y-4">
-                {categories.map((cat) => (
-                    <View key={cat.label} className="w-[50%] pr-2">
-                        <View className="flex-row items-center mb-1">
-                            <View
-                                className="h-2.5 w-2.5 rounded-full mr-1.5"
-                                style={{ backgroundColor: cat.hex }}
-                            />
-                            <Text
-                                className="font-inter_bold text-sm text-white flex-1"
-                                numberOfLines={1}
-                            >
-                                {cat.label}
-                            </Text>
-                        </View>
-                        <Text
-                            className="font-inter_bold text-[10px] text-background_green ml-4"
-                            numberOfLines={1}
+            {/* Category rows */}
+            <View className="px-5 py-5">
+                {categories.map((cat, index) => {
+                    const hasSpend = cat.amount > 0;
+
+                    return (
+                        <View
+                            key={cat.label}
+                            className={index === categories.length - 1 ? '' : 'mb-5'}
                         >
-                            ${cat.amount.toFixed(2)} · {cat.percent}%
-                        </Text>
-                    </View>
-                ))}
+                            <View className="flex-row items-center justify-between mb-2">
+                                <View className="flex-row items-center flex-1 pr-2">
+                                    <View
+                                        className="h-4 w-4 border-2 border-black mr-2.5"
+                                        style={{ backgroundColor: cat.hex }}
+                                    />
+                                    <Text
+                                        className="font-jb_mono_bold text-lg text-black"
+                                        numberOfLines={1}
+                                    >
+                                        {cat.label}
+                                    </Text>
+                                </View>
+
+                                <View className="flex-row items-baseline">
+                                    <Text className="font-jb_mono_bold text-base text-black/40 mr-6">
+                                        {hasSpend ? `${cat.percent}%` : '–'}
+                                    </Text>
+                                    <Text className="font-jb_mono_bold text-xl text-black">
+                                        ${cat.amount.toFixed(0)}
+                                    </Text>
+                                </View>
+                            </View>
+
+                            <View className="h-3.5 border-[2.5px] border-black bg-[#D9D9D9] overflow-hidden">
+                                <View
+                                    className="h-full rounded-sm"
+                                    style={{
+                                        width: `${hasSpend ? cat.percent : 0}%`,
+                                        backgroundColor: cat.hex,
+                                    }}
+                                />
+                            </View>
+                        </View>
+                    );
+                })}
             </View>
         </View>
     );

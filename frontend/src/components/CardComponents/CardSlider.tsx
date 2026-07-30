@@ -1,5 +1,4 @@
-import { Animated, View, ActivityIndicator, useWindowDimensions } from 'react-native';
-import WalletCard from './WalletCard';
+import { Animated, View, Text, useWindowDimensions } from 'react-native';
 import { useCashFlow } from '../../hooks/useCashFlow';
 import { useGoals } from '../../hooks/useGoals';
 import { CARD_BACKGROUND_COLORS } from '../../constants/cardColors';
@@ -10,12 +9,11 @@ type Props = {
 
 export default function CardSlider({ scrollX }: Props) {
     const { width: SCREEN_WIDTH } = useWindowDimensions();
-    const { totalIncome, totalExpenses, transactions, isLoading: isCashFlowLoading } = useCashFlow();
-    const { totalSaved, totalTarget, isLoading: isGoalsLoading } = useGoals();
+    const { totalIncome, totalExpenses, transactions } = useCashFlow();
+    const { totalSaved, totalTarget } = useGoals();
 
     const remainingFunds = totalIncome - totalExpenses - totalSaved;
 
-    // Calculate Today's Expenses
     const isToday = (dateStr: string) => {
         const d1 = new Date(dateStr);
         const d2 = new Date();
@@ -28,12 +26,11 @@ export default function CardSlider({ scrollX }: Props) {
         .filter((t) => t.type === 'EXPENSE' && isToday(t.date))
         .reduce((sum, t) => sum + parseFloat(t.amount), 0);
 
-    // Calculate Avg Daily Expense
     const currentDay = new Date().getDate();
     const avgDailyExpense = totalExpenses / currentDay;
 
     const formatCurrency = (amount: number) =>
-        `$${Math.floor(amount).toLocaleString()}`
+        `$${Math.floor(amount).toLocaleString()}`;
 
     const formatExact = (amount: number) =>
         `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -43,15 +40,15 @@ export default function CardSlider({ scrollX }: Props) {
             id: '1',
             title: 'Remaining Funds',
             amount: formatCurrency(remainingFunds),
-            subtitle: `Total Deposited this month:\n${formatCurrency(totalIncome)}`,
+            subtitle: `Deposited this month: ${formatCurrency(totalIncome)}`,
             isLight: false,
-            amountColorClass: 'text-white',
+            amountColorClass: 'text-background',
         },
         {
             id: '2',
             title: 'Saving Goals',
             amount: formatCurrency(totalSaved),
-            subtitle: `Total goals target:\n${formatCurrency(totalTarget)}`,
+            subtitle: `Total goals target: ${formatCurrency(totalTarget)}`,
             isLight: true,
             amountColorClass: 'text-black',
         },
@@ -64,13 +61,6 @@ export default function CardSlider({ scrollX }: Props) {
             amountColorClass: 'text-background_green',
         },
     ];
-    // if (isCashFlowLoading || isGoalsLoading) {
-    //     return (
-    //         <View className="mt-4 h-64 justify-center items-center">
-    //             <ActivityIndicator size="large" color="#000000" />
-    //         </View>
-    //     );
-    // }
 
     const inputRange = CARDS_DATA.map((_, i) => i * SCREEN_WIDTH);
 
@@ -85,7 +75,10 @@ export default function CardSlider({ scrollX }: Props) {
     });
 
     return (
-        <Animated.View style={{ backgroundColor: animatedBgColor }}>
+        <Animated.View
+            style={{ backgroundColor: animatedBgColor }}
+            className="border-b-4 border-black  "
+        >
             <Animated.FlatList
                 data={CARDS_DATA}
                 keyExtractor={(item) => item.id}
@@ -100,19 +93,33 @@ export default function CardSlider({ scrollX }: Props) {
                 )}
                 scrollEventThrottle={16}
                 renderItem={({ item }) => (
-                    <View style={{ width: SCREEN_WIDTH }} className="h-64 mb-8">
-                        <WalletCard
-                            title={item.title}
-                            amount={item.amount}
-                            subtitle={item.subtitle}
-                            isLight={item.isLight}
-                            amountColorClass={item.amountColorClass}
-                        />
+                    <View style={{ width: SCREEN_WIDTH }} className="px-6 h-[240px] justify-center">
+                        <Text
+                            className={`font-jb_mono_bold text-lg uppercase tracking-widest mb-1 ${item.isLight ? 'text-black' : 'text-white/80'
+                                }`}
+                        >
+                            {item.title}
+                        </Text>
+
+                        <Text
+                            className={`font-alfa text-[64px] leading-[72px] mb-2 ${item.amountColorClass}`}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                        >
+                            {item.amount}
+                        </Text>
+
+                        <Text
+                            className={`font-jb_mono text-sm leading-relaxed ${item.isLight ? 'text-black' : 'text-white/90'
+                                }`}
+                        >
+                            {item.subtitle}
+                        </Text>
                     </View>
                 )}
             />
 
-            <View className="flex-row justify-center items-center pb-5 gap-2">
+            <View className="flex-row justify-center items-center pb-4 gap-3">
                 {CARDS_DATA.map((_, index) => {
                     const dotInputRange = [
                         (index - 1) * SCREEN_WIDTH,

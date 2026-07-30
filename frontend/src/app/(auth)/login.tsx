@@ -51,7 +51,7 @@ export default function LoginScreen() {
                 autoCapitalize="none"
                 value={username}
                 onChangeText={setUsername}
-                className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg mb-4 placeholder:text-gray-400"
+                className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-jb_mono_medium text-lg mb-4 placeholder:text-gray-400"
             />
             <View className="relative mb-2">
                 <TextInput
@@ -59,7 +59,7 @@ export default function LoginScreen() {
                     secureTextEntry={!showPassword}
                     value={password}
                     onChangeText={setPassword}
-                    className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                    className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-jb_mono_medium text-lg placeholder:text-gray-400"
                 />
                 <TouchableOpacity
                     className="absolute right-4 top-5"
@@ -70,7 +70,7 @@ export default function LoginScreen() {
             </View>
 
             <TouchableOpacity onPress={() => router.push('/forgot-password')} className="mb-6">
-                <Text className="text-right font-inter_medium text-white/80 underline">Forgot password?</Text>
+                <Text className="text-right font-jb_mono_medium text-white/80 underline">Forgot password?</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -80,7 +80,7 @@ export default function LoginScreen() {
             >
                 <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
                 <View className="bg-yellow py-4 px-16 border-2 border-black items-center">
-                    <Text className="font-inter_bold text-xl">Login</Text>
+                    <Text className="font-jb_mono_bold text-xl">Login</Text>
                 </View>
             </TouchableOpacity>
 
@@ -88,15 +88,15 @@ export default function LoginScreen() {
 
             {loginFailed && (
                 <TouchableOpacity onPress={() => router.push('/verify-pending')} className="mb-2">
-                    <Text className="text-center font-inter_medium text-white/70 underline">
+                    <Text className="text-center font-jb_mono_medium text-white/70 underline">
                         Didn't verify your email yet?
                     </Text>
                 </TouchableOpacity>
             )}
 
             <TouchableOpacity onPress={() => router.push('/signup')}>
-                <Text className="text-center font-inter_medium text-white/80">
-                    Don't have an account? <Text className="text-white font-inter_bold underline">Sign Up</Text>
+                <Text className="text-center font-jb_mono_medium text-white/80">
+                    Don't have an account? <Text className="text-white font-jb_mono_bold underline">Sign Up</Text>
                 </Text>
             </TouchableOpacity>
         </View>

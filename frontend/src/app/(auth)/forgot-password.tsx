@@ -27,12 +27,12 @@ export default function ForgotPasswordScreen() {
     if (submitted) {
         return (
             <View className="flex-1 bg-background_red justify-center px-6">
-                <Text className="text-2xl font-inter_bold text-white text-center mb-4">Check your email</Text>
-                <Text className="text-white/80 text-center font-inter_medium mb-8">
+                <Text className="text-2xl font-jb_mono_bold text-white text-center mb-4">Check your email</Text>
+                <Text className="text-white/80 text-center font-jb_mono_medium mb-8">
                     If an account exists for {email}, we've sent a link to reset your password.
                 </Text>
                 <TouchableOpacity onPress={() => router.replace('/login')}>
-                    <Text className="text-white font-inter_bold text-center underline">Back to Login</Text>
+                    <Text className="text-white font-jb_mono_bold text-center underline">Back to Login</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -41,7 +41,7 @@ export default function ForgotPasswordScreen() {
     return (
         <View className="flex-1 bg-background_red justify-center px-6">
             <Text className="text-3xl font-alfa text-white text-center mb-2">Forgot Password</Text>
-            <Text className="text-white/80 text-center font-inter_medium mb-8">
+            <Text className="text-white/80 text-center font-jb_mono_medium mb-8">
                 Enter your email and we'll send you a reset link.
             </Text>
             <TextInput
@@ -50,7 +50,7 @@ export default function ForgotPasswordScreen() {
                 keyboardType="email-address"
                 value={email}
                 onChangeText={setEmail}
-                className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-inter_medium text-lg mb-6 placeholder:text-gray-400"
+                className="bg-white px-6 py-4 rounded-2xl border-2 border-black font-jb_mono_medium text-lg mb-6 placeholder:text-gray-400"
             />
             <TouchableOpacity
                 className="relative self-center mb-6"
@@ -60,11 +60,11 @@ export default function ForgotPasswordScreen() {
             >
                 <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
                 <View className="bg-yellow py-4 px-16 border-2 border-black items-center">
-                    <Text className="font-inter_bold text-black text-xl">{isLoading ? 'Sending...' : 'Send Reset Link'}</Text>
+                    <Text className="font-jb_mono_bold text-black text-xl">{isLoading ? 'Sending...' : 'Send Reset Link'}</Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => router.back()}>
-                <Text className="text-center font-inter_medium text-white/80 underline">Back</Text>
+                <Text className="text-center font-jb_mono_medium text-white/80 underline">Back</Text>
             </TouchableOpacity>
         </View>
     );

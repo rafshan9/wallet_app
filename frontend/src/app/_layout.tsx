@@ -1,7 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useFonts, Inter_400Regular, Inter_500Medium, Inter_700Bold, Inter_900Black } from '@expo-google-fonts/inter';
+//import { useFonts, Inter_400Regular, Inter_500Medium, Inter_700Bold, Inter_900Black } from '@expo-google-fonts/inter';
+import { useFonts, JetBrainsMono_400Regular, JetBrainsMono_500Medium, JetBrainsMono_700Bold, JetBrainsMono_800ExtraBold } from '@expo-google-fonts/jetbrains-mono';
 import { AlfaSlabOne_400Regular } from '@expo-google-fonts/alfa-slab-one';
 import { useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
@@ -19,11 +20,19 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
+  // const [fontsLoaded, error] = useFonts({
+  //   Inter_400Regular,
+  //   Inter_500Medium,
+  //   Inter_700Bold,
+  //   Inter_900Black,
+  //   AlfaSlabOne_400Regular,
+  // });
+
   const [fontsLoaded, error] = useFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_700Bold,
-    Inter_900Black,
+    JetBrainsMono_400Regular,
+    JetBrainsMono_500Medium,
+    JetBrainsMono_700Bold,
+    JetBrainsMono_800ExtraBold,
     AlfaSlabOne_400Regular,
   });
 

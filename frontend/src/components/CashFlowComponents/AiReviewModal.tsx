@@ -27,7 +27,7 @@ export default function AiReviewModal({ visible, onClose, onConfirm, scannedData
         <Modal transparent visible={visible} animationType="slide">
             <View className="flex-1 bg-black/80 justify-end">
                 <View className="bg-[#F9F9F9] w-full rounded-t-3xl p-6 h-[80%]">
-                    <Text className="text-xl font-inter_bold text-black mb-4">Review Receipt</Text>
+                    <Text className="text-xl font-jb_mono_bold text-black mb-4">Review Receipt</Text>
 
                     <ScrollView showsVerticalScrollIndicator={false}>
                         {items.map((item, index) => (

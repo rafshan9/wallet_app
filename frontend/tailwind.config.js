@@ -23,10 +23,10 @@ module.exports = {
 
       },
       fontFamily: {
-        inter: ['Inter_400Regular'],
-        inter_medium: ['Inter_500Medium'],
-        inter_bold: ['Inter_700Bold'],
-        inter_black: ['Inter_900Black'],
+        jb_mono: ['JetBrainsMono_400Regular'],
+        jb_mono_medium: ['JetBrainsMono_500Medium'],
+        jb_mono_bold: ['JetBrainsMono_700Bold'],
+        jb_mono_extrabold: ['JetBrainsMono_800ExtraBold'],
         alfa: ['AlfaSlabOne_400Regular'],
 
       },

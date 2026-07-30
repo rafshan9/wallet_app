@@ -62,7 +62,7 @@ export default function ProfileScreen() {
                 >
                     <Feather name="arrow-left" size={24} color="black" />
                 </TouchableOpacity>
-                <Text className="text-2xl font-inter_bold ml-4 text-white">My Profile</Text>
+                <Text className="text-2xl font-jb_mono_bold ml-4 text-white">My Profile</Text>
             </View>
 
             {/* Avatar & User Info */}
@@ -76,8 +76,8 @@ export default function ProfileScreen() {
                         <Feather name="edit-2" size={16} color="black" />
                     </TouchableOpacity>
                 </View>
-                <Text className="text-3xl font-inter_bold text-black text-center mb-1">{fullName}</Text>
-                <Text className="text-lg font-inter_medium text-white">{email}</Text>
+                <Text className="text-3xl font-jb_mono_bold text-black text-center mb-1">{fullName}</Text>
+                <Text className="text-lg font-jb_mono_medium text-white">{email}</Text>
             </View>
 
             {/* Settings Links (Dummy) */}
@@ -88,7 +88,7 @@ export default function ProfileScreen() {
                 >
                     <View className="flex-row items-center">
                         <Feather name="settings" size={24} color="black" />
-                        <Text className="ml-4 text-xl font-inter_medium text-black">Account Settings</Text>
+                        <Text className="ml-4 text-xl font-jb_mono_medium text-black">Account Settings</Text>
                     </View>
                     <Feather name="chevron-right" size={24} color="gray" />
                 </TouchableOpacity>
@@ -96,7 +96,7 @@ export default function ProfileScreen() {
                 <TouchableOpacity className="flex-row items-center justify-between bg-white p-5 rounded-2xl border-2 border-black shadow-sm">
                     <View className="flex-row items-center">
                         <Feather name="bell" size={24} color="black" />
-                        <Text className="ml-4 text-xl font-inter_medium text-black">Notifications</Text>
+                        <Text className="ml-4 text-xl font-jb_mono_medium text-black">Notifications</Text>
                     </View>
                     <Feather name="chevron-right" size={24} color="gray" />
                 </TouchableOpacity>
@@ -115,7 +115,7 @@ export default function ProfileScreen() {
                 {/* The Button */}
                 <View className="flex-row items-center justify-center gap-4 bg-yellow py-4 px-16 border-2 border-black">
                     <Feather name="log-out" size={24} color="black" />
-                    <Text className="font-inter_bold text-black text-xl">Log Out</Text>
+                    <Text className="font-jb_mono_bold text-black text-xl">Log Out</Text>
                 </View>
             </TouchableOpacity>
 
@@ -131,7 +131,7 @@ export default function ProfileScreen() {
                 {/* The Button */}
                 <View className="flex-row items-center justify-center gap-4 bg-background_red py-4 px-16 border-2 border-black">
                     <Feather name="trash-2" size={24} color="white" />
-                    <Text className="font-inter_bold text-white text-xl">Delete Account</Text>
+                    <Text className="font-jb_mono_bold text-white text-xl">Delete Account</Text>
                 </View>
             </TouchableOpacity>
         </ScrollView>

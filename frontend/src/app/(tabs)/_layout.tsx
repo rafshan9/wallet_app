@@ -1,8 +1,14 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useNavigationContainerRef } from 'expo-router';
 import CustomTabBar from '../../components/CustomTabBar';
 
 
 export default function TabsLayout() {
+    const navigationRef = useNavigationContainerRef();
+
+    if (!navigationRef?.isReady()) {
+        return null;
+    }
+
     return (
         <Tabs
             screenOptions={{ headerShown: false }}

@@ -55,20 +55,23 @@ export default function HomeScreen() {
   });
 
   return (
-    <Animated.View className="flex-1 relative" style={{ backgroundColor: animatedHeroColor }}>
-      <View style={{ paddingTop: 64 }}>
+    <View className="flex-1 relative bg-background">
+      {/* 1. Keep the TopBar dynamic so it blends perfectly with the slider below it */}
+      <Animated.View className="bg-background" style={{ paddingTop: 32 }}>
         <TopBar />
-      </View>
+      </Animated.View>
 
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 140 }}
       >
+        {/* 2. CardSlider handles its own dynamic background color now */}
         <CardSlider scrollX={scrollX} />
-        <View className="px-6">
 
-          <RecentActivity transactions={transactions} scrollX={scrollX} />
+        {/* 3. Added pt-6 for breathing room below the slider's shadow */}
+        <View className="px-6 pt-6">
+          <RecentActivity transactions={transactions} />
           <PlannedPaymentsCard
             payments={upcoming}
             totalDueThisWeek={totalDueThisWeek}
@@ -94,6 +97,6 @@ export default function HomeScreen() {
           }}
         />
       )}
-    </Animated.View>
+    </View>
   );
 }

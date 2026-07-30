@@ -29,7 +29,7 @@ function ValidationItem({ label, isMet }: { label: string; isMet: boolean }) {
             </View>
 
             {/* The Requirement Text */}
-            <Text className={`font-inter_bold text-sm ${textColor}`}>
+            <Text className={`font-jb_mono_bold text-sm ${textColor}`}>
                 {label}
             </Text>
         </View>

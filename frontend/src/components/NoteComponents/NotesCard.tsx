@@ -3,7 +3,6 @@ import { Feather } from '@expo/vector-icons';
 import { useEffect, useRef } from 'react';
 import { Note } from '../../hooks/useNotes';
 
-// Sub-component to manage animation state for each note independently
 const NoteItem = ({
     note,
     onEditPress,
@@ -32,29 +31,29 @@ const NoteItem = ({
     return (
         <Animated.View
             style={{ opacity: fadeAnim }}
-            className="flex-row items-start py-3 border-t border-white/10"
+            className="flex-row items-center justify-between bg-neutral-900 border-2 border-white p-3.5 mb-3 shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]"
         >
-            {/* Swap the standard dot for a red one when transcribing */}
-            {isTranscribing ? (
-                <View className="w-2 h-2 rounded-full bg-red mt-2 mr-3" />
-            ) : (
-                <View className="w-2 h-2 rounded-full bg-white/60 mt-2 mr-3" />
-            )}
+            <View className="flex-row items-center flex-1 mr-3 gap-x-2.5">
+                {isTranscribing ? (
+                    <View className="w-3 h-3 rounded-full bg-red-500 border border-white" />
+                ) : (
+                    <View className="w-2.5 h-2.5 rounded-full bg-white" />
+                )}
 
-            <Text className="flex-1 font-inter_medium text-lg text-white pr-2">
-                {note.content}
-            </Text>
+                <Text className="flex-1 font-jb_mono text-sm text-white">
+                    {note.content}
+                </Text>
+            </View>
 
-            {/* Hide interaction buttons so they can't be pressed during upload */}
             {!isTranscribing && (
-                <>
-                    <TouchableOpacity onPress={() => onEditPress(note)} hitSlop={8} className="ml-2">
-                        <Feather name="edit-2" size={14} color="white" style={{ opacity: 0.6 }} />
+                <View className="flex-row items-center gap-x-3">
+                    <TouchableOpacity onPress={() => onEditPress(note)} hitSlop={8}>
+                        <Feather name="edit-2" size={14} color="white" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => onDeletePress(note)} hitSlop={8} className="ml-3">
-                        <Feather name="trash-2" size={14} color="white" style={{ opacity: 0.6 }} />
+                    <TouchableOpacity onPress={() => onDeletePress(note)} hitSlop={8}>
+                        <Feather name="trash-2" size={14} color="white" />
                     </TouchableOpacity>
-                </>
+                </View>
             )}
         </Animated.View>
     );
@@ -69,17 +68,30 @@ type Props = {
 
 export default function NotesCard({ notes, onAddPress, onEditPress, onDeletePress }: Props) {
     return (
-        <View className="mt-2">
-            <View className="bg-black rounded-3xl p-5 mb-8">
-                <View className="flex-row justify-between items-center mb-4">
-                    <Text className="font-inter_bold text-lg text-white">Notes</Text>
-                    <Text className="font-inter_medium text-xs text-white/60">
-                        {notes.length} {notes.length === 1 ? 'note' : 'notes'}
+        <View className="mt-6 mb-4">
+            {/* Category Header */}
+            <Text className="font-jb_mono_bold text-xs uppercase tracking-wider text-neutral-500 mb-3">
+                NOTES
+            </Text>
+
+            {/* Main Black Neo-Brutalist Card */}
+            <View className="bg-black border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+
+                {/* Header Row */}
+                <View className="flex-row justify-between items-center mb-4 pb-3 border-b-2 border-white/20">
+                    <Text className="font-jb_mono_bold text-sm text-white uppercase">
+                        Active Notes
+                    </Text>
+                    <Text className="font-jb_mono_bold text-xs text-neutral-400">
+                        {notes.length} {notes.length === 1 ? 'NOTE' : 'NOTES'}
                     </Text>
                 </View>
 
+                {/* Items List */}
                 {notes.length === 0 ? (
-                    <Text className="text-white/60 font-inter_medium text-center py-4">No notes yet.</Text>
+                    <Text className="font-jb_mono text-xs text-neutral-400 text-center py-4">
+                        No notes yet.
+                    </Text>
                 ) : (
                     notes.map((note) => (
                         <NoteItem
@@ -91,9 +103,16 @@ export default function NotesCard({ notes, onAddPress, onEditPress, onDeletePres
                     ))
                 )}
 
-                <TouchableOpacity onPress={onAddPress} className="mt-4 bg-white py-3 rounded-full items-center">
-                    <Text className="text-black font-inter_bold text-md">Add Note</Text>
+                {/* Add Note Action */}
+                <TouchableOpacity
+                    onPress={onAddPress}
+                    className="mt-2 bg-white border-2 border-white p-3 items-center justify-center shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]"
+                >
+                    <Text className="font-jb_mono_bold text-xs text-black uppercase">
+                        + Add Note
+                    </Text>
                 </TouchableOpacity>
+
             </View>
         </View>
     );

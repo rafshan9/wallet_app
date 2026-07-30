@@ -60,7 +60,7 @@ export default function ResetPasswordScreen() {
                     value={newPassword}
                     autoCapitalize="none"
                     onChangeText={setNewPassword}
-                    className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                    className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-jb_mono_medium text-lg placeholder:text-gray-400"
                 />
                 <TouchableOpacity
                     className="absolute right-4 top-5 z-10"
@@ -79,7 +79,7 @@ export default function ResetPasswordScreen() {
                     value={confirmPassword}
                     autoCapitalize="none"
                     onChangeText={setConfirmPassword}
-                    className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-inter_medium text-lg placeholder:text-gray-400"
+                    className="bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 border-black font-jb_mono_medium text-lg placeholder:text-gray-400"
                 />
                 <TouchableOpacity
                     className="absolute right-4 top-5 z-10"
@@ -97,7 +97,7 @@ export default function ResetPasswordScreen() {
             >
                 <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
                 <View className="bg-yellow py-4 px-16 border-2 border-black items-center">
-                    <Text className="font-inter_bold text-black text-xl">{isLoading ? 'Resetting...' : 'Reset Password'}</Text>
+                    <Text className="font-jb_mono_bold text-black text-xl">{isLoading ? 'Resetting...' : 'Reset Password'}</Text>
                 </View>
             </TouchableOpacity>
         </View>

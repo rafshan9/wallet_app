@@ -32,12 +32,12 @@ export default function AllPlannedPaymentsScreen() {
                 >
                     <Feather name="arrow-left" size={24} color="black" />
                 </TouchableOpacity>
-                <Text className="text-2xl font-inter_bold mx-4 text-white">All Payments</Text>
+                <Text className="text-2xl font-jb_mono_bold mx-4 text-white">All Payments</Text>
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
                 {upcoming.length === 0 ? (
-                    <Text className="text-gray-400 font-inter_medium text-center py-8">Nothing scheduled.</Text>
+                    <Text className="text-gray-400 font-jb_mono_medium text-center py-8">Nothing scheduled.</Text>
                 ) : (
                     upcoming.map((payment) => {
                         const style = CATEGORY_STYLES[payment.category as PaymentCategory] ?? CATEGORY_STYLES.other;
@@ -59,8 +59,8 @@ export default function AllPlannedPaymentsScreen() {
                                     </Text>
                                 </View>
                                 <View className="items-end">
-                                    <Text className="font-inter_bold text-sm">${payment.amount.toLocaleString()}</Text>
-                                    <Text className={`font-inter_medium text-[10px] ${status.color}`}>{status.label}</Text>
+                                    <Text className="font-jb_mono_bold text-sm">${payment.amount.toLocaleString()}</Text>
+                                    <Text className={`font-jb_mono_medium text-[10px] ${status.color}`}>{status.label}</Text>
                                 </View>
                             </TouchableOpacity>
                         );

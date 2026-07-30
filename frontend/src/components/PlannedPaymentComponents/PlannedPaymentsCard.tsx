@@ -1,22 +1,13 @@
-// components/PlannedPaymentsCard.tsx
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { PlannedPayment } from '../../hooks/usePlannedPayments';
 
-const CATEGORY_STYLES: Record<string, { icon: keyof typeof Feather.glyphMap; bg: string }> = {
-    housing: { icon: 'home', bg: 'bg-black' },
-    subscription: { icon: 'tv', bg: 'bg-black' },
-    utility: { icon: 'zap', bg: 'bg-black' },
-    insurance: { icon: 'shield', bg: 'bg-black' },
-    transport: { icon: 'truck', bg: 'bg-black' },
-    other: { icon: 'credit-card', bg: 'bg-black' },
-};
-
-function getStatus(dueDate: string) {
-    const days = Math.ceil((new Date(dueDate).getTime() - Date.now()) / (1000 * 3600 * 24));
-    if (days < 0) return { label: 'Overdue', color: 'text-red-500' };
-    if (days <= 3) return { label: 'Due soon', color: 'text-maroon/50' };
-    return { label: 'Upcoming', color: 'text-gray-400' };
+function checkIsDueThisWeek(dueDate: string) {
+    const today = new Date();
+    const due = new Date(dueDate);
+    const diffTime = due.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24));
+    return diffDays >= 0 && diffDays <= 7;
 }
 
 type Props = {
@@ -27,67 +18,95 @@ type Props = {
     onViewAll: () => void;
 };
 
-export default function PlannedPaymentsCard({ payments, totalDueThisWeek, onPressPayment, onAddPress, onViewAll }: Props) {
+export default function PlannedPaymentsCard({
+    payments,
+    totalDueThisWeek,
+    onPressPayment,
+    onAddPress,
+    onViewAll
+}: Props) {
     const visible = payments.slice(0, 4);
-    const remaining = payments.length - visible.length;
 
     return (
         <View className="mt-6 mb-4">
-            <View className="bg-white rounded-3xl p-5 mb-8 border-black border-dashed">
-                <TouchableOpacity
-                    onPress={onViewAll}
-                    className="flex-row justify-between items-center mb-4"
-                >
-                    <View className="flex-row items-center">
-                        <Text className="font-alfa text-2xl text-black">
-                            ${totalDueThisWeek.toLocaleString()} due this week
+            {/* Header */}
+            <Text className="font-jb_mono_bold text-xs uppercase tracking-wider text-neutral-500 mb-3">
+                PLANNED PAYMENTS
+            </Text>
+
+            {/* Main Outer Neo-Brutalist Card */}
+            <View className="bg-white border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+
+                {/* Total Summary Row */}
+                {totalDueThisWeek > 0 && (
+                    <View className="mb-4 pb-3 border-b-2 border-black flex-row justify-between items-center">
+                        <Text className="font-jb_mono_bold text-sm text-black">
+                            Due This Week
+                        </Text>
+                        <Text className="font-jb_mono_bold text-base text-black">
+                            ${totalDueThisWeek.toLocaleString()}
                         </Text>
                     </View>
-                </TouchableOpacity>
-
-                {visible.length === 0 ? (
-                    <Text className="text-gray-400 font-inter_medium text-center py-4">Nothing scheduled.</Text>
-                ) : (
-                    visible.map((payment) => {
-                        const style = CATEGORY_STYLES[payment.category] ?? CATEGORY_STYLES.other;
-                        const status = getStatus(payment.dueDate);
-                        return (
-                            <TouchableOpacity
-                                key={payment.id}
-                                onPress={() => onPressPayment(payment.id)}
-                                className="flex-row items-center py-3 border-t border-black/5"
-                            >
-                                <View className={`w-10 h-10 rounded-full ${style.bg} items-center justify-center mr-3`}>
-                                    <Feather name={style.icon} size={16} color="white" />
-                                </View>
-                                <View className="flex-1">
-                                    <Text className="font-inter_black text-xl">{payment.name}</Text>
-                                    <Text className="font-inter_regular text-xs text-gray-400">
-                                        {payment.isRecurring ? `${payment.frequency} · ` : ''}
-                                        {new Date(payment.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                                    </Text>
-                                </View>
-                                <View className="items-end">
-                                    <Text className="font-inter_black text-sm">${payment.amount.toLocaleString()}</Text>
-                                    <Text className={`font-inter_medium text-[10px] ${status.color}`}>{status.label}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        );
-                    })
                 )}
 
-                {remaining > 0 && (
-                    <TouchableOpacity onPress={onViewAll} className="flex-row items-center justify-center py-2">
-                        <Text className="font-inter_medium text-xs text-gray-400">
-                            +{remaining} more
+                {/* Items Container */}
+                <View className="flex-col gap-y-3">
+                    {visible.length === 0 ? (
+                        <Text className="font-jb_mono text-xs text-neutral-400 text-center py-2">
+                            No scheduled payments.
                         </Text>
-                        <Feather name="chevron-right" size={12} color="#9CA3AF" style={{ marginLeft: 2 }} />
-                    </TouchableOpacity>
-                )}
+                    ) : (
+                        visible.map((payment) => {
+                            const isDueThisWeek = checkIsDueThisWeek(payment.dueDate);
+                            const cardBg = isDueThisWeek ? 'bg-[#F4C753]' : 'bg-white';
 
-                <TouchableOpacity onPress={onAddPress} className="mt-4 bg-black py-3 rounded-full items-center">
-                    <Text className="text-white p-2 font-inter_bold text-md">Add Payment</Text>
-                </TouchableOpacity>
+                            return (
+                                <TouchableOpacity
+                                    key={payment.id}
+                                    onPress={() => onPressPayment(payment.id)}
+                                    className={`flex-row items-center justify-between border-2 border-black p-3.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${cardBg}`}
+                                >
+                                    <View className="flex-row items-center gap-x-2">
+                                        {isDueThisWeek && (
+                                            <Feather name="alert-triangle" size={14} color="black" />
+                                        )}
+                                        <Text className="font-jb_mono_bold text-sm text-black">
+                                            {isDueThisWeek ? 'Due this week' : payment.name}
+                                        </Text>
+                                    </View>
+
+                                    <Text className="font-jb_mono_bold text-sm text-black">
+                                        ${payment.amount.toLocaleString()} {isDueThisWeek ? payment.name : ''}
+                                    </Text>
+                                </TouchableOpacity>
+                            );
+                        })
+                    )}
+                </View>
+
+                {/* Actions */}
+                <View className="mt-4 flex-row gap-x-3">
+                    <TouchableOpacity
+                        onPress={onAddPress}
+                        className="flex-1 bg-black p-3 items-center justify-center"
+                    >
+                        <Text className="font-jb_mono_bold text-xs text-white uppercase">
+                            + Add Payment
+                        </Text>
+                    </TouchableOpacity>
+
+                    {payments.length > 4 && (
+                        <TouchableOpacity
+                            onPress={onViewAll}
+                            className="bg-white border-2 border-black px-4 py-3 items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                        >
+                            <Text className="font-jb_mono_bold text-xs text-black uppercase">
+                                View All
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
+
             </View>
         </View>
     );

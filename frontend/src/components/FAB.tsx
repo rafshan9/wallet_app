@@ -56,7 +56,7 @@ export default function FAB() {
         <View className="items-center justify-end relative z-50">
             <Animated.View className="absolute items-center justify-center" style={item2Style}>
                 <View className="absolute right-[68px] bg-yellow py-2 rounded-full w-36 items-center justify-center">
-                    <Text className="text-black font-inter_bold text-sm">Add Transaction</Text>
+                    <Text className="text-black font-jb_mono_bold text-sm">Add Transaction</Text>
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.8}
@@ -66,13 +66,13 @@ export default function FAB() {
                     }}
                     className="h-14 w-14 bg-yellow rounded-full justify-center items-center shadow-xl"
                 >
-                    <PlusIcon width={24} height={24} />
+                    <Text className="text-black font-jb_mono_bold text-4xl">+</Text>
                 </TouchableOpacity>
             </Animated.View>
 
             <Animated.View className="absolute items-center justify-center" style={item1Style}>
                 <View className="absolute right-[68px] bg-dark_blue py-2 rounded-full w-20 items-center justify-center">
-                    <Text className="text-white font-inter_bold text-sm">Notes</Text>
+                    <Text className="text-white font-jb_mono_bold text-sm">Notes</Text>
                 </View>
                 <TouchableOpacity
                     activeOpacity={0.8}
@@ -82,7 +82,7 @@ export default function FAB() {
                     }}
                     className="h-14 w-14 bg-dark_blue rounded-full justify-center items-center shadow-xl"
                 >
-                    <PlusIcon width={24} height={24} />
+                    <Text className="text-black font-jb_mono_bold text-4xl">+</Text>
                 </TouchableOpacity>
             </Animated.View>
 
@@ -92,7 +92,7 @@ export default function FAB() {
                 className="h-14 w-14 bg-white rounded-full justify-center items-center z-50 shadow-xl"
             >
                 <Animated.View style={{ transform: [{ rotate: rotation }] }}>
-                    <PlusIcon width={24} height={24} />
+                    <Text className="text-black font-jb_mono_bold text-4xl">+</Text>
                 </Animated.View>
             </TouchableOpacity>
 

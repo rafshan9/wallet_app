@@ -38,37 +38,39 @@ export default function TopBar() {
     };
 
     return (
-        <View className="px-6 pb-2 mb-2">
-            <View className="flex-row items-center bg-white rounded-full border-[2px] border-black px-5 h-14" style={{ position: 'relative' }}>
+        <View className="w-full">
+            <View className="flex-row items-center bg-white border-b-2 border-t-2 border-black px-4 h-14" style={{ position: 'relative' }}>
                 {/* Left column — flex:1, pill pinned to the start, mirrors the right column exactly */}
                 <View className="flex-1 items-start">
                     <TouchableOpacity
                         activeOpacity={isHome ? 1 : 0.8}
                         disabled={isHome}
                         onPress={() => router.back()}
-                        className="bg-yellow rounded-3xl border-[1px] border-yellow"
+                        className="bg-yellow  border-2 border-black"
                         style={{ width: PILL_WIDTH, height: PILL_HEIGHT, overflow: 'hidden' }}
                     >
                         <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }, spendsStyle]}>
-                            <Text className="font-inter_black text-sm">SPENDS</Text>
+                            <Text className="font-alfa text-sm text-black uppercase">SPENDS</Text>
                         </Animated.View>
 
                         <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }, backStyle]}>
                             <Feather name="chevron-left" size={16} color="black" />
-                            <Text className="font-inter_black text-sm  ml-1">BACK</Text>
+                            <Text className="font-jb_mono_bold text-sm ml-1 text-black uppercase">BACK</Text>
                         </Animated.View>
                     </TouchableOpacity>
                 </View>
 
                 {/* Middle: absolutely centered on the whole bar */}
                 <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, alignItems: 'center' }}>
-                    <Text className={`font-inter_black ${isHome ? 'text-lg' : 'text-md'}`}>{title}</Text>
+                    <Text className={`font-jb_mono_bold text-black ${isHome ? 'text-lg' : 'text-md'}`}>
+                        {title}
+                    </Text>
                 </View>
 
                 {/* Right column — flex:1, pill pinned to the end, mirrors the left column */}
                 <View className="flex-1 items-end">
                     <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/profile')}>
-                        <Text className="px-4 py-1 font-inter_bold text-sm">Profile</Text>
+                        <Text className="px-2 py-1 font-jb_mono_bold text-sm text-black">Profile</Text>
                     </TouchableOpacity>
                 </View>
             </View>

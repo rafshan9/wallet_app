@@ -82,14 +82,14 @@ export default function SignUpScreen() {
                     autoCapitalize="words"
                     value={firstName}
                     onChangeText={setFirstName}
-                    className={`flex-1 bg-white px-6 py-4 rounded-2xl border-2 ${errorFields.includes('firstName') ? 'border-red' : 'border-black'} font-inter_medium text-lg placeholder:text-gray-400`}
+                    className={`flex-1 bg-white px-6 py-4 rounded-2xl border-2 ${errorFields.includes('firstName') ? 'border-red' : 'border-black'} font-jb_mono_medium text-lg placeholder:text-gray-400`}
                 />
                 <TextInput
                     placeholder="Last Name"
                     autoCapitalize="words"
                     value={lastName}
                     onChangeText={setLastName}
-                    className={`flex-1 bg-white px-6 py-4 rounded-2xl border-2 ${errorFields.includes('lastName') ? 'border-red' : 'border-black'} font-inter_medium text-lg placeholder:text-gray-400`}
+                    className={`flex-1 bg-white px-6 py-4 rounded-2xl border-2 ${errorFields.includes('lastName') ? 'border-red' : 'border-black'} font-jb_mono_medium text-lg placeholder:text-gray-400`}
                 />
             </View>
 
@@ -98,7 +98,7 @@ export default function SignUpScreen() {
                 autoCapitalize="none"
                 value={username}
                 onChangeText={setUsername}
-                className={`bg-white px-6 py-4 rounded-2xl border-2 ${errorFields.includes('username') ? 'border-red' : 'border-black'} font-inter_medium text-lg mb-4 placeholder:text-gray-400`}
+                className={`bg-white px-6 py-4 rounded-2xl border-2 ${errorFields.includes('username') ? 'border-red' : 'border-black'} font-jb_mono_medium text-lg mb-4 placeholder:text-gray-400`}
             />
             <TextInput
                 placeholder="Email"
@@ -106,7 +106,7 @@ export default function SignUpScreen() {
                 autoCapitalize="none"
                 value={email}
                 onChangeText={setEmail}
-                className={`bg-white px-6 py-4 rounded-2xl border-2 ${errorFields.includes('email') ? 'border-red' : 'border-black'} font-inter_medium text-lg mb-4 placeholder:text-gray-400`}
+                className={`bg-white px-6 py-4 rounded-2xl border-2 ${errorFields.includes('email') ? 'border-red' : 'border-black'} font-jb_mono_medium text-lg mb-4 placeholder:text-gray-400`}
             />
             <View className="relative mb-4">
                 <TextInput
@@ -115,7 +115,7 @@ export default function SignUpScreen() {
                     value={password}
                     autoCapitalize='none'
                     onChangeText={setPassword}
-                    className={`bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 ${errorFields.includes('password') ? 'border-red' : 'border-black'} font-inter_medium text-lg placeholder:text-gray-400`}
+                    className={`bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 ${errorFields.includes('password') ? 'border-red' : 'border-black'} font-jb_mono_medium text-lg placeholder:text-gray-400`}
                 />
                 <TouchableOpacity
                     className="absolute right-4 top-5 z-10"
@@ -134,7 +134,7 @@ export default function SignUpScreen() {
                     value={confirmPassword}
                     autoCapitalize="none"
                     onChangeText={setConfirmPassword}
-                    className={`bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 ${errorFields.includes('password') ? 'border-red-500' : 'border-black'} font-inter_medium text-lg placeholder:text-gray-400`}
+                    className={`bg-white text-black px-6 py-4 pr-14 rounded-2xl border-2 ${errorFields.includes('password') ? 'border-red-500' : 'border-black'} font-jb_mono_medium text-lg placeholder:text-gray-400`}
                 />
                 <TouchableOpacity
                     className="absolute right-4 top-5 z-10"
@@ -151,15 +151,15 @@ export default function SignUpScreen() {
             >
                 <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
                 <View className="bg-very_dark_blue py-4 px-16 border-2 border-black items-center">
-                    <Text className="font-inter_bold text-white text-xl">Sign Up</Text>
+                    <Text className="font-jb_mono_bold text-white text-xl">Sign Up</Text>
                 </View>
             </TouchableOpacity>
 
             <GoogleAuthButton onPress={handleGoogleAuth} />
 
             <TouchableOpacity onPress={() => router.push('/login')}>
-                <Text className="text-center font-inter_medium text-white">
-                    Already have an account? <Text className="text-white font-inter_bold underline">Login</Text>
+                <Text className="text-center font-jb_mono_medium text-white">
+                    Already have an account? <Text className="text-white font-jb_mono_bold underline">Login</Text>
                 </Text>
             </TouchableOpacity>
         </View>
