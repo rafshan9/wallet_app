@@ -40,7 +40,7 @@ export function AlertModalProvider({ children }: { children: ReactNode }) {
             {children}
             <Modal visible={visible} transparent animationType="fade" onRequestClose={() => setVisible(false)}>
                 <View className="flex-1 items-center justify-center bg-black/40 px-8">
-                    <View className="bg-yellow rounded-3xl border-2 border-black border-dashed p-6 w-full max-w-sm">
+                    <View className="bg-background rounded-3xl border-2 border-black border-dashed p-6 w-full max-w-sm">
                         <Text className="font-jb_mono_bold text-lg text-center mb-2">{options?.title}</Text>
                         {options?.message && (
                             <Text className="font-inter_regular text-sm text-center mb-6">

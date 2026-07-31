@@ -38,10 +38,10 @@ export default function MonthYearPickerModal({
     return (
         <Modal transparent visible={visible} animationType="slide">
             <View className="flex-1 justify-end bg-black/60">
-                <View className="bg-very_dark_blue rounded-t-3xl p-6 pb-10">
+                <View className="bg-background rounded-t-3xl p-6 pb-10">
                     {/* Header */}
                     <View className="flex-row justify-between items-center mb-6">
-                        <Text className="text-xl font-jb_mono_medium text-white">Select Month</Text>
+                        <Text className="text-xl font-jb_mono_medium text-black">Select Month</Text>
                         <TouchableOpacity
                             className='bg-yellow rounded-full p-2 border-2 border-black'
                             onPress={onClose}><Feather name="x" size={24} color="black" /></TouchableOpacity>
@@ -64,13 +64,13 @@ export default function MonthYearPickerModal({
                             const isSelected = month === m;
                             const hasData = monthsWithData.has(m);
                             const bg = isSelected ? 'bg-yellow' : hasData ? 'bg-teal' : 'bg-white';
-                            const textColor = isSelected || hasData ? 'text-black' : 'text-gray-400';
+                            const textColor = isSelected || hasData ? 'text-black' : 'text-gray-500';
 
                             return (
                                 <TouchableOpacity
                                     key={m}
                                     onPress={() => setMonth(m)}
-                                    className={`w-[30%] py-3 mb-4 rounded-xl items-center shadow-sm ${bg}`}
+                                    className={`w-[30%] py-3 mb-4 rounded-xl border border-2 border-black items-center shadow-sm ${bg}`}
                                 >
                                     <Text className={`font-jb_mono_medium ${textColor}`}>{m}</Text>
                                 </TouchableOpacity>

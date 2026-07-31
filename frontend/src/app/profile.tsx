@@ -52,88 +52,73 @@ export default function ProfileScreen() {
         });
     };
     return (
-        <ScrollView className="flex-1 bg-dark_blue pt-16 px-6">
+        <ScrollView className="flex-1 bg-[#F4F4F0] pt-16 px-6">
 
             {/* Top Bar with Back Button */}
             <View className="flex-row items-center mb-8">
                 <TouchableOpacity
                     onPress={() => router.back()}
-                    className="w-12 h-12 bg-yellow border-2 border-black rounded-full items-center justify-center shadow-sm"
+                    className="w-12 h-12 bg-yellow rounded-full border-2 border-black items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                 >
                     <Feather name="arrow-left" size={24} color="black" />
                 </TouchableOpacity>
-                <Text className="text-2xl font-jb_mono_bold ml-4 text-white">My Profile</Text>
+                <Text className="text-2xl font-jb_mono_bold ml-4 text-black">My Profile</Text>
             </View>
 
             {/* Avatar & User Info */}
             <View className="items-center mb-10">
-                <View className="relative">
+                <View className="relative mb-4">
                     <Image
                         source={{ uri: avatarUri }}
-                        className="w-32 h-32 rounded-full border-4 border-black mb-4 bg-white"
+                        className="w-32 h-32 rounded-full border-4 border-black bg-white"
                     />
-                    <TouchableOpacity className="absolute bottom-4 right-0 bg-white p-2 rounded-full border-2 border-black">
-                        <Feather name="edit-2" size={16} color="black" />
-                    </TouchableOpacity>
                 </View>
                 <Text className="text-3xl font-jb_mono_bold text-black text-center mb-1">{fullName}</Text>
-                <Text className="text-lg font-jb_mono_medium text-white">{email}</Text>
+                <Text className="text-lg font-jb_mono_medium text-black/70">{email}</Text>
             </View>
 
-            {/* Settings Links (Dummy) */}
+            {/* Settings Links */}
             <View className="gap-y-4 mb-8">
                 <TouchableOpacity
-                    className="flex-row items-center justify-between bg-white p-5 rounded-2xl border-2 border-black shadow-sm"
+                    className="flex-row rounded-xl items-center justify-between bg-white p-5 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                     onPress={() => router.push('/account-settings')}
                 >
                     <View className="flex-row items-center">
                         <Feather name="settings" size={24} color="black" />
                         <Text className="ml-4 text-xl font-jb_mono_medium text-black">Account Settings</Text>
                     </View>
-                    <Feather name="chevron-right" size={24} color="gray" />
+                    <Feather name="chevron-right" size={24} color="black" />
                 </TouchableOpacity>
 
-                <TouchableOpacity className="flex-row items-center justify-between bg-white p-5 rounded-2xl border-2 border-black shadow-sm">
+                <TouchableOpacity className="flex-row rounded-xl items-center justify-between bg-white p-5 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <View className="flex-row items-center">
                         <Feather name="bell" size={24} color="black" />
                         <Text className="ml-4 text-xl font-jb_mono_medium text-black">Notifications</Text>
                     </View>
-                    <Feather name="chevron-right" size={24} color="gray" />
+                    <Feather name="chevron-right" size={24} color="black" />
                 </TouchableOpacity>
             </View>
 
             {/* Logout Button */}
             <TouchableOpacity
-                className="relative self-center mb-6"
+                className="flex-row rounded-xl items-center justify-center gap-4 bg-yellow py-4 px-16 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6"
                 onPress={handleLogout}
-                activeOpacity={0.8}
+                activeOpacity={1}
             >
-
-                {/* The Solid Shadow */}
-                <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
-
-                {/* The Button */}
-                <View className="flex-row items-center justify-center gap-4 bg-yellow py-4 px-16 border-2 border-black">
-                    <Feather name="log-out" size={24} color="black" />
-                    <Text className="font-jb_mono_bold text-black text-xl">Log Out</Text>
-                </View>
+                <Feather name="log-out" size={24} color="black" />
+                <Text className="font-jb_mono_bold text-black text-xl">Log Out</Text>
             </TouchableOpacity>
 
             {/* Delete Account Button */}
             <TouchableOpacity
-                className="relative self-center mb-6"
+                className="flex-row rounded-xl items-center justify-center gap-4 bg-background_red py-4 px-16 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-12"
                 onPress={handleDeleteAccount}
-                activeOpacity={0.8}
+                activeOpacity={1}
             >
-                {/* The Solid Shadow */}
-                <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
-
-                {/* The Button */}
-                <View className="flex-row items-center justify-center gap-4 bg-background_red py-4 px-16 border-2 border-black">
-                    <Feather name="trash-2" size={24} color="white" />
-                    <Text className="font-jb_mono_bold text-white text-xl">Delete Account</Text>
-                </View>
+                <Feather name="trash-2" size={24} color="black" />
+                <Text className="font-jb_mono_bold text-black text-xl">Delete Account</Text>
             </TouchableOpacity>
+
         </ScrollView>
     );
 }

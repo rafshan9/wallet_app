@@ -82,7 +82,7 @@ export default function FAB() {
                     }}
                     className="h-14 w-14 bg-dark_blue rounded-full justify-center items-center shadow-xl"
                 >
-                    <Text className="text-black font-jb_mono_bold text-4xl">+</Text>
+                    <Text className="text-white font-jb_mono_bold text-4xl">+</Text>
                 </TouchableOpacity>
             </Animated.View>
 

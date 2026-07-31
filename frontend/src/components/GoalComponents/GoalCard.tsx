@@ -57,18 +57,18 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
         <View className={`${goal.color} border-2 border-black p-5 mb-4`}>
             <View className="flex-row justify-between items-start mb-4">
                 <View className="flex-1 mr-2">
-                    <Text className={` text-lg ${textColor}`}>{goal.name}</Text>
+                    <Text className={` font-jb_mono_bold text-lg ${textColor}`}>{goal.name}</Text>
 
                     {/* Updated Subtitle: Combines deadline date and weekly tracking insight */}
                     {(goal.deadline || deadlineInsight) && (
-                        <Text className={` text-xs mt-1 ${isDark ? 'text-white/70' : 'text-black/60'}`}>
+                        <Text className={`font-jb_mono_medium text-xs mt-1 ${isDark ? 'text-white/70' : 'text-black/60'}`}>
                             {goal.deadline ? `${goal.deadline} ` : ''}
                             {deadlineInsight ? `• ${deadlineInsight}` : ''}
                         </Text>
                     )}
                 </View>
                 <View className="flex-row items-center gap-3">
-                    <Text className={` text-base ${textColor}`}>{percent}%</Text>
+                    <Text className={` font-jb_mono_bold text-base ${textColor}`}>{percent}%</Text>
                     <TouchableOpacity onPress={handleDelete} hitSlop={8}>
                         <Feather name="trash-2" size={16} color={isDark ? 'white' : 'black'} style={{ opacity: 0.5 }} />
                     </TouchableOpacity>
@@ -86,9 +86,9 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
             </View>
 
             <View className="flex-row justify-between items-center">
-                <Text className={`text-sm ${textColor}`}>
+                <Text className={`font-jb_mono_medium text-sm ${textColor}`}>
                     ${goal.savedAmount.toLocaleString()}
-                    <Text className={isDark ? 'text-white/60' : 'text-black/50'}> of ${goal.targetAmount.toLocaleString()}</Text>
+                    <Text className={`font-jb_mono_medium ${isDark ? 'text-white/60' : 'text-black/50'}`}> of ${goal.targetAmount.toLocaleString()}</Text>
                 </Text>
 
                 {/* Hides the action button if the milestone is already reached */}

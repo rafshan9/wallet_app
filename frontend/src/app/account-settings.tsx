@@ -214,7 +214,7 @@ export default function AccountSettingsScreen() {
     );
 
     return (
-        <ScrollView className="flex-1 bg-dark_blue pt-16 px-6" contentContainerStyle={{ paddingBottom: 60 }}>
+        <ScrollView className="flex-1 bg-background pt-16 px-6" contentContainerStyle={{ paddingBottom: 60 }}>
 
             {/* Top Bar */}
             <View className="flex-row items-center mb-8">
@@ -224,11 +224,11 @@ export default function AccountSettingsScreen() {
                 >
                     <Feather name="arrow-left" size={24} color="black" />
                 </TouchableOpacity>
-                <Text className="text-2xl font-jb_mono_bold ml-4 text-white">Account Settings</Text>
+                <Text className="text-2xl font-jb_mono_bold ml-4 text-black">Account Settings</Text>
             </View>
 
             {/* Account Info Section */}
-            <Text className="text-white/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Account</Text>
+            <Text className="text-black/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Account</Text>
             <View className="gap-y-3 mb-8">
                 {/* Name Row */}
                 <SettingsRow
@@ -372,7 +372,7 @@ export default function AccountSettingsScreen() {
             </View>
 
             {/* Security Section */}
-            <Text className="text-white/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Security</Text>
+            <Text className="text-black/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Security</Text>
             <View className="gap-y-3 mb-8">
                 <SettingsRow
                     icon="lock"
@@ -459,7 +459,7 @@ export default function AccountSettingsScreen() {
             </View>
 
             {/* Support Section */}
-            <Text className="text-white/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Support</Text>
+            <Text className="text-black/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Support</Text>
             <View className="gap-y-3 mb-8">
                 <SettingsRow
                     icon="help-circle"
@@ -482,28 +482,24 @@ export default function AccountSettingsScreen() {
             {/* Danger Zone */}
             <Text className="text-red-400/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Danger Zone</Text>
             <View className="gap-y-3 mb-8">
+                {/* Logout Button */}
                 <TouchableOpacity
-                    className="relative self-center mb-2"
+                    className="flex-row rounded-xl items-center justify-center gap-4 bg-yellow py-4 px-16 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6"
                     onPress={handleLogout}
-                    activeOpacity={0.8}
+                    activeOpacity={1}
                 >
-                    <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
-                    <View className="flex-row items-center justify-center gap-4 bg-yellow py-4 px-16 border-2 border-black">
-                        <Feather name="log-out" size={22} color="black" />
-                        <Text className="font-jb_mono_bold text-black text-lg">Log Out</Text>
-                    </View>
+                    <Feather name="log-out" size={24} color="black" />
+                    <Text className="font-jb_mono_bold text-black text-xl">Log Out</Text>
                 </TouchableOpacity>
 
+                {/* Delete Account Button */}
                 <TouchableOpacity
-                    className="relative self-center"
+                    className="flex-row rounded-xl items-center justify-center gap-4 bg-background_red py-4 px-16 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-12"
                     onPress={handleDeleteAccount}
-                    activeOpacity={0.8}
+                    activeOpacity={1}
                 >
-                    <View className="absolute top-1.5 left-1.5 right-[-6px] bottom-[-6px] bg-black" />
-                    <View className="flex-row items-center justify-center gap-4 bg-background_red py-4 px-16 border-2 border-black">
-                        <Feather name="trash-2" size={22} color="white" />
-                        <Text className="font-jb_mono_bold text-white text-lg">Delete Account</Text>
-                    </View>
+                    <Feather name="trash-2" size={24} color="black" />
+                    <Text className="font-jb_mono_bold text-black text-xl">Delete Account</Text>
                 </TouchableOpacity>
             </View>
 

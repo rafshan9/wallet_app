@@ -10,9 +10,10 @@ import { usePlannedPayments } from '../../hooks/usePlannedPayments';
 import { useAlert } from '../../components/AlertModal';
 import { useNotes, Note } from '../../hooks/useNotes';
 import { useAppStore } from '../../store';
-import { CARD_BACKGROUND_COLORS } from '../../constants/cardColors';
+import { CARD_BACKGROUND_COLORS, CARD_TEXT_COLORS } from '../../constants/cardColors';
 import RecentActivity from '../../components/HomeScreenComponents/RecentActivity'
 import { useCashFlow } from '../../hooks/useCashFlow';
+
 
 
 export default function HomeScreen() {
@@ -24,6 +25,7 @@ export default function HomeScreen() {
   const { notes, deleteNote } = useNotes();
   const { openNoteModal } = useAppStore();
   const showAlert = useAlert();
+
 
   useFocusEffect(
     useCallback(() => {
@@ -53,12 +55,15 @@ export default function HomeScreen() {
     inputRange,
     outputRange: CARD_BACKGROUND_COLORS,
   });
+  const animatedHeroTextColor = scrollX.interpolate({
+    inputRange,
+    outputRange: CARD_TEXT_COLORS,
+  });
 
   return (
     <View className="flex-1 relative bg-background">
-      {/* 1. Keep the TopBar dynamic so it blends perfectly with the slider below it */}
-      <Animated.View className="bg-background" style={{ paddingTop: 32 }}>
-        <TopBar />
+      <Animated.View style={{ paddingTop: 48, backgroundColor: animatedHeroColor }}>
+        <TopBar textColor={animatedHeroTextColor} />
       </Animated.View>
 
       <ScrollView
@@ -68,9 +73,7 @@ export default function HomeScreen() {
       >
         {/* 2. CardSlider handles its own dynamic background color now */}
         <CardSlider scrollX={scrollX} />
-
-        {/* 3. Added pt-6 for breathing room below the slider's shadow */}
-        <View className="px-6 pt-6">
+        <View className="px-6 pt-2">
           <RecentActivity transactions={transactions} />
           <PlannedPaymentsCard
             payments={upcoming}

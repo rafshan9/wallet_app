@@ -11,7 +11,11 @@ const PAGE_TITLES: Record<string, string> = {
 const PILL_WIDTH = 88;
 const PILL_HEIGHT = 34;
 
-export default function TopBar() {
+type TopBarProps = {
+    textColor?: Animated.AnimatedInterpolation<string> | string;
+};
+
+export default function TopBar({ textColor = '#000' }: TopBarProps) {
     const router = useRouter();
     const pathname = usePathname();
     const title = PAGE_TITLES[pathname] ?? 'Home';
@@ -39,14 +43,14 @@ export default function TopBar() {
 
     return (
         <View className="w-full">
-            <View className="flex-row items-center bg-white border-b-2 border-t-2 border-black px-4 h-14" style={{ position: 'relative' }}>
+            <View className="flex-row items-center px-4 h-14" style={{ position: 'relative' }}>
                 {/* Left column — flex:1, pill pinned to the start, mirrors the right column exactly */}
                 <View className="flex-1 items-start">
                     <TouchableOpacity
                         activeOpacity={isHome ? 1 : 0.8}
                         disabled={isHome}
                         onPress={() => router.back()}
-                        className="bg-yellow  border-2 border-black"
+                        className="bg-yellow rounded-xl  border-2 border-black"
                         style={{ width: PILL_WIDTH, height: PILL_HEIGHT, overflow: 'hidden' }}
                     >
                         <Animated.View style={[{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }, spendsStyle]}>
@@ -60,17 +64,20 @@ export default function TopBar() {
                     </TouchableOpacity>
                 </View>
 
-                {/* Middle: absolutely centered on the whole bar */}
                 <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, alignItems: 'center' }}>
-                    <Text className={`font-jb_mono_bold text-black ${isHome ? 'text-lg' : 'text-md'}`}>
+                    <Animated.Text
+                        className={`font-jb_mono_bold ${isHome ? 'text-lg' : 'text-md'}`}
+                        style={{ color: textColor }}
+                    >
                         {title}
-                    </Text>
+                    </Animated.Text>
                 </View>
 
-                {/* Right column — flex:1, pill pinned to the end, mirrors the left column */}
                 <View className="flex-1 items-end">
                     <TouchableOpacity activeOpacity={0.8} onPress={() => router.push('/profile')}>
-                        <Text className="px-2 py-1 font-jb_mono_bold text-sm text-black">Profile</Text>
+                        <Animated.Text className="px-2 py-1 font-jb_mono_bold text-sm" style={{ color: textColor }}>
+                            Profile
+                        </Animated.Text>
                     </TouchableOpacity>
                 </View>
             </View>
