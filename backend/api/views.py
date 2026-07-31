@@ -1,4 +1,4 @@
-from backend.api import models
+from api import models
 from django.contrib.auth.models import User
 from rest_framework import generics, viewsets, permissions, status
 from rest_framework.decorators import action
