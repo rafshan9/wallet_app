@@ -21,7 +21,7 @@ export default function HomeScreen() {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const scrollX = useRef(new Animated.Value(0)).current;
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { upcoming, totalDueThisWeek, fetchPayments } = usePlannedPayments();
+  const { upcoming, totalPlanned, fetchPayments } = usePlannedPayments();
   const { notes, deleteNote } = useNotes();
   const { openNoteModal } = useAppStore();
   const showAlert = useAlert();
@@ -35,7 +35,6 @@ export default function HomeScreen() {
 
   const handlePressPayment = (id: string) => router.push(`/planned-payment/${id}`);
   const handleAddPress = () => setIsAddModalOpen(true);
-  const handleViewAll = () => router.push('/planned-payment');
   const { transactions } = useCashFlow();
   const handleAddNotePress = () => openNoteModal();
   const handleEditNotePress = (note: Note) => openNoteModal(note);
@@ -79,10 +78,9 @@ export default function HomeScreen() {
           <RecentActivity transactions={transactions} />
           <PlannedPaymentsCard
             payments={upcoming}
-            totalDueThisWeek={totalDueThisWeek}
+            totalPlanned={totalPlanned}
             onPressPayment={handlePressPayment}
             onAddPress={handleAddPress}
-            onViewAll={handleViewAll}
           />
           <NotesCard
             notes={notes}

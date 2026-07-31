@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { PlannedPayment } from '../../hooks/usePlannedPayments';
+import { useState } from 'react';
 
 function checkIsDueThisWeek(dueDate: string) {
     const today = new Date();
@@ -12,20 +13,19 @@ function checkIsDueThisWeek(dueDate: string) {
 
 type Props = {
     payments: PlannedPayment[];
-    totalDueThisWeek: number;
+    totalPlanned: number;
     onPressPayment: (id: string) => void;
     onAddPress: () => void;
-    onViewAll: () => void;
 };
 
 export default function PlannedPaymentsCard({
     payments,
-    totalDueThisWeek,
+    totalPlanned,
     onPressPayment,
     onAddPress,
-    onViewAll
 }: Props) {
-    const visible = payments.slice(0, 4);
+    const [expanded, setExpanded] = useState(false);
+    const visible = expanded ? payments : payments.slice(0, 7);
 
     return (
         <View className="mt-6 mb-4">
@@ -36,9 +36,19 @@ export default function PlannedPaymentsCard({
 
             {/* Main Outer Neo-Brutalist Card */}
             <View className="bg-white border-2 border-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                {payments.length > 0 && (
+                    <View className="mb-4 pb-3 border-b-2 border-black flex-row justify-between items-center">
+                        <Text className="font-jb_mono_bold text-sm text-black">
+                            Total Planned
+                        </Text>
+                        <Text className="font-jb_mono_bold text-base text-black">
+                            ${totalPlanned.toLocaleString()}
+                        </Text>
+                    </View>
+                )}
 
                 {/* Total Summary Row */}
-                {totalDueThisWeek > 0 && (
+                {/* {totalDueThisWeek > 0 && (
                     <View className="mb-4 pb-3 border-b-2 border-black flex-row justify-between items-center">
                         <Text className="font-jb_mono_bold text-sm text-black">
                             Due This Week
@@ -47,7 +57,7 @@ export default function PlannedPaymentsCard({
                             ${totalDueThisWeek.toLocaleString()}
                         </Text>
                     </View>
-                )}
+                )} */}
 
                 {/* Items Container */}
                 <View className="flex-col gap-y-3">
@@ -95,14 +105,15 @@ export default function PlannedPaymentsCard({
                         </Text>
                     </TouchableOpacity>
 
-                    {payments.length > 4 && (
+                    {payments.length > 7 && (
                         <TouchableOpacity
-                            onPress={onViewAll}
-                            className="bg-white border-2 border-black px-4 py-3 items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                            onPress={() => setExpanded((prev) => !prev)}
+                            className="bg-white border-2 border-black px-4 py-3 flex-row items-center justify-center gap-x-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                         >
                             <Text className="font-jb_mono_bold text-xs text-black uppercase">
-                                View All
+                                {expanded ? 'Show Less' : 'View All'}
                             </Text>
+                            <Feather name={expanded ? 'chevron-up' : 'chevron-down'} size={14} color="black" />
                         </TouchableOpacity>
                     )}
                 </View>

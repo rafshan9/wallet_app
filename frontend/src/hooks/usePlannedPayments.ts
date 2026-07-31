@@ -46,9 +46,11 @@ export function usePlannedPayments() {
         .filter((p) => !p.isPaid)
         .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
 
-    const totalDueThisWeek = upcoming
-        .filter((p) => (new Date(p.dueDate).getTime() - Date.now()) / (1000 * 3600 * 24) <= 7)
-        .reduce((sum, p) => sum + p.amount, 0);
+    // const totalDueThisWeek = upcoming
+    //     .filter((p) => (new Date(p.dueDate).getTime() - Date.now()) / (1000 * 3600 * 24) <= 7)
+    //     .reduce((sum, p) => sum + p.amount, 0);
+
+    const totalPlanned = upcoming.reduce((sum, p) => sum + p.amount, 0);
 
     return {
         payments,
@@ -57,6 +59,6 @@ export function usePlannedPayments() {
         fetchPayments: refetch,
         markPaid: markPaidMutation.mutateAsync,
         deletePayment: deleteMutation.mutateAsync,
-        totalDueThisWeek
+        totalPlanned,
     };
 }
