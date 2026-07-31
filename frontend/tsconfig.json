@@ -17,6 +17,7 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "nativewind-env.d.ts",
-    "src/components/CashFlowComponents"
+    "src/components/CashFlowComponents",
+    "types/**/*.d.ts"
   ]
 }

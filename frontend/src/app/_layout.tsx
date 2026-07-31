@@ -12,7 +12,8 @@ import api from '../../utils/axios';
 import { useAppStore } from '../../src/store';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-
+import { Buffer } from 'buffer';
+global.Buffer = global.Buffer || Buffer;
 
 
 SplashScreen.preventAutoHideAsync();

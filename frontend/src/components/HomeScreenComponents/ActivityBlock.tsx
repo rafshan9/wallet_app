@@ -7,18 +7,20 @@ export function ActivityBlock({ item, color }: { item: Transaction; color: strin
 
     return (
         <View className="flex-row items-center justify-between bg-white border-2 border-black p-3.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-            <View className="flex-row items-center gap-x-3">
-                {/* Category Dot */}
+            {/* Added flex-1 and mr-3 here so text constrains without squishing the amount */}
+            <View className="flex-1 flex-row items-center gap-x-3 mr-3">
+                {/* Dot */}
                 <View
                     style={{ backgroundColor: color }}
-                    className="w-4 h-4 rounded-full border-2 border-black"
+                    className="w-4 h-4 rounded-full border-2 border-black flex-shrink-0"
                 />
 
-                <View>
-                    <Text className="font-jb_mono_bold text-base text-black">
+                <View className="flex-1">
+                    {/* Changed to text-sm, leading-snug, and numberOfLines={2} */}
+                    <Text numberOfLines={2} className="font-jb_mono_bold text-sm leading-snug text-black">
                         {item.title || item.category}
                     </Text>
-                    <Text className="font-jb_mono text-xs text-neutral-400 capitalize">
+                    <Text numberOfLines={1} className="font-jb_mono text-xs text-neutral-400 capitalize">
                         {item.category.toLowerCase()}
                     </Text>
                 </View>
