@@ -1,8 +1,65 @@
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useState, useEffect } from 'react';
 import { Feather } from '@expo/vector-icons'
+import api from '../../utils/axios';
+import { useAlert } from '../components/AlertModal';
+
+
+
 export default function DailyBudgetPage() {
     const router = useRouter();
+    const showAlert = useAlert();
+    const [budget, setBudget] = useState<string>('');
+    const [spentToday, setSpentToday] = useState<number>(0);
+
+    useEffect(() => {
+        fetchBudget();
+    }, []);
+
+    const fetchBudget = async () => {
+        try {
+            const { data } = await api.get('/budget');
+            if (data.daily_budget !== null) {
+                setBudget(data.daily_budget.toString());
+            }
+            setSpentToday(data.spent_today);
+
+        } catch (error) {
+            console.error('Fetch error:', error)
+        }
+
+    };
+
+    const saveBudget = async () => {
+        try {
+            // Convert string to number, or send null if they cleared the input
+            const amount = budget ? parseFloat(budget) : null;
+
+            await api.post('/budget/', { daily_budget: amount });
+            showAlert({ title: 'Success', message: 'Budget updated!' });
+            router.back();
+
+        } catch (error) {
+            console.error('Save error:', error);
+            showAlert({ title: 'Error', message: 'Could not save budget.' });
+        }
+    };
+
+    const handleClear = async () => {
+        try {
+            await api.post('/budget/', { daily_budget: null })
+            setBudget('');
+            showAlert({ title: 'Success', message: 'Budget cleared!' });
+            router.back();
+
+        } catch (error) {
+            console.error('Clear error:', error);
+            showAlert({ title: 'Error', message: 'Could not clear budget.' });
+
+        }
+    };
+
     return (
         <View className="flex-1 bg-background">
             {/*Back button*/}
@@ -23,6 +80,8 @@ export default function DailyBudgetPage() {
                     placeholder="$0.00"
                     placeholderTextColor="#9CA3AF"
                     keyboardType="numeric"
+                    value={budget}
+                    onChangeText={setBudget}
                 />
                 <Text className="font-jb_mono_medium text-sm text-center">
                     If you don't have one, just press continue
@@ -30,15 +89,18 @@ export default function DailyBudgetPage() {
 
                 {/* Continue Button */}
                 <TouchableOpacity
-                    onPress={() => router.push('/')}
+                    onPress={budget ? saveBudget : () => router.push('/')}
                     className="bg-yellow w-full py-4 rounded-xl border-2 border-black items-center mt-6">
                     <Text className="font-jb_mono_medium text-xl">
-                        Continue
+                        {budget ? 'Save' : 'Continue'}
                     </Text>
                 </TouchableOpacity>
 
                 {/* Clear Button */}
-                <TouchableOpacity className="absolute bottom-20 py-3 px-4 rounded-xl bg-background_red/80 ">
+                <TouchableOpacity
+                    className="absolute bottom-20 py-3 px-4 rounded-xl bg-background_red/80 "
+                    onPress={handleClear}
+                >
                     <Text className="font-jb_mono_medium text-sm text-white">Clear budget</Text>
                 </TouchableOpacity>
 

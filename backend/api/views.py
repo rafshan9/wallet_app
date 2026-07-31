@@ -25,7 +25,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from django.conf import settings
 from rest_framework.views import APIView
-from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer, NoteSerializer, UserSettingsSerializer
+from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer, NoteSerializer
 from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment, Note, UserSettings
 from google.oauth2 import id_token as google_id_token
 from google.auth.transport import requests as google_requests

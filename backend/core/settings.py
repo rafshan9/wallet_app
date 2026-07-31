@@ -26,7 +26,7 @@ if not SECRET_KEY:
     raise ValueError("SECRET_KEY environment variable is not set. Check your .env file.")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
