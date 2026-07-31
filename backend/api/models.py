@@ -30,6 +30,7 @@ class Transaction(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     title = models.CharField(max_length=100) # e.g., "Netflix", "June Salary"
     date = models.DateTimeField(auto_now_add=True)
+    goal_contribution = models.ForeignKey('GoalContribution', null=True, blank=True, on_delete=models.SET_NULL, related_name='transactions')
 
     def __str__(self):
         return f"{self.user.username} | {self.type} | {self.amount}"

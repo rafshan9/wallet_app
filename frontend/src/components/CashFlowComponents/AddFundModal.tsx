@@ -239,10 +239,10 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
 
                             {/* Voice transcript panel */}
                             {(isRecording || editableTranscript.length > 0) && (
-                                <View className="bg-black/30 rounded-2xl p-4 mb-6">
+                                <View className="bg-black/80 rounded-2xl p-4 mb-6">
                                     <View className="flex-row items-center mb-2">
                                         <View className={`w-2 h-2 rounded-full mr-2 ${isRecording ? 'bg-red' : 'bg-white/30'}`} />
-                                        <Text className="text-white/60 font-jb_mono_medium text-xs">
+                                        <Text className="text-white font-jb_mono_medium text-xs">
                                             {isRecording ? 'Listening...' : 'Review your transcript'}
                                         </Text>
                                     </View>

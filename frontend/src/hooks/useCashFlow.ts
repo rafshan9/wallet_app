@@ -20,6 +20,19 @@ const CATEGORY_HEX: Record<string, string> = {
     OTHER: '#bc2d39ff',
 };
 
+const isThisMonth = (dateStr: string) => {
+    const d = new Date(dateStr);
+    const now = new Date();
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+};
+
+const isToday = (dateStr: string) => {
+    const d = new Date(dateStr);
+    const now = new Date();
+    return d.toDateString() === now.toDateString();
+};
+
+
 function getCategoryBreakdown(transactions: Transaction[]) {
     const expenseTxs = transactions.filter(t => t.type === 'EXPENSE');
     const total = expenseTxs.reduce((sum, t) => sum + parseFloat(t.amount), 0);
@@ -41,7 +54,6 @@ function getCategoryBreakdown(transactions: Transaction[]) {
 }
 
 export function useCashFlow() {
-    // TanStack Query handles fetching, caching, and loading states automatically
     const { data, isLoading, refetch } = useQuery({
         queryKey: ['cashFlow'],
         queryFn: async () => {
@@ -50,20 +62,33 @@ export function useCashFlow() {
                 api.get('/contributions/')
             ]);
 
-            const savingsSum = contRes.data.reduce((sum: number, c: any) => sum + parseFloat(c.amount), 0);
-
             return {
                 transactions: txRes.data as Transaction[],
-                totalSavings: savingsSum
+                contributions: contRes.data
             };
         }
     });
 
-    // Safe fallbacks while data is loading
     const transactions = data?.transactions || [];
-    const totalSavings = data?.totalSavings || 0;
+    const contributions = data?.contributions || [];
 
-    // Derived calculations remain exactly the same
+    // Savings calculations
+    const totalSavings = contributions.reduce((sum: number, c: any) => sum + parseFloat(c.amount), 0);
+    const monthlySavings = contributions
+        .filter((c: any) => isThisMonth(c.date)) // Change c.date to c.created_at if your backend uses that
+        .reduce((sum: number, c: any) => sum + parseFloat(c.amount), 0);
+
+    const dailySavings = contributions
+        .filter((c: any) => isToday(c.date))
+        .reduce((sum: number, c: any) => sum + parseFloat(c.amount), 0);
+
+    const dailyTransactions = transactions.filter((t) => isToday(t.date));
+
+    const dailySpent = dailyTransactions
+        .filter((t) => t.type === 'EXPENSE')
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0) - dailySavings;
+
+    // All-time totals
     const totalIncome = transactions
         .filter((t) => t.type === 'INCOME')
         .reduce((sum, t) => sum + parseFloat(t.amount), 0);
@@ -72,15 +97,29 @@ export function useCashFlow() {
         .filter((t) => t.type === 'EXPENSE')
         .reduce((sum, t) => sum + parseFloat(t.amount), 0) - totalSavings;
 
+    // Monthly totals
+    const monthlyTransactions = transactions.filter((t) => isThisMonth(t.date));
+
+    const monthlyIncome = monthlyTransactions
+        .filter((t) => t.type === 'INCOME')
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+
+    const monthlyExpenses = monthlyTransactions
+        .filter((t) => t.type === 'EXPENSE')
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0) - monthlySavings;
+
     const categoryBreakdown = getCategoryBreakdown(transactions);
 
     return {
         transactions,
         isLoading,
-        fetchTransactions: refetch, // Renamed 'refetch' to match your existing component logic
+        fetchTransactions: refetch,
         totalIncome,
         totalExpenses,
+        monthlyIncome,
+        monthlyExpenses,
         categoryBreakdown,
-        totalSavings
+        totalSavings,
+        dailySpent
     };
 }

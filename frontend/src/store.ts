@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Note } from './hooks/useNotes';
+import api from '../utils/axios';
 
 interface User {
     first_name: string;
@@ -22,6 +23,11 @@ interface AppState {
     editingNote: Note | null;
     openNoteModal: (note?: Note | null) => void;
     closeNoteModal: () => void;
+
+    budget: number;
+    spent: number;
+    fetchBudget: () => Promise<void>;
+    updateBudgetLocal: (newBudget: number) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -38,4 +44,16 @@ export const useAppStore = create<AppState>((set) => ({
     editingNote: null,
     openNoteModal: (note = null) => set({ isNoteModalOpen: true, editingNote: note }),
     closeNoteModal: () => set({ isNoteModalOpen: false, editingNote: null }),
+
+    budget: 0,
+    spent: 0,
+    fetchBudget: async () => {
+        try {
+            const res = await api.get('/budget/');
+            set({ budget: res.data.daily_budget || 0, spent: res.data.spent_today || 0 });
+        } catch (error) {
+            console.error('Failed to fetch budget:', error);
+        }
+    },
+    updateBudgetLocal: (newBudget) => set({ budget: newBudget }),
 }));

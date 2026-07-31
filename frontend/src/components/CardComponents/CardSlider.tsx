@@ -9,28 +9,15 @@ type Props = {
 
 export default function CardSlider({ scrollX }: Props) {
     const { width: SCREEN_WIDTH } = useWindowDimensions();
-    const { totalIncome, totalExpenses, transactions } = useCashFlow();
+    const { totalIncome, totalExpenses, monthlyExpenses, monthlyIncome } = useCashFlow();
     const { totalSaved, totalTarget } = useGoals();
 
     const remainingFunds = totalIncome - totalExpenses - totalSaved;
-
-    const isToday = (dateStr: string) => {
-        const d1 = new Date(dateStr);
-        const d2 = new Date();
-        return d1.getFullYear() === d2.getFullYear() &&
-            d1.getMonth() === d2.getMonth() &&
-            d1.getDate() === d2.getDate();
-    };
-
-    const todayExpenses = transactions
-        .filter((t) => t.type === 'EXPENSE' && isToday(t.date))
-        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
-
     const currentDay = new Date().getDate();
-    const avgDailyExpense = totalExpenses / currentDay;
+
 
     const formatCurrency = (amount: number) =>
-        `$${Math.floor(amount).toLocaleString()}`;
+        `$${amount.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}`;
 
     const formatExact = (amount: number) =>
         `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -40,7 +27,7 @@ export default function CardSlider({ scrollX }: Props) {
             id: '1',
             title: 'Remaining Funds',
             amount: formatCurrency(remainingFunds),
-            subtitle: `Deposited this month: ${formatCurrency(totalIncome)}`,
+            subtitle: `Deposited this month: ${formatCurrency(monthlyIncome)}`,
             isLight: false,
             amountColorClass: 'text-background',
         },
@@ -56,7 +43,7 @@ export default function CardSlider({ scrollX }: Props) {
             id: '3',
             title: 'Monthly Expenses',
             amount: formatCurrency(totalExpenses),
-            subtitle: `Total spent this month\nAvg Daily: ${formatExact(avgDailyExpense)} • Today: ${formatExact(todayExpenses)}`,
+            subtitle: `Total spent this month: ${formatExact(monthlyExpenses)}`,
             isLight: false,
             amountColorClass: 'text-background_green',
         },
@@ -77,7 +64,7 @@ export default function CardSlider({ scrollX }: Props) {
     return (
         <Animated.View
             style={{ backgroundColor: animatedBgColor }}
-            className="border-b-2 border-black  "
+            className="border-b-2 border-black"
         >
             <Animated.FlatList
                 data={CARDS_DATA}
@@ -119,7 +106,7 @@ export default function CardSlider({ scrollX }: Props) {
                 )}
             />
 
-            <View className="flex-row justify-center items-center pb-4 gap-3">
+            <View className="flex-row justify-center items-center pb-4 pt-8 gap-3">
                 {CARDS_DATA.map((_, index) => {
                     const dotInputRange = [
                         (index - 1) * SCREEN_WIDTH,

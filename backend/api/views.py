@@ -1,3 +1,4 @@
+from backend.api import models
 from django.contrib.auth.models import User
 from rest_framework import generics, viewsets, permissions, status
 from rest_framework.decorators import action
@@ -386,6 +387,12 @@ class SavingsGoalViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def perform_destroy(self, instance):
+        is_completed = instance.current_amount >= instance.target_amount
+        if not is_completed:
+            Transaction.objects.filter(goal_contribution__goal=instance).delete()
+        instance.delete()
+
     @action(detail=True, methods=['post'])
     def add_funds(self, request, pk=None):
         goal = self.get_object()
@@ -396,14 +403,15 @@ class SavingsGoalViewSet(viewsets.ModelViewSet):
 
         # 1. Add money to the goal
         contribution = GoalContribution.objects.create(goal=goal, amount=amount)
-        
+
         # 2. Automatically log this as an expense so it deducts from available balance
         Transaction.objects.create(
             user=self.request.user,
             type='EXPENSE',
             amount=amount,
             category='OTHER',
-            title=f'Contribution to: {goal.name}'
+            title=f'Contribution to: {goal.name}',
+            goal_contribution=contribution, 
         )
 
         return Response(GoalContributionSerializer(contribution).data, status=status.HTTP_201_CREATED)

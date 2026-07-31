@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { router } from 'expo-router';
-import { useAppStore } from '../src/store';
+
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -39,6 +39,7 @@ const processQueue = (error: unknown, token: string | null = null) => {
 const logout = async () => {
     await SecureStore.deleteItemAsync('accessToken');
     await SecureStore.deleteItemAsync('refreshToken');
+    const { useAppStore } = await import('../src/store');
     useAppStore.getState().setUser(null);
 };
 

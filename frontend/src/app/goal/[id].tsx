@@ -66,13 +66,13 @@ export default function GoalDetailScreen() {
 
 
     return (
-        <View className="flex-1 bg-very_dark_blue pt-16 px-6">
+        <View className="flex-1 bg-black/95 pt-16 px-6">
 
             {/* Custom Header */}
             <View className="flex-row items-center justify-between mb-8">
                 <TouchableOpacity
                     onPress={() => router.back()}
-                    className="w-12 h-12 bg-white border-2 border-white rounded-full items-center justify-center shadow-sm"
+                    className="w-12 h-12 bg-yellow border-2 border-black rounded-full items-center justify-center shadow-sm"
                 >
                     <Feather name="arrow-left" size={24} color="black" />
                 </TouchableOpacity>
@@ -82,30 +82,30 @@ export default function GoalDetailScreen() {
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
 
                 {/* Main Stats Card */}
-                <View className="p-6 bg-maroon rounded-3xl mb-8 border-2 border-dashed border-very_dark_blue shadow-sm">
-                    <Text className="text-center text-sm font-jb_mono_medium text-white mb-2 uppercase tracking-widest">
+                <View className="p-6 bg-background rounded-3xl mb-8 border-2 border-dashed border-very_dark_blue shadow-sm">
+                    <Text className="text-center text-sm font-jb_mono_medium text-black mb-2 uppercase tracking-widest">
                         Current Balance
                     </Text>
-                    <Text className="text-center text-5xl font-jb_mono_bold text-white mb-8">
+                    <Text className="text-center text-5xl font-jb_mono_bold text-black mb-8">
                         ${saved.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </Text>
 
                     <View className="mb-2 flex-row justify-between">
-                        <Text className="font-jb_mono_bold text-white">Progress</Text>
-                        <Text className="font-jb_mono_bold text-white">{progress.toFixed(0)}%</Text>
+                        <Text className="font-jb_mono_bold text-black">Progress</Text>
+                        <Text className="font-jb_mono_bold text-black">{progress.toFixed(0)}%</Text>
                     </View>
 
                     <View className="h-4 bg-black/5 rounded-full overflow-hidden mb-4">
                         <View
-                            className={`h-full rounded-full ${isCompleted ? 'bg-yellow' : 'bg-white'}`}
+                            className={`h-full rounded-full ${isCompleted ? 'bg-green' : 'bg-black'}`}
                             style={{ width: `${progress}%` }}
                         />
                     </View>
 
                     <View className="flex-row justify-between">
-                        <Text className="text-sm font-jb_mono_medium text-white">Target: ${Number(goal.targetAmount).toLocaleString()}</Text>
+                        <Text className="text-sm font-jb_mono_medium text-black">Target: ${Number(goal.targetAmount).toLocaleString()}</Text>
                         {goal.deadline && (
-                            <Text className="text-sm font-jb_mono_medium text-white">
+                            <Text className="text-sm font-jb_mono_medium text-black">
                                 Due: {new Date(goal.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </Text>
                         )}
