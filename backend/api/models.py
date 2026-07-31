@@ -94,3 +94,11 @@ class Note(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
+class UserSettings(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='settings')
+    daily_budget = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s Settings"

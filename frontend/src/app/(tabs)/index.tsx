@@ -13,7 +13,7 @@ import { useAppStore } from '../../store';
 import { CARD_BACKGROUND_COLORS, CARD_TEXT_COLORS } from '../../constants/cardColors';
 import RecentActivity from '../../components/HomeScreenComponents/RecentActivity'
 import { useCashFlow } from '../../hooks/useCashFlow';
-
+import Test from '../../components/DailyBudget/DailyBudgetBanner';
 
 
 export default function HomeScreen() {
@@ -73,6 +73,8 @@ export default function HomeScreen() {
       >
         {/* 2. CardSlider handles its own dynamic background color now */}
         <CardSlider scrollX={scrollX} />
+        <Test />
+
         <View className="px-6 pt-2">
           <RecentActivity transactions={transactions} />
           <PlannedPaymentsCard
