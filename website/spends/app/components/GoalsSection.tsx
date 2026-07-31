@@ -95,7 +95,7 @@ export default function GoalsSection() {
             {/* Image — no bottom padding, flush to box bottom */}
             <div className="relative w-full aspect-[3/4] max-w-[320px] mx-auto pt-4 px-4">
               <Image
-                src="/goal_mobile_2.png"
+                src="/goal_mobile_new.png"
                 alt="SPENDS goals screen showing savings progress"
                 fill
                 className="object-contain object-bottom"
@@ -289,7 +289,7 @@ export default function GoalsSection() {
             >
               <div className="relative w-full max-w-[380px] lg:max-w-[550px] h-[550px] lg:h-[750px]">
                 <Image
-                  src="/third_page_image.png"
+                  src="/third_page_web.png"
                   alt="SPENDS goals screen showing savings progress"
                   fill
                   className="object-contain object-bottom"

@@ -93,12 +93,13 @@ export default function CardSlider({ scrollX }: Props) {
                 )}
                 scrollEventThrottle={16}
                 renderItem={({ item }) => (
-                    <View style={{ width: SCREEN_WIDTH }} className="px-6 h-[200px] justify-start pt-6">                        <Text
-                        className={`font-jb_mono_bold text-lg uppercase tracking-widest mb-1 ${item.isLight ? 'text-black' : 'text-white/80'
-                            }`}
-                    >
-                        {item.title}
-                    </Text>
+                    <View style={{ width: SCREEN_WIDTH }} className="px-6 h-[20`0px] justify-start pt-6">
+                        <Text
+                            className={`font-jb_mono_bold text-lg uppercase tracking-widest mb-1 ${item.isLight ? 'text-black' : 'text-white/80'
+                                }`}
+                        >
+                            {item.title}
+                        </Text>
 
                         <Text
                             className={`font-alfa text-[64px] leading-[72px] mb-2 ${item.amountColorClass}`}

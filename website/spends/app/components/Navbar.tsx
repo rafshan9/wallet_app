@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import GetSpendsButton from "./GetSpendsButton";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,18 +39,7 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <motion.a
-              href="#"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              className="px-5 py-2 bg-[#F7CB46] text-[#282825] font-black text-sm border-2 border-[#282825] inline-block"
-              style={{
-                boxShadow: "3px 3px 0px #282825",
-                fontFamily: "var(--font-jetbrains-mono)",
-              }}
-            >
-              Get SPENDS
-            </motion.a>
+            <GetSpendsButton />
           </li>
         </ul>
 

@@ -49,7 +49,7 @@ export default function ExpenseSection() {
             {/* Image — no top padding, flush to box top */}
             <div className="relative w-full aspect-[3/4] max-w-[320px] mx-auto px-4 pb-4">
               <Image
-                src="/expense_mobile.png"
+                src="/expense_mobile_new.png"
                 alt="SPENDS expense input screen"
                 fill
                 className="object-contain object-top"
@@ -210,7 +210,7 @@ export default function ExpenseSection() {
             >
               <div className="relative w-full max-w-[380px] lg:max-w-[550px] h-[550px] lg:h-[750px]">
                 <Image
-                  src="/second_page_image.png"
+                  src="/second_page_web.png"
                   alt="SPENDS expense input screen with AI voice and camera features"
                   fill
                   className="object-contain object-top"

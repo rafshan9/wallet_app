@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import TickerBanner from "./TickerBanner";
+import GetSpendsButton from "./GetSpendsButton";
 
 const pills = [
   { label: "Expense", color: "#F7CB46", text: "#282825", dot: "#D9313F" },
@@ -146,22 +147,7 @@ export default function HeroSection() {
             </p>
 
             {/* CTA */}
-            <motion.a
-              href="#"
-              whileHover={{ x: -2, y: -2, boxShadow: "6px 6px 0px #282825" }}
-              whileTap={{ scale: 0.97, x: 0, y: 0 }}
-              className="inline-block px-8 py-4 font-black text-lg w-fit cursor-pointer"
-              style={{
-                fontFamily: "var(--font-jetbrains-mono)",
-                backgroundColor: "#F7CB46",
-                color: "#282825",
-                border: "3px solid #282825",
-                boxShadow: "4px 4px 0px #282825",
-                letterSpacing: "0.04em",
-              }}
-            >
-              Get SPENDS
-            </motion.a>
+            <GetSpendsButton variant="medium" />
           </motion.div>
 
           {/* Right: phone image — cropped at bottom on desktop via overflow hidden */}
@@ -174,7 +160,7 @@ export default function HeroSection() {
           >
             <div className="relative w-full h-[580px]">
               <Image
-                src="/first_image_desktop_2.png"
+                src="/first_image_web.png"
                 alt="SPENDS app screens showing remaining funds, saving goals, and monthly expenses"
                 fill
                 className="object-contain object-bottom"
@@ -253,9 +239,9 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: "easeOut", delay: 0.1 }}
           >
-            <div className="relative w-full h-[480px]">
+            <div className="relative w-full h-[380px]">
               <Image
-                src="/first_image_desktop_2.png"
+                src="/first_image_web.png"
                 alt="SPENDS app screens"
                 fill
                 className="object-contain object-bottom"

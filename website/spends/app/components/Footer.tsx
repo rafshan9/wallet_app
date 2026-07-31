@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import GetSpendsButton from "./GetSpendsButton";
 
 const footerLinks = {
   Product: ["Features", "Pricing", "Download", "Changelog"],
@@ -38,22 +38,7 @@ export default function Footer() {
           <div className="w-12 h-1 mt-5" style={{ backgroundColor: "#F7CB46" }} />
         </div>
 
-        <motion.a
-          href="#"
-          whileHover={{ x: -3, y: -3, boxShadow: "8px 8px 0px #282825" }}
-          whileTap={{ scale: 0.97, x: 0, y: 0 }}
-          className="shrink-0 inline-block px-9 py-5 font-black text-lg cursor-pointer"
-          style={{
-            fontFamily: "var(--font-jetbrains-mono)",
-            backgroundColor: "#F7CB46",
-            color: "#282825",
-            border: "3px solid #282825",
-            boxShadow: "5px 5px 0px #282825",
-            letterSpacing: "0.04em",
-          }}
-        >
-          Get SPENDS
-        </motion.a>
+        <GetSpendsButton variant="large" />
       </div>
 
       {/* Main grid */}
