@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import TransactionViewSet, SavingsGoalViewSet, GoalContributionViewSet, PlannedPaymentViewSet, NoteViewSet, process_voice_expense, DeleteAccountView, UserProfileView, GoogleAuthView, VerifyEmailView, ResendVerificationEmailView, process_expense_text
+from .views import TransactionViewSet, SavingsGoalViewSet, GoalContributionViewSet, PlannedPaymentViewSet, NoteViewSet, process_voice_expense, DeleteAccountView, UserProfileView, GoogleAuthView, VerifyEmailView, ResendVerificationEmailView, process_expense_text, manage_daily_budget
 from . import views
 
 
@@ -27,5 +27,7 @@ urlpatterns = [
     path('account/change-username/', views.ChangeUsernameView.as_view(), name='change-username'),
     path('account/check-username/', views.CheckUsernameView.as_view(), name='check-username'),
     path('account/change-name/', views.ChangeNameView.as_view(), name='change-name'),
+    path('budget/', manage_daily_budget, name='manage_budget'),
+    
     path('', include(router.urls)),
 ]

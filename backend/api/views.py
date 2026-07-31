@@ -25,10 +25,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from django.conf import settings
 from rest_framework.views import APIView
-from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer, NoteSerializer
-from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment, Note
+from .serializers import UserSerializer, TransactionSerializer, SavingsGoalSerializer, GoalContributionSerializer, PlannedPaymentSerializer, NoteSerializer, UserSettingsSerializer
+from .models import Transaction, SavingsGoal, GoalContribution, PlannedPayment, Note, UserSettings
 from google.oauth2 import id_token as google_id_token
 from google.auth.transport import requests as google_requests
+
+
+
 
 
 
@@ -350,6 +353,28 @@ class TransactionViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
         
+#-------------------------------------------------------------------------------------------------------#
+#-------------------------------------USER SETTINGS-----------------------------------------------------#
+#-------------------------------------------------------------------------------------------------------#
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def manage_daily_budget(request):
+    # This automatically gets the settings or creates a blank one if it doesn't exist yet
+    settings, created = UserSettings.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        # React Native will send the new budget here
+        new_budget = request.data.get('daily_budget')
+        settings.daily_budget = new_budget
+        settings.save()
+        return Response({"message": "Budget updated!", "daily_budget": settings.daily_budget})
+
+    # If it's a GET request, just return the current budget
+    return Response({"daily_budget": settings.daily_budget})
+
+
+#----------------------------------------------------------------#
 
 class SavingsGoalViewSet(viewsets.ModelViewSet):
     serializer_class = SavingsGoalSerializer
