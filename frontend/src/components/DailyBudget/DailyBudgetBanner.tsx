@@ -28,6 +28,16 @@ export default function DailyBudgetBanner() {
         }, [])
     );
 
+    if (!budget || Number(budget) === 0) {
+        return (
+            <TouchableOpacity onPress={() => router.push('/DailyBudgetPage')}>
+                <View className="flex-row bg-yellow w-full justify-center items-center py-3.5 border-b-2 border-black">
+                    <Text className="font-jb_mono_bold px-4 opacity-70">Tap to set daily budget</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
     if (loading || isCashFlowLoading) {
         return <Text className="font-jb_mono_bold">Loading...</Text>;
     }

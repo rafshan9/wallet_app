@@ -164,7 +164,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
 
                             {(isScanning || isExtracting) && (
-                                <View className="absolute inset-0 bg-very_dark_blue/80 z-50 justify-center items-center rounded-t-[40px]">
+                                <View className="absolute inset-0 bg-background z-50 justify-center items-center rounded-t-[40px]">
                                     <ActivityIndicator size="large" color="#000000" />
                                     <Text className="mt-4 font-jb_mono_bold text-black text-lg">
                                         {isScanning ? 'Analyzing receipt...' : 'Extracting your expense...'}
@@ -274,24 +274,26 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                             )}
 
                             <View className="flex-row justify-between items-center mb-8">
-                                <View className="flex-row gap-4">
-                                    <ScannerButton
-                                        isScanning={isScanning}
-                                        onScanStart={() => setIsScanning(true)}
-                                        onScanComplete={handleScanComplete}
-                                    />
-
-                                    <TouchableOpacity
-                                        onPress={isRecording ? stopRecording : startRecording}
-                                        className="h-14 w-14 rounded-full items-center justify-center border-2 border-black overflow-hidden"
-                                    >
-                                        <Animated.View
-                                            className={`absolute inset-0 rounded-full ${isRecording ? 'bg-red' : 'bg-yellow'}`}
-                                            style={{ opacity: isRecording ? blinkAnim : 1 }}
+                                {type === 'expense' && (
+                                    <View className="flex-row gap-4">
+                                        <ScannerButton
+                                            isScanning={isScanning}
+                                            onScanStart={() => setIsScanning(true)}
+                                            onScanComplete={handleScanComplete}
                                         />
-                                        <Feather name={isRecording ? 'square' : 'mic'} size={20} color="black" />
-                                    </TouchableOpacity>
-                                </View>
+
+                                        <TouchableOpacity
+                                            onPress={isRecording ? stopRecording : startRecording}
+                                            className="h-14 w-14 rounded-full items-center justify-center border-2 border-black overflow-hidden"
+                                        >
+                                            <Animated.View
+                                                className={`absolute inset-0 rounded-full ${isRecording ? 'bg-red' : 'bg-yellow'}`}
+                                                style={{ opacity: isRecording ? blinkAnim : 1 }}
+                                            />
+                                            <Feather name={isRecording ? 'square' : 'mic'} size={20} color="black" />
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
 
                                 <TouchableOpacity
                                     className="bg-maroon px-8 py-4 rounded-full flex-row items-center shadow-md border-2 border-black"
