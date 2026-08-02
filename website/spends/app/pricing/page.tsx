@@ -46,7 +46,8 @@ export default function PricingPage() {
             The app is still in beta, so pricing hasn&apos;t been decided. I
             want to build something you actually love using. <br />
             <br />
-            Let me know how much you think it should cost!
+            Let me know how much you think it should cost! Or do you want it for free?
+            If so, then give me ideas how to get money to sustain this project, as AI apis need to be used.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
