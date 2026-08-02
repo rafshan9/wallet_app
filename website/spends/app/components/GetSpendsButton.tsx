@@ -28,7 +28,7 @@ export default function GetSpendsButton({ variant = "small" }: { variant?: Varia
 
     return (
         <MotionLink
-            href="https://drive.google.com/file/d/1GTghNIKWgSDtCTYYmybnRmXRYSjHb1Ps/view?usp=sharing"
+            href="https://drive.google.com/file/d/15mAgA6fa6e4axsQQvwHqeL4XWOCDKgVd/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={hover}

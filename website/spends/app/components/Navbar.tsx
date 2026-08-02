@@ -87,7 +87,7 @@ export default function Navbar() {
               ))}
               <li>
                 <a
-                  href="#"
+                  href="https://drive.google.com/file/d/15mAgA6fa6e4axsQQvwHqeL4XWOCDKgVd/view?usp=sharing"
                   className="inline-block px-5 py-2.5 bg-[#F7CB46] text-[#282825] font-black text-sm border-2 border-[#282825]"
                   style={{ boxShadow: "3px 3px 0px #282825" }}
                 >
