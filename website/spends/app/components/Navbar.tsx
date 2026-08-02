@@ -2,12 +2,20 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import Link from "next/link";
 import GetSpendsButton from "./GetSpendsButton";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const navLinks = ["Features", "Pricing", "Download"];
+  const navLinks = [
+    { name: "Features", href: "/#expense-tracking" },
+    { name: "Pricing", href: "/pricing" },
+    {
+      name: "Download",
+      href: "https://drive.google.com/file/d/15mAgA6fa6e4axsQQvwHqeL4XWOCDKgVd/view?usp=sharing",
+    },
+  ];
 
   return (
     <nav
@@ -16,12 +24,13 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
         {/* Logo */}
-        <span
+        <Link
+          href="/"
           className="text-2xl font-black tracking-tight text-[#F7CB46]"
           style={{ fontFamily: "var(--font-rubik)" }}
         >
           SPENDS
-        </span>
+        </Link>
 
         {/* Desktop Nav */}
         <ul
@@ -29,13 +38,24 @@ export default function Navbar() {
           style={{ fontFamily: "var(--font-jetbrains-mono)" }}
         >
           {navLinks.map((link) => (
-            <li key={link}>
-              <a
-                href="#"
-                className="text-white font-semibold text-sm tracking-wide hover:text-[#F7CB46] transition-colors duration-150"
-              >
-                {link}
-              </a>
+            <li key={link.name}>
+              {link.href.startsWith("http") ? (
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white font-semibold text-sm tracking-wide hover:text-[#F7CB46] transition-colors duration-150"
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <Link
+                  href={link.href}
+                  className="text-white font-semibold text-sm tracking-wide hover:text-[#F7CB46] transition-colors duration-150"
+                >
+                  {link.name}
+                </Link>
+              )}
             </li>
           ))}
           <li>
@@ -76,13 +96,26 @@ export default function Navbar() {
               style={{ fontFamily: "var(--font-jetbrains-mono)" }}
             >
               {navLinks.map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="text-white font-semibold text-base tracking-wide hover:text-[#F7CB46] transition-colors"
-                  >
-                    {link}
-                  </a>
+                <li key={link.name}>
+                  {link.href.startsWith("http") ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white font-semibold text-base tracking-wide hover:text-[#F7CB46] transition-colors"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {link.name}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-white font-semibold text-base tracking-wide hover:text-[#F7CB46] transition-colors"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
               <li>

@@ -1,11 +1,24 @@
 "use client";
 
 import GetSpendsButton from "./GetSpendsButton";
+import Link from "next/link";
 
 const footerLinks = {
-  Product: ["Features", "Pricing", "Download", "Changelog"],
-  Support: ["FAQ", "Contact", "Privacy Policy", "Terms of Use"],
-  Connect: ["Twitter / X", "Instagram", "GitHub", "Press Kit"],
+  Product: [
+    { name: "Features", href: "/#expense-tracking" },
+    { name: "Pricing", href: "/pricing" },
+    { name: "Download", href: "https://drive.google.com/file/d/15mAgA6fa6e4axsQQvwHqeL4XWOCDKgVd/view?usp=sharing" },
+  ],
+  Support: [
+    { name: "FAQ", href: "/faq" },
+    { name: "Contact", href: "/contact" },
+    { name: "Privacy Policy", href: "/privacy-policy" },
+    { name: "Terms of Use", href: "/terms-of-use" },
+  ],
+  Connect: [
+    { name: "Twitter / X", href: "https://twitter.com/the_rafshan" },
+    { name: "Instagram", href: "https://instagram.com/the_rafshan" },
+  ],
 };
 
 export default function Footer() {
@@ -67,7 +80,7 @@ export default function Footer() {
               Just you and your numbers.
             </p>
             <div className="flex gap-3 mt-5 flex-wrap">
-              {["iOS", "Android"].map((p) => (
+              {["iOS coming soon", "Android"].map((p) => (
                 <span
                   key={p}
                   className="px-3.5 py-1.5 text-[11px] font-black border-2 cursor-pointer transition-colors duration-150 hover:bg-[#F7CB46] hover:text-[#282825]"
@@ -99,27 +112,52 @@ export default function Footer() {
               </p>
               <ul className="flex flex-col gap-3">
                 {links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="text-[13px] transition-all duration-150"
-                      style={{
-                        fontFamily: "var(--font-jetbrains-mono)",
-                        color: "#F9F5F2",
-                        opacity: 0.55,
-                        textDecoration: "none",
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.target as HTMLAnchorElement).style.opacity = "1";
-                        (e.target as HTMLAnchorElement).style.color = "#F7CB46";
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.target as HTMLAnchorElement).style.opacity = "0.55";
-                        (e.target as HTMLAnchorElement).style.color = "#F9F5F2";
-                      }}
-                    >
-                      {link}
-                    </a>
+                  <li key={link.name}>
+                    {link.href.startsWith("http") ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[13px] transition-all duration-150"
+                        style={{
+                          fontFamily: "var(--font-jetbrains-mono)",
+                          color: "#F9F5F2",
+                          opacity: 0.55,
+                          textDecoration: "none",
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.target as HTMLAnchorElement).style.opacity = "1";
+                          (e.target as HTMLAnchorElement).style.color = "#F7CB46";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.target as HTMLAnchorElement).style.opacity = "0.55";
+                          (e.target as HTMLAnchorElement).style.color = "#F9F5F2";
+                        }}
+                      >
+                        {link.name}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-[13px] transition-all duration-150 block w-fit"
+                        style={{
+                          fontFamily: "var(--font-jetbrains-mono)",
+                          color: "#F9F5F2",
+                          opacity: 0.55,
+                          textDecoration: "none",
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.target as HTMLAnchorElement).style.opacity = "1";
+                          (e.target as HTMLAnchorElement).style.color = "#F7CB46";
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.target as HTMLAnchorElement).style.opacity = "0.55";
+                          (e.target as HTMLAnchorElement).style.color = "#F9F5F2";
+                        }}
+                      >
+                        {link.name}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

@@ -14,14 +14,13 @@ const pills = [
 export default function ExpenseSection() {
   return (
     <section
+      id="expense-tracking"
       className="w-full pb-20 md:pb-28 overflow-hidden relative"
       style={{ backgroundColor: "#F9F5F2" }}
     >
       <div className="max-w-7xl mx-auto px-6">
-
         {/* ── MOBILE (below md) ── */}
         <div className="flex md:hidden flex-col items-center text-center pt-14">
-
           {/* Image in slightly darker block — pill sits on top edge */}
           <motion.div
             className="w-full rounded-lg relative mb-6"
@@ -56,7 +55,6 @@ export default function ExpenseSection() {
               />
             </div>
           </motion.div>
-
 
           {/* 5 pills */}
           <motion.div
@@ -103,14 +101,14 @@ export default function ExpenseSection() {
               save. Boring but reliable.
             </p>
             <p className="text-xs leading-relaxed opacity-80">
-              <span className="font-black opacity-100">The fun way:</span>{" "}
-              just talk. &quot;Football $50, cinema $20, groceries $80&quot; — AI
+              <span className="font-black opacity-100">The fun way:</span> just
+              talk. &quot;Football $50, cinema $20, groceries $80&quot; — AI
               hears it, sorts it into categories, hands you an editable list.
               One tap to save the whole thing.
             </p>
             <p className="text-xs leading-relaxed opacity-80">
-              Or point your camera at a receipt. AI reads it so you
-              don&apos;t have to squint at the numbers yourself.
+              Or point your camera at a receipt. AI reads it so you don&apos;t
+              have to squint at the numbers yourself.
             </p>
           </div>
         </div>
@@ -133,7 +131,6 @@ export default function ExpenseSection() {
           </div>
 
           <div className="grid grid-cols-2 gap-8 lg:gap-16 items-start">
-
             {/* Left: copy + pills */}
             <motion.div
               className="flex flex-col gap-4 lg:gap-6 pt-4 lg:pt-6"
@@ -184,9 +181,9 @@ export default function ExpenseSection() {
                 </p>
                 <p className="text-xs lg:text-sm leading-relaxed opacity-80">
                   <span className="font-black opacity-100">The fun way:</span>{" "}
-                  just talk. &quot;Football $50, cinema $20, groceries $80&quot; — AI
-                  hears it, sorts it into categories, hands you an editable list.
-                  One tap to save the whole thing.
+                  just talk. &quot;Football $50, cinema $20, groceries $80&quot;
+                  — AI hears it, sorts it into categories, hands you an editable
+                  list. One tap to save the whole thing.
                 </p>
                 <p className="text-xs lg:text-sm leading-relaxed opacity-80">
                   Or point your camera at a receipt. AI reads it so you
@@ -219,7 +216,6 @@ export default function ExpenseSection() {
             </motion.div>
           </div>
         </div>
-
       </div>
     </section>
   );
