@@ -43,7 +43,7 @@ export default function HeroSection() {
       <Navbar />
 
       {/* ── Hero body ── */}
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full overflow-hidden mt-24">
 
         {/* Watermark — desktop only */}
         <div
@@ -165,6 +165,7 @@ export default function HeroSection() {
                 fill
                 className="object-contain object-bottom"
                 priority
+                quality={100}
               />
             </div>
           </motion.div>
@@ -246,6 +247,7 @@ export default function HeroSection() {
                 fill
                 className="object-contain object-bottom"
                 priority
+                quality={100}
               />
             </div>
           </motion.div>

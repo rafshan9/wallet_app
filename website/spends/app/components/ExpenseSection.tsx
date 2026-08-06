@@ -52,6 +52,7 @@ export default function ExpenseSection() {
                 alt="SPENDS expense input screen"
                 fill
                 className="object-contain object-top"
+                quality={100}
               />
             </div>
           </motion.div>
@@ -211,6 +212,7 @@ export default function ExpenseSection() {
                   alt="SPENDS expense input screen with AI voice and camera features"
                   fill
                   className="object-contain object-top"
+                  quality={100}
                 />
               </div>
             </motion.div>

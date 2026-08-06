@@ -99,6 +99,7 @@ export default function GoalsSection() {
                 alt="SPENDS goals screen showing savings progress"
                 fill
                 className="object-contain object-bottom"
+                quality={100}
               />
             </div>
           </motion.div>
@@ -293,6 +294,7 @@ export default function GoalsSection() {
                   alt="SPENDS goals screen showing savings progress"
                   fill
                   className="object-contain object-bottom"
+                  quality={100}
                 />
               </div>
             </motion.div>
