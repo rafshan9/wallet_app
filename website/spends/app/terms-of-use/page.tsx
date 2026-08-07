@@ -54,15 +54,19 @@ export default function TermsOfUsePage() {
             <p>
               You agree to use SPENDS for its intended purpose of tracking
               expenses and managing your finances. You are responsible for the
-              data you enter.
+              accuracy of the data you enter.
             </p>
-            <h2 className="text-xl font-bold mt-4">3. Beta Release</h2>
+            <h2 className="text-xl font-bold mt-4">3. Third-Party Services</h2>
+            <p>
+              Our app utilizes third-party AI services (including Google Gemini and Deepgram) to provide features like receipt scanning and voice transcription. By using these features, you acknowledge that your audio and image data may be processed by these partners in accordance with our Privacy Policy.
+            </p>
+            <h2 className="text-xl font-bold mt-4">4. Beta Release</h2>
             <p>
               SPENDS is currently in a Beta phase. Features and functionalities
               may change without prior notice, and the app is provided &quot;as
               is&quot; without warranties of any kind.
             </p>
-            <h2 className="text-xl font-bold mt-4">4. Changes to Terms</h2>
+            <h2 className="text-xl font-bold mt-4">5. Changes to Terms</h2>
             <p>
               We reserve the right to update these terms at any time. Continued
               use of the app implies acceptance of the new terms.
