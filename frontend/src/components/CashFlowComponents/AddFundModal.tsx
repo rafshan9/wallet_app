@@ -35,18 +35,18 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
     const [editableTranscript, setEditableTranscript] = useState('');
     const [isExtracting, setIsExtracting] = useState(false);
 
-    const { isRecording, transcript, startRecording, stopRecording } = useSpeechToText();
+    const { isRecording, isTranscribing, transcript, startRecording, stopRecording } = useSpeechToText();
 
-    // Mirror the live transcript into the editable box while recording;
-    // once stopped, the box is fully user-controlled (no more overwrites)
+    // Mirror the live transcript into the editable box once transcription finishes.
+    // Since whisper.rn processes offline, the transcript arrives all at once at the end.
     useEffect(() => {
-        if (isRecording && visible) {
+        if (!isRecording && !isTranscribing && transcript && visible) {
             setEditableTranscript(transcript);
         }
-    }, [transcript, isRecording, visible]);
+    }, [transcript, isRecording, isTranscribing, visible]);
 
     useEffect(() => {
-        if (isRecording) {
+        if (isRecording || isTranscribing) {
             const blink = Animated.loop(
                 Animated.sequence([
                     Animated.timing(blinkAnim, { toValue: 0.3, duration: 500, useNativeDriver: true }),
@@ -59,7 +59,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                 blinkAnim.setValue(1);
             };
         }
-    }, [isRecording]);
+    }, [isRecording, isTranscribing]);
 
     const handleVoiceResult = (expenses: { name: string; amount: number; category: string }[]) => {
         if (!expenses || expenses.length === 0) {
@@ -246,25 +246,32 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                             )}
 
                             {/* Voice transcript panel */}
-                            {(isRecording || editableTranscript.length > 0) && (
+                            {(isRecording || isTranscribing || editableTranscript.length > 0) && (
                                 <View className="bg-black/80 rounded-2xl p-4 mb-6">
                                     <View className="flex-row items-center mb-2">
-                                        <View className={`w-2 h-2 rounded-full mr-2 ${isRecording ? 'bg-red' : 'bg-white/30'}`} />
+                                        <View className={`w-2 h-2 rounded-full mr-2 ${isRecording ? 'bg-red' : isTranscribing ? 'bg-yellow' : 'bg-white/30'}`} />
                                         <Text className="text-white font-jb_mono_medium text-xs">
-                                            {isRecording ? 'Listening...' : 'Review your transcript'}
+                                            {isRecording ? 'Listening...' : isTranscribing ? 'Transcribing (local model)...' : 'Review your transcript'}
                                         </Text>
                                     </View>
-                                    <TextInput
-                                        value={editableTranscript}
-                                        onChangeText={setEditableTranscript}
-                                        multiline
-                                        editable={!isRecording}
-                                        placeholder="Speak your expense..."
-                                        placeholderTextColor="rgba(255,255,255,0.4)"
-                                        className="text-white font-jb_mono_medium text-base"
-                                        style={{ minHeight: 50, textAlignVertical: 'top' }}
-                                    />
-                                    {!isRecording && editableTranscript.length > 0 && (
+                                    {isTranscribing ? (
+                                        <View className="flex-row items-center justify-center py-4">
+                                            <ActivityIndicator size="small" color="#FACC15" />
+                                            <Text className="text-white/70 font-jb_mono_medium ml-3">Running Whisper model...</Text>
+                                        </View>
+                                    ) : (
+                                        <TextInput
+                                            value={editableTranscript}
+                                            onChangeText={setEditableTranscript}
+                                            multiline
+                                            editable={!isRecording && !isTranscribing}
+                                            placeholder="Speak your expense..."
+                                            placeholderTextColor="rgba(255,255,255,0.4)"
+                                            className="text-white font-jb_mono_medium text-base"
+                                            style={{ minHeight: 50, textAlignVertical: 'top' }}
+                                        />
+                                    )}
+                                    {!isRecording && !isTranscribing && editableTranscript.length > 0 && (
                                         <View className="flex-row justify-end gap-3 mt-3">
                                             <TouchableOpacity onPress={() => setEditableTranscript('')}>
                                                 <Text className="text-white/60 font-jb_mono_medium">Discard</Text>
