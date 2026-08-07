@@ -165,7 +165,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
             <KeyboardAvoidingView behavior="padding" className="flex-1">
                 <View className="flex-1 justify-end bg-black/80">
                     <View className="bg-background w-full rounded-t-[40px] p-8 border-2 border-black max-h-[90%] relative overflow-hidden">
-                        
+
                         {(isScanning || isExtracting) && (
                             <View className="absolute inset-0 bg-background z-50 justify-center items-center rounded-t-[40px]">
                                 <ActivityIndicator size="large" color="#000000" />
@@ -250,7 +250,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                     <View className="flex-row items-center mb-2">
                                         <View className={`w-2 h-2 rounded-full mr-2 ${isRecording ? 'bg-red' : 'bg-white/30'}`} />
                                         <Text className="text-white font-jb_mono_medium text-xs">
-                                            {isRecording ? 'Listening (Deepgram Live)...' : 'Review your transcript'}
+                                            {isRecording ? 'Listening...' : 'Review your transcript'}
                                         </Text>
                                     </View>
                                     <TextInput
