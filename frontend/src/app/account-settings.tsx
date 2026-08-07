@@ -7,11 +7,14 @@ import api from '../../utils/axios';
 import { useAppStore } from '../../src/store';
 import { useAlert } from '../components/AlertModal';
 import PasswordValidator from '../components/PasswordValidator';
+import CurrencyPickerModal from '../components/CurrencyComponents/CurrencyPickerModal';
+import { CURRENCIES } from '../../src/constants/currencies';
 
 export default function AccountSettingsScreen() {
     const router = useRouter();
-    const { user } = useAppStore();
+    const { user, preferredCurrency, setPreferredCurrency } = useAppStore();
     const showAlert = useAlert();
+    const [showCurrencyPicker, setShowCurrencyPicker] = useState(false);
 
     // Change name state
     const [showChangeName, setShowChangeName] = useState(false);
@@ -214,6 +217,7 @@ export default function AccountSettingsScreen() {
     );
 
     return (
+        <>
         <ScrollView className="flex-1 bg-background pt-16 px-6" contentContainerStyle={{ paddingBottom: 60 }}>
 
             {/* Top Bar */}
@@ -371,6 +375,16 @@ export default function AccountSettingsScreen() {
                 )}
             </View>
 
+            {/* Preferences Section */}
+            <Text className="text-black/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Preferences</Text>
+            <View className="gap-y-3 mb-8">
+                <SettingsRow
+                    icon="globe"
+                    label={`Currency: ${preferredCurrency}`}
+                    onPress={() => setShowCurrencyPicker(true)}
+                />
+            </View>
+
             {/* Security Section */}
             <Text className="text-black/60 font-jb_mono_bold text-sm uppercase tracking-wider mb-3 ml-1">Security</Text>
             <View className="gap-y-3 mb-8">
@@ -506,5 +520,14 @@ export default function AccountSettingsScreen() {
             {/* App Version */}
             <Text className="text-center text-white/30 font-jb_mono_medium text-sm mb-4">Spends v1.0.0</Text>
         </ScrollView>
+
+        <CurrencyPickerModal
+            visible={showCurrencyPicker}
+            onClose={() => setShowCurrencyPicker(false)}
+            onSelect={(code) => setPreferredCurrency(code)}
+            selected={preferredCurrency}
+            title="Preferred Currency"
+        />
+        </>
     );
 }

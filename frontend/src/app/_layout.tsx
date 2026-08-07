@@ -66,6 +66,8 @@ export default function RootLayout() {
           // on a real 401, the axios interceptor already cleared tokens + setUser(null)
         }
       }
+      // Load persisted currency preference
+      await useAppStore.getState().loadPreferredCurrency();
       setUserLoaded(true);
     };
     loadUser();

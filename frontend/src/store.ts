@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { Note } from './hooks/useNotes';
 import api from '../utils/axios';
+import * as SecureStore from 'expo-secure-store';
 
 interface User {
     first_name: string;
@@ -28,6 +29,16 @@ interface AppState {
     spent: number;
     fetchBudget: () => Promise<void>;
     updateBudgetLocal: (newBudget: number) => void;
+
+    // Currency
+    preferredCurrency: string;
+    setPreferredCurrency: (currency: string) => Promise<void>;
+    loadPreferredCurrency: () => Promise<void>;
+
+    // Converter modal
+    isConverterModalOpen: boolean;
+    openConverterModal: () => void;
+    closeConverterModal: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -56,4 +67,20 @@ export const useAppStore = create<AppState>((set) => ({
         }
     },
     updateBudgetLocal: (newBudget) => set({ budget: newBudget }),
+
+    // Currency
+    preferredCurrency: 'USD',
+    setPreferredCurrency: async (currency: string) => {
+        await SecureStore.setItemAsync('preferredCurrency', currency);
+        set({ preferredCurrency: currency });
+    },
+    loadPreferredCurrency: async () => {
+        const stored = await SecureStore.getItemAsync('preferredCurrency');
+        if (stored) set({ preferredCurrency: stored });
+    },
+
+    // Converter modal
+    isConverterModalOpen: false,
+    openConverterModal: () => set({ isConverterModalOpen: true }),
+    closeConverterModal: () => set({ isConverterModalOpen: false }),
 }));
