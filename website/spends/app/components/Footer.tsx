@@ -16,8 +16,9 @@ const footerLinks = {
     { name: "Terms of Use", href: "/terms-of-use" },
   ],
   Connect: [
-    { name: "Twitter / X", href: "https://twitter.com/the_rafshan" },
+    { name: "Threads", href: "https://threads.net/@the_rafshan" },
     { name: "Instagram", href: "https://instagram.com/the_rafshan" },
+    { name: "GitHub", href: "https://github.com/rafshan9" },
   ],
 };
 
@@ -182,13 +183,15 @@ export default function Footer() {
         </p>
         <div className="flex gap-3">
           {[
-            { label: "Twitter", icon: "𝕏" },
-            { label: "Instagram", icon: "◎" },
-            { label: "GitHub", icon: "◉" },
+            { label: "Threads", icon: "@", href: "https://threads.net/@the_rafshan" },
+            { label: "Instagram", icon: "◎", href: "https://instagram.com/the_rafshan" },
+            { label: "GitHub", icon: "◉", href: "https://github.com/rafshan9" },
           ].map((s) => (
             <a
               key={s.label}
-              href="#"
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label={s.label}
               className="w-9 h-9 flex items-center justify-center text-sm border-2 transition-all duration-150"
               style={{

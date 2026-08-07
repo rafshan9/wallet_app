@@ -13,8 +13,11 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Your Site",
+  title: "SPENDS",
   description: "Your description",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
