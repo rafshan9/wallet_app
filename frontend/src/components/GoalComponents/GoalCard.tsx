@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useAlert } from '../AlertModal';
+import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 
 type Goal = {
     id: string;
@@ -21,6 +23,8 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
     const percent = goal.targetAmount > 0 ? Math.min(100, Math.round((goal.savedAmount / goal.targetAmount) * 100)) : 0;
     const isCompleted = goal.savedAmount >= goal.targetAmount;
     const showAlert = useAlert();
+    const { preferredCurrency } = useAppStore();
+    const symbol = getCurrencySymbol(preferredCurrency);
     const lightBackgrounds = ['bg-white', 'bg-yellow', 'bg-light_blue', 'bg-orange', 'bg-teal'];
     const textColor = lightBackgrounds.includes(goal.color) ? 'text-black' : 'text-white';
     const isDark = textColor === 'text-white';
@@ -36,7 +40,7 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
         if (daysLeft > 0) {
             const weeksLeft = Math.max(1, Math.floor(daysLeft / 7));
             const perWeek = remainingAmount / weeksLeft;
-            deadlineInsight = `$${perWeek.toFixed(0)}/wk needed`;
+            deadlineInsight = `${symbol}${perWeek.toFixed(0)}/wk needed`;
         } else {
             deadlineInsight = 'Past deadline';
         }

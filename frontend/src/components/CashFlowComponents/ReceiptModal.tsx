@@ -1,5 +1,7 @@
 import { Modal, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useAlert } from '../AlertModal';
+import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 
 type Transaction = {
     id: string | number;
@@ -18,8 +20,8 @@ interface ReceiptModalProps {
     transactions: Transaction[];
 }
 
-function formatAmount(value: number, sign: '+' | '-') {
-    return `${sign}$${Math.abs(value).toLocaleString(undefined, {
+function formatAmount(value: number, sign: '+' | '-', symbol: string) {
+    return `${sign}${symbol}${Math.abs(value).toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     })}`;
@@ -32,6 +34,8 @@ function toTitleCase(value: string) {
 const isGoalTransfer = (title: string) => title.startsWith('Transferred to');
 
 export default function ReceiptModal({ visible, onClose, month, year, transactions }: ReceiptModalProps) {
+    const { preferredCurrency } = useAppStore();
+    const symbol = getCurrencySymbol(preferredCurrency);
     const filtered = transactions.filter((tx) => {
         const txDate = new Date(tx.date);
         const txMonth = txDate.toLocaleDateString('en-US', { month: 'short' });
@@ -75,14 +79,14 @@ export default function ReceiptModal({ visible, onClose, month, year, transactio
                                                 {tx.title}
                                             </Text>
                                             <Text className="font-mono text-black text-sm">
-                                                {formatAmount(parseFloat(tx.amount), '+')}
+                                                {formatAmount(parseFloat(tx.amount), '+', symbol)}
                                             </Text>
                                         </View>
                                     ))}
                                     <View className="flex-row justify-between mt-2 mb-4">
                                         <Text className="font-mono text-black text-sm font-bold">Total Income</Text>
                                         <Text className="font-mono text-black text-sm font-bold">
-                                            {formatAmount(totalIncome, '+')}
+                                            {formatAmount(totalIncome, '+', symbol)}
                                         </Text>
                                     </View>
                                 </>
@@ -95,7 +99,7 @@ export default function ReceiptModal({ visible, onClose, month, year, transactio
                                         <View key={category} className="flex-row justify-between mb-1.5">
                                             <Text className="font-mono text-black text-sm">{category}</Text>
                                             <Text className="font-mono text-black text-sm">
-                                                {formatAmount(amount, '-')}
+                                                {formatAmount(amount, '-', symbol)}
                                             </Text>
                                         </View>
                                     ))}
@@ -111,7 +115,7 @@ export default function ReceiptModal({ visible, onClose, month, year, transactio
                                                 {tx.title.replace('Transferred to ', '')}
                                             </Text>
                                             <Text className="font-mono text-black text-sm">
-                                                {formatAmount(parseFloat(tx.amount), '-')}
+                                                {formatAmount(parseFloat(tx.amount), '-', symbol)}
                                             </Text>
                                         </View>
                                     ))}
@@ -122,7 +126,7 @@ export default function ReceiptModal({ visible, onClose, month, year, transactio
                                 <View className="flex-row justify-between mt-2 mb-2">
                                     <Text className="font-mono text-black text-sm font-bold">Total Expenses</Text>
                                     <Text className="font-mono text-black text-sm font-bold">
-                                        {formatAmount(totalExpenses, '-')}
+                                        {formatAmount(totalExpenses, '-', symbol)}
                                     </Text>
                                 </View>
                             )}
@@ -134,7 +138,7 @@ export default function ReceiptModal({ visible, onClose, month, year, transactio
                     <View className="flex-row justify-between">
                         <Text className="font-mono font-bold text-black text-lg">NET TOTAL</Text>
                         <Text className="font-mono font-bold text-black text-lg">
-                            {formatAmount(net, net >= 0 ? '+' : '-')}
+                            {formatAmount(net, net >= 0 ? '+' : '-', symbol)}
                         </Text>
                     </View>
                 </View>

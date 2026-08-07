@@ -1,9 +1,13 @@
 import { View, Text } from 'react-native';
 import { Transaction } from '../../hooks/useCashFlow';
+import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 
 export function ActivityBlock({ item, color }: { item: Transaction; color: string }) {
     const isIncome = item.type === 'INCOME' || Number(item.amount) > 0;
-    const formattedAmount = `${isIncome ? '+' : '-'}$${Math.abs(Number(item.amount)).toLocaleString()}`;
+    const { preferredCurrency } = useAppStore();
+    const symbol = getCurrencySymbol(preferredCurrency);
+    const formattedAmount = `${isIncome ? '+' : '-'}${symbol}${Math.abs(Number(item.amount)).toLocaleString()}`;
 
     return (
         <View className="flex-row items-center justify-between bg-white border-2 border-black p-3.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">

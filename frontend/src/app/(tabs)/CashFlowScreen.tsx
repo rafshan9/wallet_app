@@ -7,6 +7,7 @@ import MonthlyCashFlowChart from '../../components/CashFlowComponents/MonthlyCas
 import { getCategoryStyle } from '../../constants/categories';
 import { useCashFlow } from '../../hooks/useCashFlow';
 import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 import MonthYearPickerModal from '../../components/CashFlowComponents/MonthYearPickerModal';
 import ReceiptModal from '../../components/CashFlowComponents/ReceiptModal';
 import TopBar from '../../components/TopBar';
@@ -24,7 +25,8 @@ export default function CashFlowScreen() {
     const [selectedMonth, setSelectedMonth] = useState('Jul');
     const [selectedYear, setSelectedYear] = useState(2026);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { refreshTrigger, openModal } = useAppStore();
+    const { refreshTrigger, openModal, preferredCurrency } = useAppStore();
+    const symbol = getCurrencySymbol(preferredCurrency);
     const showAlert = useAlert();
 
     const {
@@ -106,7 +108,7 @@ export default function CashFlowScreen() {
                     <>
                         <MonthlyCashFlowChart deposited={totalIncome} expense={totalExpenses} savings={totalSavings} />
 
-                        <ExpensePieChart total={`$${totalExpenses.toFixed(2)}`} categories={categoryBreakdown} />
+                        <ExpensePieChart total={`${symbol}${totalExpenses.toFixed(2)}`} categories={categoryBreakdown} />
 
                         <View className="flex-row justify-between items-center">
                             <Text className="font-jb_mono_bold">Recent Activity</Text>

@@ -2,6 +2,8 @@ import { Animated, View, Text, useWindowDimensions } from 'react-native';
 import { useCashFlow } from '../../hooks/useCashFlow';
 import { useGoals } from '../../hooks/useGoals';
 import { CARD_BACKGROUND_COLORS } from '../../constants/cardColors';
+import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 
 type Props = {
     scrollX: Animated.Value;
@@ -11,16 +13,18 @@ export default function CardSlider({ scrollX }: Props) {
     const { width: SCREEN_WIDTH } = useWindowDimensions();
     const { totalIncome, totalExpenses, monthlyExpenses, monthlyIncome } = useCashFlow();
     const { totalSaved, totalTarget } = useGoals();
+    const { preferredCurrency } = useAppStore();
+    const symbol = getCurrencySymbol(preferredCurrency);
 
     const remainingFunds = totalIncome - totalExpenses - totalSaved;
     const currentDay = new Date().getDate();
 
 
     const formatCurrency = (amount: number) =>
-        `$${amount.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}`;
+        `${symbol}${amount.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}`;
 
     const formatExact = (amount: number) =>
-        `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        `${symbol}${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
     const CARDS_DATA = [
         {
