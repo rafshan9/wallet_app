@@ -7,6 +7,9 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const api = axios.create({
     baseURL: `${API_URL}/api`,
+    headers: {
+        'Connection': 'close',
+    }
 });
 
 // Before any request goes out of the device, this appends the header with the access token if found 
@@ -41,6 +44,7 @@ const logout = async () => {
     await SecureStore.deleteItemAsync('refreshToken');
     const { useAppStore } = await import('../src/store');
     useAppStore.getState().setUser(null);
+    router.replace('/(auth)/login');
 };
 
 // This checks every response from the server, if 401 found, it tries to refresh tokens
@@ -76,6 +80,8 @@ api.interceptors.response.use(
             // plain axios here, NOT `api` — otherwise a failed refresh re-enters this same interceptor
             const { data } = await axios.post(`${API_URL}/api/token/refresh/`, {
                 refresh: refreshToken,
+            }, {
+                headers: { 'Connection': 'close' }
             });
 
             await SecureStore.setItemAsync('accessToken', data.access);

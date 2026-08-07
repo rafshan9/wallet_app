@@ -1,4 +1,4 @@
-import { View, ScrollView, Animated, useWindowDimensions } from 'react-native';
+import { View, ScrollView, Animated, useWindowDimensions, RefreshControl } from 'react-native';
 import { useState, useCallback, useRef } from 'react';
 import { useRouter, useFocusEffect } from 'expo-router';
 import TopBar from '../../components/TopBar'
@@ -25,6 +25,7 @@ export default function HomeScreen() {
   const { notes, deleteNote } = useNotes();
   const { openNoteModal } = useAppStore();
   const showAlert = useAlert();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
 
   useFocusEffect(
@@ -35,7 +36,7 @@ export default function HomeScreen() {
 
   const handlePressPayment = (id: string) => router.push(`/planned-payment/${id}`);
   const handleAddPress = () => setIsAddModalOpen(true);
-  const { transactions } = useCashFlow();
+  const { transactions, fetchTransactions } = useCashFlow();
   const handleAddNotePress = () => openNoteModal();
   const handleEditNotePress = (note: Note) => openNoteModal(note);
   const handleDeleteNotePress = (note: Note) => {
@@ -59,6 +60,15 @@ export default function HomeScreen() {
     outputRange: CARD_TEXT_COLORS,
   });
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await Promise.all([
+      fetchPayments(),
+      fetchTransactions(),
+    ]);
+    setIsRefreshing(false);
+  };
+
   return (
     <View className="flex-1 relative bg-background">
       <Animated.View style={{ paddingTop: 48, backgroundColor: animatedHeroColor }}>
@@ -69,8 +79,11 @@ export default function HomeScreen() {
         className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 140 }}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
+        }
       >
-        {/* 2. CardSlider handles its own dynamic background color now */}
+        {/* CardSlider handles its own dynamic background color now */}
         <CardSlider scrollX={scrollX} />
         <Test />
 
