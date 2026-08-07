@@ -91,8 +91,8 @@ export default function GoalCard({ goal, onAddPress, onDelete }: GoalCardProps) 
 
             <View className="flex-row justify-between items-center">
                 <Text className={`font-jb_mono_medium text-sm ${textColor}`}>
-                    ${goal.savedAmount.toLocaleString()}
-                    <Text className={`font-jb_mono_medium ${isDark ? 'text-white/60' : 'text-black/50'}`}> of ${goal.targetAmount.toLocaleString()}</Text>
+                    {symbol}{goal.savedAmount.toLocaleString()}
+                    <Text className={`font-jb_mono_medium ${isDark ? 'text-white/60' : 'text-black/50'}`}> of {symbol}{goal.targetAmount.toLocaleString()}</Text>
                 </Text>
 
                 {/* Hides the action button if the milestone is already reached */}

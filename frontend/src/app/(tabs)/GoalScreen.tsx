@@ -9,6 +9,8 @@ import CelebrationModal from '../../components/GoalComponents/CelebrationModal';
 import { useGoals } from '../../hooks/useGoals';
 import TopBar from '../../components/TopBar';
 import PlusIcon from '../../../assets/icons/plus_white.svg';
+import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 
 const BAR_COLORS = ['#34d399', '#0eff66ff', '#ffde0fff', '#3b08f7ff', '#f43f5e', '#fb923c', '#a855f7'];
 
@@ -20,6 +22,8 @@ export default function GoalScreen() {
     const [celebratingGoal, setCelebratingGoal] = useState<{ name: string; targetAmount: number } | null>(null);
 
     const { goals, isLoading, fetchGoals, deleteGoal, totalSaved, totalTarget } = useGoals();
+    const { preferredCurrency } = useAppStore();
+    const symbol = getCurrencySymbol(preferredCurrency);
 
     if (isLoading) {
         return (
@@ -43,7 +47,7 @@ export default function GoalScreen() {
                 <View className="bg-black p-6 mt-6 mb-8">
                     <Text className="text-white/60 font-jb_mono_medium text-sm mb-2">Total Saved</Text>
                     <Text className="text-white font-jb_mono_bold text-4xl mb-4">
-                        ${totalSaved.toLocaleString()}
+                        {symbol}{totalSaved.toLocaleString()}
                     </Text>
                     <View className="h-3 bg-white/20 rounded-full overflow-hidden mb-2 flex-row">
                         {goals.length > 0 ? (
@@ -65,7 +69,7 @@ export default function GoalScreen() {
                         )}
                     </View>
                     <Text className="text-white/60 font-jb_mono_medium text-xs">
-                        ${totalSaved.toLocaleString()} of ${totalTarget.toLocaleString()} across {goals.length} goals
+                        {symbol}{totalSaved.toLocaleString()} of {symbol}{totalTarget.toLocaleString()} across {goals.length} goals
                     </Text>
                 </View>
 

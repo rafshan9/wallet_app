@@ -4,6 +4,7 @@ import { useState } from 'react';
 import api from '../../../utils/axios';
 import { useAlert } from '../AlertModal';
 import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 
 type AddContributionModalProps = {
     visible: boolean;
@@ -16,6 +17,8 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
     const [isLoading, setIsLoading] = useState(false);
     const showAlert = useAlert();
     const triggerRefresh = useAppStore((state) => state.triggerRefresh);
+    const preferredCurrency = useAppStore((state) => state.preferredCurrency);
+    const symbol = getCurrencySymbol(preferredCurrency);
 
     const handleSubmit = async () => {
         if (!amount || !goal) {
@@ -62,13 +65,15 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
                     </View>
 
                     <TextInput
-                        placeholder="$0.00"
+                        placeholder={`${symbol}0.00`}
                         keyboardType="numeric"
                         value={amount}
                         onChangeText={setAmount}
                         placeholderTextColor="rgba(255,255,255,0.5)"
                         className="text-5xl font-jb_mono_bold text-white text-center mb-8"
                         style={{ lineHeight: 64, paddingTop: 8 }}
+                        adjustsFontSizeToFit
+                        numberOfLines={1}
                     />
 
                     <TouchableOpacity

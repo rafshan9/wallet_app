@@ -2,8 +2,11 @@ import { View, Text, Modal, TextInput, TouchableOpacity, ActivityIndicator, Keyb
 import { Feather } from '@expo/vector-icons';
 import { useRef, useState, useEffect } from 'react';
 import { CATEGORIES } from '../../constants/categories';
-import api from '../../../utils/axios'
-import { useAppStore } from '../../store'
+import api from '../../../utils/axios';
+import * as ImagePicker from 'expo-image-picker';
+import { analyzeReceipt } from '../../../utils/gemini';
+import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 import { useAlert } from '../AlertModal';
 import ScannerButton from '../ui/ScannerButton';
 import AiReviewModal from './AiReviewModal';
@@ -15,6 +18,8 @@ type AddExpenseModalProps = {
 };
 
 export default function AddExpenseModal({ visible, onClose }: AddExpenseModalProps) {
+    const { preferredCurrency } = useAppStore();
+    const symbol = getCurrencySymbol(preferredCurrency);
     const [type, setType] = useState<'expense' | 'income'>('expense');
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const { triggerRefresh } = useAppStore();
@@ -197,7 +202,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                             </View>
 
                             <TextInput
-                                placeholder="$0.00"
+                                placeholder={`${symbol}0.00`}
                                 keyboardType="numeric"
                                 placeholderTextColor="rgba(100, 100, 100, 0.5)"
                                 scrollEnabled={false}
@@ -206,6 +211,8 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                 onChangeText={setAmount}
                                 className="text-6xl font-jb_mono_bold text-black text-center mb-8"
                                 style={{ textAlignVertical: 'center', includeFontPadding: false, paddingVertical: 0, height: 80 }}
+                                adjustsFontSizeToFit
+                                numberOfLines={1}
                             />
 
                             <TextInput

@@ -2,6 +2,8 @@ import { View, Text, Modal, TextInput, TouchableOpacity, Alert, ActivityIndicato
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import api from '../../../utils/axios';
+import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 
 type AddGoalModalProps = {
     visible: boolean;
@@ -20,6 +22,8 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
     const [name, setName] = useState('');
     const [targetAmount, setTargetAmount] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const { preferredCurrency } = useAppStore();
+    const symbol = getCurrencySymbol(preferredCurrency);
 
     const handleSubmit = async () => {
         if (!name || !targetAmount || !selectedColor) {
@@ -71,7 +75,7 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                         />
 
                         <TextInput
-                            placeholder="$0.00"
+                            placeholder={`${symbol}0.00`}
                             keyboardType="numeric"
                             placeholderTextColor="rgba(100, 100, 100, 0.5)"
                             scrollEnabled={false}
@@ -80,6 +84,8 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                             onChangeText={setTargetAmount}
                             className="text-5xl text-black font-jb_mono_bold text-center mb-8"
                             style={{ textAlignVertical: 'center', includeFontPadding: false, paddingVertical: 0, height: 80 }}
+                            adjustsFontSizeToFit
+                            numberOfLines={1}
                         />
 
                         <Text className="text-black font-jb_mono_bold text-sm mb-3">Choose a color</Text>

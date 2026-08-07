@@ -1,4 +1,6 @@
 import { View, Text } from 'react-native';
+import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 
 type CategoryBreakdown = {
     label: string;
@@ -13,6 +15,9 @@ type ExpensePieChartProps = {
 };
 
 export default function ExpensePieChart({ total, categories }: ExpensePieChartProps) {
+    const { preferredCurrency } = useAppStore();
+    const symbol = getCurrencySymbol(preferredCurrency);
+
     return (
         <View className="mb-8 overflow-hidden">
             {/* Header */}
@@ -54,7 +59,7 @@ export default function ExpensePieChart({ total, categories }: ExpensePieChartPr
                                         {hasSpend ? `${cat.percent}%` : '–'}
                                     </Text>
                                     <Text className="font-jb_mono_bold text-xl text-black">
-                                        ${cat.amount.toFixed(0)}
+                                        {symbol}{cat.amount.toFixed(0)}
                                     </Text>
                                 </View>
                             </View>

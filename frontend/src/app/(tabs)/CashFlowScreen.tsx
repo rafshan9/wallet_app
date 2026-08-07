@@ -156,7 +156,7 @@ export default function CashFlowScreen() {
                                     <Text className="text-sm font-jb_mono_regular text-gray-500 mt-1">{formattedDate}</Text>
                                 </View>
                                 <Text className="text-lg font-jb_mono_bold text-green mr-3">
-                                    +${parsedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    +{symbol}{parsedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </Text>
                                 <TouchableOpacity onPress={() => handleDelete(tx.id, tx.title)} className="p-1">
                                     <Feather name="trash-2" size={18} color="#9CA3AF" />
@@ -197,7 +197,7 @@ export default function CashFlowScreen() {
                                 </Text>
                             </View>
                             <Text className={`text-lg font-jb_mono_bold ${style.text} mr-3`}>
-                                -${parsedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                -{symbol}{parsedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </Text>
                             <TouchableOpacity onPress={() => handleDelete(tx.id, tx.title)} className="p-1">
                                 <Feather

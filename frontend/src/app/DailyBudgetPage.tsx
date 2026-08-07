@@ -5,13 +5,15 @@ import { Feather } from '@expo/vector-icons';
 import api from '../../utils/axios';
 import { useAlert } from '../components/AlertModal';
 import { useAppStore } from '../store';
+import { getCurrencySymbol } from '../constants/currencyFormat';
 
 export default function DailyBudgetPage() {
     const router = useRouter();
     const showAlert = useAlert();
 
-    const { budget: storeBudget, fetchBudget, updateBudgetLocal } = useAppStore();
+    const { budget: storeBudget, fetchBudget, updateBudgetLocal, preferredCurrency } = useAppStore();
     const [budget, setBudget] = useState<string>(storeBudget ? storeBudget.toString() : '');
+    const symbol = getCurrencySymbol(preferredCurrency);
 
     useEffect(() => {
         fetchBudget();
@@ -67,11 +69,13 @@ export default function DailyBudgetPage() {
 
                 <TextInput
                     className="bg-white border-[2.5px] border-black/20 text-black w-full h-16 rounded-xl font-jb_mono_bold text-2xl text-center mb-4"
-                    placeholder="$0.00"
+                    placeholder={`${symbol}0.00`}
                     placeholderTextColor="#9CA3AF"
                     keyboardType="numeric"
                     value={budget}
                     onChangeText={setBudget}
+                    adjustsFontSizeToFit
+                    numberOfLines={1}
                 />
 
                 <Text className="font-jb_mono_medium text-sm text-center">

@@ -142,6 +142,8 @@ export default function CurrencyConverterModal({ visible, onClose }: Props) {
                                             onChangeText={setAmount}
                                             className="text-6xl font-jb_mono_bold text-black text-center mb-8"
                                             style={{ textAlignVertical: 'center', includeFontPadding: false, paddingVertical: 0, height: 80 }}
+                                            adjustsFontSizeToFit
+                                            numberOfLines={1}
                                         />
 
                                         {/* Currency row */}

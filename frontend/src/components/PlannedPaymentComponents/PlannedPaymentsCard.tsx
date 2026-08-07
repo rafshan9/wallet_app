@@ -2,6 +2,8 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { PlannedPayment } from '../../hooks/usePlannedPayments';
 import { useState } from 'react';
+import { useAppStore } from '../../store';
+import { getCurrencySymbol } from '../../constants/currencyFormat';
 
 function checkIsDueThisWeek(dueDate: string) {
     const today = new Date();
@@ -25,6 +27,8 @@ export default function PlannedPaymentsCard({
     onAddPress,
 }: Props) {
     const [expanded, setExpanded] = useState(false);
+    const { preferredCurrency } = useAppStore();
+    const symbol = getCurrencySymbol(preferredCurrency);
     const visible = expanded ? payments : payments.slice(0, 7);
 
     return (
@@ -42,7 +46,7 @@ export default function PlannedPaymentsCard({
                             Total Planned
                         </Text>
                         <Text className="font-jb_mono_bold text-base text-black">
-                            ${totalPlanned.toLocaleString()}
+                            {symbol}{totalPlanned.toLocaleString()}
                         </Text>
                     </View>
                 )}
@@ -86,7 +90,7 @@ export default function PlannedPaymentsCard({
                                     </View>
 
                                     <Text className="font-jb_mono_bold text-sm text-black">
-                                        ${payment.amount.toLocaleString()} {isDueThisWeek ? payment.name : ''}
+                                        {symbol}{payment.amount.toLocaleString()} {isDueThisWeek ? payment.name : ''}
                                     </Text>
                                 </TouchableOpacity>
                             );
