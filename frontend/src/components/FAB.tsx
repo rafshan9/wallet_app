@@ -69,7 +69,7 @@ export default function FAB() {
         <View className="items-center justify-end relative z-50">
             {/* Item 3 — Convert */}
             <Animated.View className="absolute items-center justify-center" style={item3Style}>
-                <View className="absolute right-[68px] bg-background_green py-2 rounded-full w-24 items-center justify-center">
+                <View className="absolute right-[68px] bg-background_green py-2 rounded-full w-24 items-center justify-center border-2 border-black">
                     <Text className="text-black font-jb_mono_bold text-sm">Convert</Text>
                 </View>
                 <TouchableOpacity
@@ -86,7 +86,7 @@ export default function FAB() {
 
             {/* Item 2 — Add Transaction */}
             <Animated.View className="absolute items-center justify-center" style={item2Style}>
-                <View className="absolute right-[68px] bg-yellow py-2 rounded-full w-36 items-center justify-center">
+                <View className="absolute right-[68px] bg-yellow py-2 rounded-full w-36 items-center justify-center border-2 border-black">
                     <Text className="text-black font-jb_mono_bold text-sm">Add Transaction</Text>
                 </View>
                 <TouchableOpacity
@@ -95,7 +95,7 @@ export default function FAB() {
                         toggleMenu();
                         openModal();
                     }}
-                    className="h-14 w-14 bg-yellow rounded-full justify-center items-center shadow-xl"
+                    className="h-14 w-14 bg-yellow rounded-full justify-center items-center shadow-xl border-2 border-black"
                 >
                     <Text className="text-black font-jb_mono_bold text-4xl">+</Text>
                 </TouchableOpacity>
@@ -103,7 +103,7 @@ export default function FAB() {
 
             {/* Item 1 — Notes */}
             <Animated.View className="absolute items-center justify-center" style={item1Style}>
-                <View className="absolute right-[68px] bg-dark_blue py-2 rounded-full w-20 items-center justify-center">
+                <View className="absolute right-[68px] bg-dark_blue py-2 rounded-full w-20 items-center justify-center border-2 border-black">
                     <Text className="text-white font-jb_mono_bold text-sm">Notes</Text>
                 </View>
                 <TouchableOpacity
@@ -112,7 +112,7 @@ export default function FAB() {
                         toggleMenu();
                         openNoteModal();
                     }}
-                    className="h-14 w-14 bg-dark_blue rounded-full justify-center items-center shadow-xl"
+                    className="h-14 w-14 bg-dark_blue rounded-full justify-center items-center shadow-xl border-2 border-black"
                 >
                     <Text className="text-white font-jb_mono_bold text-4xl">+</Text>
                 </TouchableOpacity>
@@ -122,7 +122,7 @@ export default function FAB() {
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={toggleMenu}
-                className="h-14 w-14 bg-white rounded-full justify-center items-center z-50 shadow-xl"
+                className="h-14 w-14 bg-white rounded-full justify-center items-center z-50 shadow-xl border-2 border-black"
             >
                 <Animated.View style={{ transform: [{ rotate: rotation }] }}>
                     <Text className="text-black font-jb_mono_bold text-4xl">+</Text>

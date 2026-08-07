@@ -61,7 +61,7 @@ export default function CurrencyConverterModal({ visible, onClose }: Props) {
         try {
             await api.post('/transactions/', {
                 type: 'INCOME',
-                amount: convertedAmount.toString(),
+                amount: convertedAmount.toFixed(2),
                 title: `${amount} ${fromCurrency} converted to ${toCurrency}`,
                 category: 'OTHER',
             });
@@ -88,7 +88,7 @@ export default function CurrencyConverterModal({ visible, onClose }: Props) {
         try {
             await api.post('/transactions/', {
                 type: 'EXPENSE',
-                amount: convertedAmount.toString(),
+                amount: convertedAmount.toFixed(2),
                 title: expenseTitle.trim(),
                 category: selectedCategory.toUpperCase(),
             });

@@ -165,18 +165,18 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
         <Modal visible={visible} animationType="slide" transparent={true}>
             <KeyboardAvoidingView behavior="padding" className="flex-1">
                 <View className="flex-1 justify-end bg-black/80">
-                    <View className="bg-background w-full rounded-t-[40px] p-8 border-2 border-black max-h-[90%]">
+                    <View className="bg-background w-full rounded-t-[40px] p-8 border-2 border-black max-h-[90%] relative overflow-hidden">
+                        
+                        {(isScanning || isExtracting) && (
+                            <View className="absolute inset-0 bg-background z-50 justify-center items-center rounded-t-[40px]">
+                                <ActivityIndicator size="large" color="#000000" />
+                                <Text className="mt-4 font-jb_mono_bold text-black text-lg">
+                                    {isScanning ? 'Analyzing receipt...' : 'Extracting your expense...'}
+                                </Text>
+                            </View>
+                        )}
+
                         <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-
-                            {(isScanning || isExtracting) && (
-                                <View className="absolute inset-0 bg-background z-50 justify-center items-center rounded-t-[40px]">
-                                    <ActivityIndicator size="large" color="#000000" />
-                                    <Text className="mt-4 font-jb_mono_bold text-black text-lg">
-                                        {isScanning ? 'Analyzing receipt...' : 'Extracting your expense...'}
-                                    </Text>
-                                </View>
-                            )}
-
                             <View className="flex-row justify-between items-center mb-8">
                                 <Text className="text-3xl font-jb_mono_bold text-black">
                                     {type === 'expense' ? 'New Expense' : 'New Income'}
