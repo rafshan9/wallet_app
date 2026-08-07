@@ -72,6 +72,7 @@ export default function AddContributionModal({ visible, onClose, goal }: AddCont
                         placeholderTextColor="rgba(255,255,255,0.5)"
                         className="text-5xl font-jb_mono_bold text-white text-center mb-8"
                         style={{ lineHeight: 64, paddingTop: 8 }}
+                        // @ts-expect-error - adjustsFontSizeToFit is not in React Native TextInput types but works on iOS
                         adjustsFontSizeToFit
                         numberOfLines={1}
                     />

@@ -84,6 +84,7 @@ export default function AddGoalModal({ visible, onClose }: AddGoalModalProps) {
                             onChangeText={setTargetAmount}
                             className="text-5xl text-black font-jb_mono_bold text-center mb-8"
                             style={{ textAlignVertical: 'center', includeFontPadding: false, paddingVertical: 0, height: 80 }}
+                            // @ts-expect-error - adjustsFontSizeToFit is not in React Native TextInput types but works on iOS
                             adjustsFontSizeToFit
                             numberOfLines={1}
                         />

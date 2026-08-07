@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import {
     View, Text, Modal, TouchableOpacity,
-    TextInput, FlatList, SafeAreaView,
+    TextInput, FlatList,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { CURRENCIES } from '../../constants/currencies';
 

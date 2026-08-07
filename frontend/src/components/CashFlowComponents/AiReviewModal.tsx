@@ -42,6 +42,7 @@ export default function AiReviewModal({ visible, onClose, onConfirm, scannedData
                                     value={item.amount.toString()}
                                     onChangeText={(val) => updateItemAmount(index, val)}
                                     className="bg-gray-100 p-2 rounded-lg text-right font-bold min-w-[80px]"
+                                    // @ts-expect-error - adjustsFontSizeToFit is not in React Native TextInput types but works on iOS
                                     adjustsFontSizeToFit
                                     numberOfLines={1}
                                 />

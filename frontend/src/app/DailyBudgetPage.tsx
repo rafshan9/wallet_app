@@ -74,6 +74,7 @@ export default function DailyBudgetPage() {
                     keyboardType="numeric"
                     value={budget}
                     onChangeText={setBudget}
+                    // @ts-expect-error - adjustsFontSizeToFit is not in React Native TextInput types but works on iOS
                     adjustsFontSizeToFit
                     numberOfLines={1}
                 />

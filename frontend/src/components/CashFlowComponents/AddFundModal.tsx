@@ -211,6 +211,7 @@ export default function AddExpenseModal({ visible, onClose }: AddExpenseModalPro
                                 onChangeText={setAmount}
                                 className="text-6xl font-jb_mono_bold text-black text-center mb-8"
                                 style={{ textAlignVertical: 'center', includeFontPadding: false, paddingVertical: 0, height: 80 }}
+                                // @ts-expect-error - adjustsFontSizeToFit is not in React Native TextInput types but works on iOS
                                 adjustsFontSizeToFit
                                 numberOfLines={1}
                             />
