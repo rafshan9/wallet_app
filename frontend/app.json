@@ -62,8 +62,7 @@
       "expo-image",
       "expo-status-bar",
       "expo-web-browser",
-      "@react-native-google-signin/google-signin",
-      "@siteed/audio-studio"
+      "@react-native-google-signin/google-signin"
     ],
     "experiments": {
       "typedRoutes": true,
