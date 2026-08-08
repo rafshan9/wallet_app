@@ -13,8 +13,21 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://spends.me"),
   title: "SPENDS",
-  description: "Your description",
+  description: "Smart Financial Management",
+  openGraph: {
+    title: "SPENDS",
+    description: "Smart Financial Management",
+    url: "https://spends.me",
+    siteName: "SPENDS",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SPENDS",
+    description: "Smart Financial Management",
+  },
   icons: {
     icon: "/favicon.png",
   },
