@@ -256,7 +256,7 @@ export default function GoalsSection() {
 
               {/* Animated progress bars — visual demo */}
               <div
-                className="flex flex-col gap-3 lg:gap-4 p-3 lg:p-5 border-2 border-[#282825]"
+                className="flex flex-col gap-3 lg:gap-4 p-3 lg:p-5 border-4 border-[#282825]"
                 style={{
                   backgroundColor: "#fff",
                   boxShadow: "4px 4px 0px #282825",
