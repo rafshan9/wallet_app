@@ -1,260 +1,174 @@
 "use client";
 
-import { motion, AnimatePresence } from "motion/react";
-import Image from "next/image";
-import { useState, useEffect } from "react";
+import { motion } from "motion/react";
 import Navbar from "./Navbar";
-import TickerBanner from "./TickerBanner";
-import GetSpendsButton from "./GetSpendsButton";
+import Link from "next/link";
 
-const pills = [
-  { label: "Expense", color: "#F7CB46", text: "#282825", dot: "#D9313F" },
-  { label: "Goals", color: "#A8FF57", text: "#282825", dot: "#00215E" },
-  { label: "Payments", color: "#DE1A58", text: "#ffffff", dot: "#F7CB46" },
-  { label: "Notes", color: "#00215E", text: "#ffffff", dot: "#A8FF57" },
-];
-
-// Scales font-size/padding down for longer labels so every pill occupies
-// roughly the same width and none of them force the headline to wrap.
-// Labels at or under `baseline` chars (e.g. "Expense", "Goals") render at full size.
-function pillScale(label: string, baseline = 9) {
-  return Math.min(1, baseline / label.length);
-}
-
-function pillFontSize(min: number, vw: number, max: number, scale: number) {
-  return `clamp(${(min * scale).toFixed(1)}px, ${(vw * scale).toFixed(2)}vw, ${(max * scale).toFixed(1)}px)`;
-}
+const FloatingPill = ({
+  label,
+  bg,
+  text,
+  top,
+  left,
+  right,
+  bottom,
+  rotate,
+  delay
+}: {
+  label: string;
+  bg: string;
+  text: string;
+  top?: string;
+  left?: string;
+  right?: string;
+  bottom?: string;
+  rotate: number;
+  delay: number;
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ 
+        opacity: 1, 
+        scale: 1,
+        y: [0, -15, 0],
+        x: [0, 10, 0],
+        rotate: [rotate, rotate + 4, rotate - 3, rotate]
+      }}
+      transition={{
+        opacity: { duration: 0.5, delay },
+        scale: { duration: 0.5, delay },
+        y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay },
+        x: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: delay + 1 },
+        rotate: { duration: 7, repeat: Infinity, ease: "easeInOut", delay: delay + 2 }
+      }}
+      className="absolute border-[3px] border-black rounded-full px-5 py-2 font-black whitespace-nowrap z-0 hidden sm:block md:px-8 md:py-3"
+      style={{
+        backgroundColor: bg,
+        color: text,
+        top,
+        left,
+        right,
+        bottom,
+        boxShadow: "4px 4px 0px 0px #000",
+        fontFamily: "var(--font-jetbrains-mono)",
+        fontSize: "clamp(12px, 1.5vw, 20px)",
+      }}
+    >
+      {label}
+    </motion.div>
+  );
+};
 
 export default function HeroSection() {
-  const [pillIndex, setPillIndex] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setPillIndex((p) => (p + 1) % pills.length);
-    }, 2200);
-    return () => clearInterval(t);
-  }, []);
-
-  const pill = pills[pillIndex];
-  const scale = pillScale(pill.label);
-
   return (
-    <section className="flex flex-col" style={{ backgroundColor: "#F9F5F2" }}>
-      <Navbar />
+    <section className="flex flex-col min-h-screen relative overflow-hidden">
+      {/* Background Gradient */}
+      <div 
+        className="absolute inset-0 z-0" 
+        style={{ background: "linear-gradient(to bottom, #FF002C, #99001A)" }}
+      />
+      
+      <div className="relative z-10 flex flex-col flex-1">
+        <Navbar />
 
-      {/* ── Hero body ── */}
-      <div className="relative w-full overflow-hidden mt-24">
+        {/* Hero Content */}
+        <div className="flex-1 flex items-center justify-center relative w-full max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+          
+          {/* Floating Pills (Desktop & Tablet) */}
+          <FloatingPill
+            label="TRACK SAVING"
+            bg="#ccff00"
+            text="#000"
+            top="15%"
+            left="5%"
+            rotate={-12}
+            delay={0.1}
+          />
+          <FloatingPill
+            label="TRACK FUNDS"
+            bg="#00E573"
+            text="#000"
+            top="20%"
+            right="5%"
+            rotate={15}
+            delay={0.3}
+          />
+          <FloatingPill
+            label="TRACK EXPENSES"
+            bg="#ffffff"
+            text="#000"
+            bottom="20%"
+            left="8%"
+            rotate={10}
+            delay={0.5}
+          />
+          <FloatingPill
+            label="REACH GOALS"
+            bg="#ccff00"
+            text="#000"
+            bottom="15%"
+            right="10%"
+            rotate={-15}
+            delay={0.7}
+          />
 
-        {/* Watermark — desktop only */}
-        <div
-          className="hidden md:flex absolute inset-0 items-center justify-end pointer-events-none select-none overflow-hidden"
-          aria-hidden="true"
-        >
-          <span
-            className="font-black leading-none tracking-tighter"
-            style={{
-              fontFamily: "var(--font-rubik)",
-              color: "#F7CB46",
-              opacity: 0.85,
-              whiteSpace: "nowrap",
-              fontSize: "clamp(100px, 18vw, 220px)",
-              transform: "translateX(4%)",
-            }}
-          >
-            SPENDS
-          </span>
-        </div>
-
-        {/* ── DESKTOP (md+) ── */}
-        <div className="hidden md:grid relative max-w-7xl mx-auto px-6 pt-14 pb-0 grid-cols-2 gap-8 items-end min-h-[520px]">
-
-          {/* Left: copy + pill + CTA */}
-          <motion.div
-            className="flex flex-col gap-6 pb-20 z-10"
-            initial={{ opacity: 0, y: 32 }}
+          <motion.div 
+            className="flex flex-col items-center z-20 w-full max-w-3xl px-4 mt-8 md:mt-0"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: "easeOut" }}
+            transition={{ duration: 0.6 }}
           >
-            {/* Headline */}
-            <h1
-              className="font-bold leading-[1.15] text-[#282825]"
-              style={{
-                fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "clamp(32px, 4.5vw, 52px)",
-              }}
-            >
-              {/* "Track" italic + red underline */}
-              <span className="relative inline-block mr-2" style={{ fontFamily: "var(--font-jetbrains-mono)" }}>
-                Track your
-              </span>
-
-              {/* Animated pill */}
-              <span className="inline-flex items-center relative" style={{ verticalAlign: "middle" }}>
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={pillIndex}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="inline-flex items-center gap-2 rounded-full"
-                    style={{
-                      backgroundColor: pill.color + "b3", // ~70% opacity
-                      color: pill.text,
-                      fontWeight: 800,
-                      fontSize: pillFontSize(26, 3.8, 46, scale),
-                      lineHeight: 1.2,
-                      paddingTop: "2px",
-                      paddingBottom: "4px",
-                      paddingLeft: `${16 * scale}px`,
-                      paddingRight: `${16 * scale}px`,
-                    }}
-                  >
-                    {/* Blinking dot */}
-                    <motion.span
-                      className="inline-block rounded-full shrink-0"
-                      style={{
-                        width: "clamp(10px, 1.2vw, 24px)",
-                        height: "clamp(10px, 1.2vw, 24px)",
-                        backgroundColor: pill.dot,
-                      }}
-                      animate={{ opacity: [1, 0.15, 1] }}
-                      transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                    {pill.label}
-                  </motion.span>
-                </AnimatePresence>
-              </span>
-            </h1>
-
-            {/* Second line */}
-            <p
-              className="font-bold text-[#282825] -mt-3"
-              style={{
-                fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "clamp(32px, 4.5vw, 52px)",
-                lineHeight: 1.15,
-              }}
-            >
-              with intentional effort
-            </p>
-
-            <p
-              className="text-[#282825] text-sm leading-relaxed max-w-[380px] opacity-75"
-              style={{ fontFamily: "var(--font-jetbrains-mono)" }}
-            >
-              Yeah, yeah, we have AI features but you still need to input stuff yourself.
-            </p>
-
-            {/* CTA */}
-            <GetSpendsButton variant="medium" />
-          </motion.div>
-
-          {/* Right: phone image — cropped at bottom on desktop via overflow hidden */}
-          <motion.div
-            className="relative z-10 overflow-hidden"
-            style={{ height: "480px" }}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: "easeOut", delay: 0.1 }}
-          >
-            <div className="relative w-full h-[580px]">
-              <Image
-                src="/first_image_web.png"
-                alt="SPENDS app screens showing remaining funds, saving goals, and monthly expenses"
-                fill
-                className="object-contain object-bottom"
-                priority
-                quality={100}
-              />
+            
+            {/* Top Icons */}
+            <div className="flex items-center gap-6 mb-8">
+              <div className="w-14 h-14 md:w-16 md:h-16 bg-[#FFC600] rounded-full border-[3px] border-black flex items-center justify-center" style={{ boxShadow: "3px 3px 0px 0px #000" }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" color="#000">
+                  <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
+                  <circle cx="12" cy="13" r="3"></circle>
+                </svg>
+              </div>
+              <div className="w-14 h-14 md:w-16 md:h-16 bg-[#D9313F] rounded-full border-[3px] border-black flex items-center justify-center" style={{ boxShadow: "3px 3px 0px 0px #000" }}>
+                <div className="w-5 h-5 bg-[#7B0D1E] rounded-sm" />
+              </div>
             </div>
-          </motion.div>
-        </div>
 
-        {/* ── MOBILE layout (below md) — correct reading order ── */}
-        <div className="flex md:hidden flex-col items-center px-5 pt-10 pb-0 gap-0">
-
-          {/* 1. Headline */}
-          <motion.div
-            className="flex flex-col gap-4 w-full z-10"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
-            <h1
-              className="font-bold leading-[1.3] text-[#282825] text-center"
-              style={{
-                fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "clamp(24px, 6.5vw, 36px)",
-              }}
+            {/* Button */}
+            <Link 
+              href="/download"
+              className="group relative inline-flex items-center justify-center cursor-pointer w-full sm:w-auto"
             >
-              <span className="relative inline-block mr-2">
-                Track
-              </span>
-              your{" "}
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={pillIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, ease: "easeInOut" }}
-                  className="inline-flex items-center gap-1.5 rounded-full"
-                  style={{
-                    backgroundColor: pill.color + "b3",
-                    color: pill.text,
-                    fontStyle: "italic",
-                    paddingTop: "1px",
-                    paddingBottom: "3px",
-                    paddingLeft: `${12 * scale}px`,
-                    paddingRight: `${12 * scale}px`,
-                    fontSize: pillFontSize(22, 6, 34, scale),
-                  }}
+              <div className="absolute inset-0 bg-black translate-x-2 translate-y-2 md:translate-x-3 md:translate-y-3" />
+              <div 
+                className="relative border-[3px] md:border-4 border-black px-12 py-5 md:px-20 md:py-8 flex items-center justify-center transition-transform active:translate-y-1 active:translate-x-1 md:active:translate-y-2 md:active:translate-x-2 w-full sm:w-auto"
+                style={{ backgroundColor: "#FFC600" }}
+              >
+                <span 
+                  className="text-black font-black text-5xl sm:text-6xl md:text-7xl lg:text-[80px] tracking-tight uppercase"
+                  style={{ fontFamily: "var(--font-rubik)" }}
                 >
-                  <motion.span
-                    className="inline-block rounded-full shrink-0"
-                    style={{ width: 14, height: 14, backgroundColor: pill.dot }}
-                    animate={{ opacity: [1, 0.15, 1] }}
-                    transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                  {pill.label}
-                </motion.span>
-              </AnimatePresence>
-              <br />
-              with intentional effort
-            </h1>
+                  Spends
+                </span>
+              </div>
+            </Link>
 
-            <p
-              className="text-[#282825] text-xs leading-relaxed opacity-75 text-center"
+            {/* Tagline */}
+            <h2 
+              className="mt-14 md:mt-20 text-white text-3xl sm:text-4xl md:text-[44px] text-center leading-tight font-medium"
               style={{ fontFamily: "var(--font-jetbrains-mono)" }}
             >
-              Yeah, yeah, we have AI features but you still need to input stuff yourself.
-            </p>
-          </motion.div>
+              Stop guessing where{" "}
+              <span className="relative inline-block">
+                your
+                <span className="absolute left-0 bottom-[-2px] md:bottom-[-4px] w-full h-[3px] md:h-[4px] bg-[#FFC600]" />
+              </span>{" "}
+              <br className="hidden sm:block" />
+              money <span style={{ color: "#ccff00" }}>actually goes.</span>
+            </h2>
 
-          {/* 2. Phone image — cropped at bottom like desktop, bigger */}
-          <motion.div
-            className="relative w-full z-10 mt-6 overflow-hidden"
-            style={{ height: "380px" }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: "easeOut", delay: 0.1 }}
-          >
-            <div className="relative w-full h-[380px]">
-              <Image
-                src="/first_image_web.png"
-                alt="SPENDS app screens"
-                fill
-                className="object-contain object-bottom"
-                priority
-                quality={100}
-              />
-            </div>
           </motion.div>
         </div>
       </div>
-
-      <TickerBanner />
     </section>
   );
 }

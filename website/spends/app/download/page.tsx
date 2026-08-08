@@ -1,5 +1,4 @@
 // app/download/page.tsx (or pages/download.tsx)
-import GetSpendsButton from "../components/GetSpendsButton";
 
 export default function DownloadPage() {
     return (

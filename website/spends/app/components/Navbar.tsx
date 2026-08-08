@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
-import GetSpendsButton from "./GetSpendsButton";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -18,10 +17,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav
-      className="w-full border-b-2 border-[#282825]"
-      style={{ backgroundColor: "#D9313F" }}
-    >
+    <nav className="w-full bg-transparent">
       <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
         {/* Logo */}
         <Link
@@ -58,9 +54,6 @@ export default function Navbar() {
               )}
             </li>
           ))}
-          <li>
-            <GetSpendsButton />
-          </li>
         </ul>
 
         {/* Mobile Hamburger */}
@@ -118,15 +111,6 @@ export default function Navbar() {
                   )}
                 </li>
               ))}
-              <li>
-                <a
-                  href="https://drive.google.com/file/d/15mAgA6fa6e4axsQQvwHqeL4XWOCDKgVd/view?usp=sharing"
-                  className="inline-block px-5 py-2.5 bg-[#F7CB46] text-[#282825] font-black text-sm border-2 border-[#282825]"
-                  style={{ boxShadow: "3px 3px 0px #282825" }}
-                >
-                  Get SPENDS
-                </a>
-              </li>
             </ul>
           </motion.div>
         )}

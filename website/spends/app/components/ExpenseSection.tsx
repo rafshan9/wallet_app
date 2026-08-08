@@ -46,9 +46,9 @@ export default function ExpenseSection() {
             </div>
 
             {/* Image — no top padding, flush to box top */}
-            <div className="relative w-full aspect-[3/4] max-w-[320px] mx-auto px-4 pb-4">
+            <div className="relative w-full aspect-[3/4] max-w-[360px] mx-auto  pb-4">
               <Image
-                src="/expense_mobile_new.png"
+                src="/expense.svg"
                 alt="SPENDS expense input screen"
                 fill
                 className="object-contain object-top"
@@ -65,7 +65,7 @@ export default function ExpenseSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            {pills.map((pill, i) => (
+            {pills.map((pill) => (
               <span
                 key={pill.label}
                 className="px-3 py-1 text-[10px] font-black tracking-wide border-2 border-[#282825] cursor-default"
@@ -206,12 +206,12 @@ export default function ExpenseSection() {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
-              <div className="relative w-full max-w-[380px] lg:max-w-[550px] h-[550px] lg:h-[750px]">
+              <div className="relative w-full max-w-[1250px] lg:max-w-[1250px] h-[680px] lg:h-[750px] -mt-4">
                 <Image
-                  src="/second_page_web.png"
+                  src="/expense_mob.svg"
                   alt="SPENDS expense input screen with AI voice and camera features"
                   fill
-                  className="object-contain object-top"
+                  className="object-fill object-top"
                   quality={100}
                 />
               </div>

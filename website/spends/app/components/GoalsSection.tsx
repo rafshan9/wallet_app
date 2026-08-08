@@ -93,12 +93,12 @@ export default function GoalsSection() {
             </div>
 
             {/* Image — no bottom padding, flush to box bottom */}
-            <div className="relative w-full aspect-[3/4] max-w-[320px] mx-auto pt-4 px-4">
+            <div className="relative w-full aspect-[3/4] max-w-[400px] mx-auto pt-4 px-4">
               <Image
-                src="/goal_mobile_new.png"
+                src="/goal_mob.svg"
                 alt="SPENDS goals screen showing savings progress"
                 fill
-                className="object-contain object-bottom"
+                className="object-fill object-bottom"
                 quality={100}
               />
             </div>
@@ -157,7 +157,7 @@ export default function GoalsSection() {
 
           {/* Your goals progress bars block */}
           <div
-            className="w-full max-w-[420px] flex flex-col gap-3 p-4 border-2 border-[#282825]"
+            className="w-full max-w-[420px] flex flex-col gap-3 p-4 border-3 border-[#282825]"
             style={{
               backgroundColor: "#fff",
               boxShadow: "4px 4px 0px #282825",
@@ -288,12 +288,12 @@ export default function GoalsSection() {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
-              <div className="relative w-full max-w-[380px] lg:max-w-[550px] h-[550px] lg:h-[750px]">
+              <div className="relative w-full max-w-[1250px] lg:max-w-[1250px] h-[880px] lg:h-[750px] -mb-12">
                 <Image
-                  src="/third_page_web.png"
+                  src="/goal_desktop.svg"
                   alt="SPENDS goals screen showing savings progress"
                   fill
-                  className="object-contain object-bottom"
+                  className="object-fill object-bottom"
                   quality={100}
                 />
               </div>
